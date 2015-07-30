@@ -1,0 +1,251 @@
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# bspwm hotkeys {{{1
+#
+
+super + alt + Escape
+	pkill -x panel; \
+    bspc quit;
+
+# close window
+super + w
+	bspc window -c
+
+# toggle sizes {{{2
+super + t
+	bspc desktop -l next
+
+# balance size of windows
+super + b
+	bspc desktop -B
+
+super + {s,f}
+	bspc window -t {floating,fullscreen}
+
+# switching active {{{2
+super + {grave,Tab}
+	bspc {window,desktop} -f last
+
+super + apostrophe
+	bspc window -s last
+
+# switch windows
+super + {_,shift + }c
+	bspc window -f {next,prev}
+
+# focus/move window
+super + {_,shift + }{h,j,k,l}
+	bspc_window_joy {empty,shift} {left,down,up,right}
+
+# show desktop, send window to desktop
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,window -d} ^{1-9,10}
+
+# }}}
+
+super + {o,i}
+	bspc control --record-history off; \
+	bspc window {older,newer} -f; \
+	bspc control --record-history on
+
+# transplant selected window to the given window
+super + y
+	bspc window -w last
+
+# make window biggest
+super + m
+	bspc window -s biggest
+
+# preselect split ratio side
+super + ctrl + {h,j,k,l}
+	bspc window -p {left,down,up,right}
+
+# change select ratio
+super + ctrl + {1-9}
+	bspc window -r 0.{1-9}
+
+# cancel selection
+super + ctrl + {_,shift + }space
+	bspc {window -p cancel,desktop -c}
+
+# resize
+super + alt + {h,j,k,l}
+	bspc window -e {left -10,down +10,up -10,right +10}
+
+super + alt + shift + {h,j,k,l}
+	bspc window -e {right -10,up +10,down -10,left +10}
+
+# reducing gap on the fly 
+super + {minus,equal}
+    bspc config -d focused window_gap $((`bspc config -d focused window_gap` {+,-} 2 ))
+
+super + alt + {8,9}
+    bspc config -d focused window_gap {1, 40}
+
+# make window sticky
+super + e
+    bspc window -t sticky
+
+# preventing closing 
+super + r
+    bspc window -t locked
+
+# Hide all windows on all desktops
+super + z
+    bspc control --toggle-visibility 
+
+# Move floating windows (requires baskerville's xdo)
+super + {Left,Right,Up,Down}
+    xdo move {-x -20,-x +20,-y -20,-y +20}
+
+# Resize floating windows
+super + shift + {Left,Right,Up,Down}
+    xdo resize {-w -20,-w +20,-h -20,-h +20}    
+    
+#bspc window -e {left -10,down +10,up -10,right +10} || {right -10,up +10,down -10,left +10}
+
+# Change desktop padding
+super + {_, shift} + bracketright
+	bspc config -d focused right_padding $((`bspc config -d focused right_padding` {+,-} 20 ))
+
+super + {_, shift} + bracketleft
+	bspc config -d focused left_padding $((`bspc config -d focused left_padding` {+,-} 20 ))
+
+super + ctrl + {_, shift} + bracketright
+	bspc config -d focused bottom_padding $((`bspc config -d focused bottom_padding` {+,-} 20 ))
+
+super + ctrl + {_, shift} + bracketleft
+	bspc config -d focused top_padding $((`bspc config -d focused top_padding` {+,-} 20 ))
+
+super + alt + {minus, equal}
+	bspc config -d focused right_padding $((`bspc config -d focused right_padding` {+,-} 20 )); \
+	bspc config -d focused left_padding $((`bspc config -d focused left_padding` {+,-} 20 )); \
+	bspc config -d focused bottom_padding $((`bspc config -d focused bottom_padding` {+,-} 20 )); \
+	bspc config -d focused top_padding $((`bspc config -d focused top_padding` {+,-} 20 ));
+
+super + alt + c
+    IFS=' ' read sw sh < <(xdotool getdisplaygeometry); \
+    eval `xdotool getactivewindow getwindowgeometry --shell`; \
+    xdotool getactivewindow windowmove $(($sw/2-$WIDTH/2)) $(($sh/2-$HEIGHT/2));
+
+    
+# mouse {{{2
+#
+
+~button1
+	bspc pointer -g focus
+
+super + button{1-3}
+	bspc pointer -g {move,resize_side,resize_corner}
+
+super + !button{1-3}
+	bspc pointer -t %i %i
+
+super + @button{1-3}
+	bspc pointer -u
+
+#
+# Workstation Monitor {{{1
+#
+super + n
+	bspc monitor -f next
+
+super + shift + n
+	bspc window -m next
+
+super + alt + {1-9}
+    bspc window -m {1-9}
+
+super + shift + alt + {1-9}
+    bspc desktop -m {1-9}
+
+#
+# mpd {{{1
+#
+
+ctrl + alt + s
+    mpc stop
+
+ctrl + alt + c
+    mpc toggle
+
+ctrl + alt + z
+    mpc prev
+
+ctrl + alt + n
+    mpc next
+
+#
+# amixer {{{1
+#
+
+XF86Audio{Raise,Lower}Volume
+    amixer sset Master {5%+,5%-} unmute
+
+#
+# xbacklight {{{1
+#
+
+XF86MonBrightness{Up,Down}
+    xbacklight -{inc,dec} 10
+
+#
+# xdotool {{{1
+super + ctrl + shift + {h,j,k,l}
+	bspc_window_joy extra {left,down,up,right}
+
+super + ctrl + alt + {h,j,k,l}
+    xdotool mousemove_relative {-- -8 0, 0 8, -- 0 -8, 8 0}
+
+super + {shift,alt} + i
+    xdotool click 1 --delay 300
+
+super + alt + d
+    xdotool click --clearmodifiers 5
+
+super + alt + u
+    xdotool click --clearmodifiers 4
+
+super + u
+    toggle_jmode
+# Misc {{{1
+# 
+
+# copy buffer to clipboard
+ctrl + shift + c
+    xclip -o -sel clipboard | xclip -i
+
+# lock Screen
+ctrl + alt + l
+    xlock
+
+# make sxhkd reload its configuration files:
+super + Escape
+	pkill -x sxhkd; sxhkd &;
+
+super + Return
+	urxvt
+
+super + space
+	dmenu_run
+
+# start terminal with ncmpcpp
+super + shift + m
+    bspc rule -a urxvt -o floating=on; \
+    urxvt -geometry 130x40 -e ncmpcpp &;
+
+# start terminal with elinks
+super + shift + b
+    OLDTMUX="$TMUX"; \
+    unset TMUX; \
+    urxvt -geometry 120x45 -e tmux new-session -A -s elinks 'elinks' \; split-window -h \; select-pane -t 0 \; resize-pane -L 10 \; send-keys -t right "c" C-m
+    export TMUX="$OLDTMUX";
+
+# start terminal with weechat
+super + shift + o
+    bspc rule -a urxvt -o floating=on; \
+    OLDTMUX="$TMUX"; \
+    unset TMUX; \
+    urxvt -geometry 150x40 -e tmux new-session -A -s weechat 'weechat' \; new-window -d -n skyped 'skyped -n -d'; \
+    export TMUX="$OLDTMUX";
+
