@@ -58,6 +58,8 @@ function fetchRemoteList() {
             remotelist+=($conf)
         fi
     done
+
+    wget -qO $repopath/dests.txt $githubRepo/raw/master/dests.txt
 }
 
 function fillListLocal() {
