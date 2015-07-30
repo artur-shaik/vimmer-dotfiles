@@ -39,6 +39,14 @@ function fillListLocal() {
     done
 }
 
+function backup() {
+    if [[ ! -d $repopath/backups ]]; then
+        mkdir $repopath/backups
+    fi
+
+    mv $1 $repopath/backups
+}
+
 function install() {
     for install in ${installList[*]}; do
         dest=$(cat $repopath/dests.txt | grep "^$install*" | cut -d'=' -f 2)
@@ -47,7 +55,7 @@ function install() {
         if [[ -f ~/$file ]]; then
             if ! cmp -s $repopath/$install $dest/$install; then
                 echo "backup old config"
-                mv $dest/$install $repopath/backups/
+                backup $dest/$install
             else
                 echo "Files are the same. Continue next."
                 continue
@@ -56,7 +64,7 @@ function install() {
             rm -rf $repopath/backups/$install
             if [[ ! -L $dest/$install ]]; then
                 echo "backup old config directory"
-                mv $dest/$install $repopath/backups/
+                backup $dest/$install
             else
                 echo -n "$install configuration is link (already installed?), remove? (Y/n): "
                 read answer
