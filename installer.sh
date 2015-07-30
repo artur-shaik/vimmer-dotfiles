@@ -49,8 +49,10 @@ function backup() {
 
 function install() {
     for install in ${installList[*]}; do
-        dest=$(cat $repopath/dests.txt | grep "^$install*" | cut -d'=' -f 2)
-        dest=~/$dest
+        dest=$(eval echo `cat $repopath/dests.txt | grep "^$install*" | cut -d'=' -f 2`)
+        if [[ $dest = '' ]]; then
+            dest=~/
+        fi
         echo "Creating symlink for $install in $dest"
         if [[ -f ~/$file ]]; then
             if ! cmp -s $repopath/$install $dest/$install; then

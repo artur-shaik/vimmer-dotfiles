@@ -1,2 +1,2 @@
-bspwm=.config
-sxhkd=.config
+bspwm=~/.config
+sxhkd=~/.config
