@@ -101,6 +101,22 @@ function list() {
     done
 }
 
+function parseIds() {
+    IN=$1
+    declare -a resultIds
+    commaIds=(${IN//,/ })
+    for id in ${commaIds[*]}; do
+        periodIds=(${id//-/ })
+        if [[ ${#periodIds[@]} -eq 2 ]]; then
+            resultIds+=($(seq ${periodIds[0]} ${periodIds[1]}))
+        else
+            resultIds+=($id)
+        fi
+    done
+
+    toggleIds=(`echo ${resultIds[*]}|tr ' ' '\n' | sort -u | tr '\n' ' '`)
+}
+
 function toggle() {
     if [[ ${#command[@]} -eq 1 ]]; then
         echo -n "toggle what?: "
@@ -108,18 +124,21 @@ function toggle() {
     else
         id=${command[1]}
     fi
-    if [[ ${conflist[id]} ]]; then
-        toggled=0
-        for (( i = 0 ; i < ${#installList[@]} ; i++ )); do
-            if [[ ${installList[i]} = ${conflist[id]} ]]; then
-                unset installList[$i]
-                toggled=1
+    parseIds $id
+    for id in ${toggleIds[@]}; do
+        if [[ ${conflist[id]} ]]; then
+            toggled=0
+            for (( i = 0 ; i <= ${#installList[*]} + 1 ; i++ )); do
+                if [[ ${installList[i]} = ${conflist[id]} ]]; then
+                    unset installList[$i]
+                    toggled=1
+                fi
+            done
+            if [[ $toggled -eq 0 ]]; then
+                installList+=(${conflist[id]})
             fi
-        done
-        if [[ $toggled -eq 0 ]]; then
-            installList+=(${conflist[id]})
         fi
-    fi
+    done
 }
 
 function process() {
