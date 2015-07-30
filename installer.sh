@@ -8,6 +8,7 @@ declare -a remotelist
 command="null"
 repopath=$PWD
 githubRepo=https://github.com/artur-shaik/vimmer-dotfiles/
+singleShot=0
 
 function usage() {
     echo "./installer.sh [install [configuration [configuration [...]]]]"
@@ -22,6 +23,10 @@ function readArguments() {
                 command="install"
                 shift
                 ;;
+            list)
+                command="list"
+                shift
+                ;;
             *)
                 if [[ "$command" = "install" ]]; then
                     installList+=($key)
@@ -30,6 +35,10 @@ function readArguments() {
                 ;;
         esac
     done
+
+    if [[ ${command} != "null" ]]; then
+        singleShot=1
+    fi
 }
 
 ignore=(.gitignore dests.txt installer.sh)
@@ -54,7 +63,6 @@ function fetchRemoteList() {
 function fillListLocal() {
     i=1
     for file in `ls -d */ | grep -v "backups" | cut -d/ -f 1`; do
-        echo $i: $file
         conflist[$i]=$file
         let i+=1
     done
@@ -213,14 +221,19 @@ function main() {
     fillListLocal
     fetchRemoteList
 
-    while true; do
-        if [[ $command = "null" ]]; then
-            echo -n "enter command: "
-            read -a command
-        fi
-
+    if [[ $singleShot -eq 1 ]]; then
         process
-    done
+    else
+        while true; do
+            if [[ $command = "null" ]]; then
+                echo -n "enter command: "
+                read -a command
+            fi
+
+            process
+
+        done
+    fi
 }
 
 main $@
