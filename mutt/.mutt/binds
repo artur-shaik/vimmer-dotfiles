@@ -1,0 +1,77 @@
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# Binds (mostly vim like)
+
+## generic {{{1
+bind generic l select-entry
+bind generic <right> select-entry
+
+## index {{{1
+bind index l display-message
+bind index h noop
+bind index <right> display-message
+bind index <left> change-folder
+bind index H display-toggle-weed
+bind index gg first-entry
+bind index G last-entry
+bind index L limit
+bind index \cw sync-mailbox
+bind index \cu half-up
+bind index \cd half-down
+macro index , '<change-folder>!^M'
+macro index I '<tag-pattern>~N^M<tag-prefix><toggle-new><tag-prefix><tag-entry>'
+macro index gi "<change-folder>=INBOX<enter>" "Go to inbox"
+macro index ga "<change-folder>=[Gmail]/Вся почта<enter>" "Go to all mail"
+macro index gs "<change-folder>=[Gmail]/Отправленные<enter>" "Go to Sent Mail"
+macro index gd "<change-folder>=[Gmail]/Черновики<enter>" "Go to drafts"
+macro index gt "<change-folder>=[Gmail]/Спам<enter>" "Go to drafts"
+macro index,pager t "<pipe-message>mutt2task.py<enter>"
+macro index,pager a "<pipe-message>goobook add<return>" "add sender to google contacts"
+
+## pager {{{1
+bind pager j next-line
+bind pager k previous-line
+bind pager h exit
+bind pager l view-attachments
+bind pager <down> next-line
+bind pager <up> previous-line
+bind pager <left> exit
+bind pager <right> view-attachments
+bind pager H display-toggle-weed
+bind pager gg top
+bind pager G bottom
+bind pager \cu half-up
+bind pager \cd half-down
+macro pager , '<change-folder>!^M'
+macro pager W '|elinks --force-html^M'
+
+## attach {{{1
+bind attach l view-attach
+bind attach <return> view-attach
+bind attach <right> view-attach
+bind attach h exit
+bind attach <left> exit
+bind attach H display-toggle-weed
+macro attach W '|elinks --force-html^M'
+
+## compose {{{1
+bind compose l view-attach
+bind compose <right> view-attach
+
+## editor {{{1
+bind editor <space> noop
+bind editor ^T complete
+bind editor <Tab> complete-query
+
+## sidebar {{{1
+macro index b "<enter-command>toggle sidebar_visible<enter><refresh>"
+macro pager b "<enter-command>toggle sidebar_visible<enter><redraw-screen>"
+bind index \cP sidebar-prev
+bind index \cN sidebar-next
+bind index \cO sidebar-open
+bind pager \cP sidebar-prev
+bind pager \cN sidebar-next
+bind pager \cO sidebar-open
+
+# Remap bounce-message function to “B”
+bind index B bounce-message

@@ -1,0 +1,61 @@
+text/html; elinks --force-html --dump %s; copiousoutput; nametemplate=%s.html
+application/x-tar-gz; gunzip -c %s | tar -tf - ; copiousoutput
+
+application/x-msexcel; ~/.mutt/view_attachment.sh %s
+application/ms-exc; ~/.mutt/view_attachment.sh %s
+application/excel; ~/.mutt/view_attachment.sh %s
+application/msexcel; ~/.mutt/view_attachment.sh %s
+application/vnd.ms-exc; ~/.mutt/view_attachment.sh %s
+application/vnd.ms-excel; ~/.mutt/view_attachment.sh %s
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; ~/.mutt/view_attachment.sh %s "-" 'oowriter'
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; ~/.mutt/view_attachment.sh %s "-" 'oocalc'
+
+application/msword; ~/.mutt/view_attachment.sh %s "-" 'oowriter'
+
+# Star/Open Office oowriter
+application/vnd.sun.xml.writer; ~/.mutt/view_attachment.sh %s "-" 'oowriter'
+application/vnd.sun.xml.writer.global; ~/.mutt/view_attachment.sh %s "-" 'oowriter'
+application/vnd.stardivision.writer; ~/.mutt/view_attachment.sh %s "-" 'oowriter'
+application/vnd.stardivision.writer-global; ~/.mutt/view_attachment.sh %s "-" 'oowriter'
+application/x-starwriter; ~/.mutt/view_attachment.sh %s "-" 'oowriter'
+application/vnd.sun.xml.writer.template; ~/.mutt/view_attachment.sh %s "-" 'oowriter'
+
+# Star/Open Office Calc
+application/x-excel; ~/.mutt/view_attachment.sh %s "-" 'oocalc'
+application/vnd.sun.xml.calc; ~/.mutt/view_attachment.sh %s "-" 'oocalc'
+application/vnd.stardivision.calc; ~/.mutt/view_attachment.sh %s "-" 'oocalc'
+application/x-starcalc; ~/.mutt/view_attachment.sh %s "-" 'oocalc'
+application/vnd.sun.xml.calc.template; ~/.mutt/view_attachment.sh %s "-" 'oocalc'
+
+# Star/Open Office Draw
+application/vnd.sun.xml.draw; ~/.mutt/view_attachment.sh %s "-" 'lodraw'
+application/vnd.stardivision.draw; ~/.mutt/view_attachment.sh %s "-" 'lodraw'
+application/x-stardraw; ~/.mutt/view_attachment.sh %s "-" 'lodraw'
+application/vnd.sun.xml.draw.template; ~/.mutt/view_attachment.sh %s "-" 'lodraw'
+
+# Star/Open Office Math
+application/vnd.sun.xml.math; ~/.mutt/view_attachment.sh %s "-" 'oomath'
+application/vnd.stardivision.math; ~/.mutt/view_attachment.sh %s "-" 'oomath'
+application/x-starmath; ~/.mutt/view_attachment.sh %s "-" 'oomath'
+
+application/vnd.sun.xml.writer; ~/.mutt/view_attachment.sh %s "-" 'oomath'
+
+# Star/Open Office Impress
+application/x-starimpress; ~/.mutt/view_attachment.sh %s "-" 'loimpress'
+application/vnd.sun.xml.impress.template; ~/.mutt/view_attachment.sh %s "-" 'loimpress'
+application/vnd.sun.xml.impress; ~/.mutt/view_attachment.sh %s "-" 'loimpress'
+application/vnd.stardivision.impress; ~/.mutt/view_attachment.sh %s "-" 'loimpress'
+application/vnd.stardivision.impress-packed; ~/.mutt/view_attachment.sh %s "-" 'loimpress'
+
+# Images
+image/jpeg; ~/.mutt/view_attachment.sh %s "-" "pim"
+image/jpg; ~/.mutt/view_attachment.sh %s "-" "pim"
+image/pjpeg; ~/.mutt/view_attachment.sh %s "-" "pim"
+image/png; ~/.mutt/view_attachment.sh %s "-" "pim"
+image/gif; ~/.mutt/view_attachment.sh %s "-" "pim"
+
+# PDF
+application/pdf; ~/.mutt/view_attachment.sh %s pdf
+
+# Unidentified.
+application/octet-stream; ~/.mutt/view_attachment.sh %s "-" 

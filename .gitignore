@@ -6,4 +6,6 @@ Session.vim
 *~
 
 tmux/.tmux/plugins/*
+mutt/.mutt/acct/
+mutt/.mutt/cache/
 backups/

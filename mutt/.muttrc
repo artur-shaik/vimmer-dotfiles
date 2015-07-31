@@ -1,0 +1,27 @@
+# Create account file and source it in this file.
+# 
+# Template for GMAIL account file
+#
+# # IMAP
+# set imap_user     = "USER"
+# set imap_pass     = "PASS"
+# set folder    = "imaps://imap.gmail.com:993"
+# set imap_check_subscribed
+#
+# # SMTP
+# set smtp_url  = "smtps://USER@smtp.gmail.com/465"
+# set smtp_pass     = "PASS"
+#
+# set from  = "YOUR NAME <USER@gmail.com>"
+# set realname  = "YOUR NAME"
+#
+# set spoolfile     = "+INBOX"
+# set postponed     = "+[Gmail]/Drafts"
+# set trash         = "imaps://imap.gmail.com/[Gmail]/Trash"
+# 
+# set signature   = "~/.mutt/acct/account.signature"
+
+source ~/.mutt/acct/accounts
+source ~/.mutt/binds
+source ~/.mutt/options
+source ~/.mutt/colors
