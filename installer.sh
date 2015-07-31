@@ -14,6 +14,7 @@ command="null"
 repopath=$PWD
 githubRepo=https://github.com/artur-shaik/vimmer-dotfiles/
 singleShot=0
+local=0
 
 function usage() {
     echo "Usage:"
@@ -41,6 +42,10 @@ function readArguments() {
                 ;;
             list)
                 command="list"
+                shift
+                ;;
+            --local)
+                local=1
                 shift
                 ;;
             ?|-h|help|--help)
@@ -251,7 +256,9 @@ function main() {
     readArguments $@
 
     fillListLocal
-    fetchRemoteList
+    if [[ $local -eq 0 ]]; then
+        fetchRemoteList
+    fi
 
     if [[ $singleShot -eq 1 ]]; then
         process
