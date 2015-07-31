@@ -71,11 +71,11 @@ function fillListLocal() {
 }
 
 function backup() {
-    if [[ ! -d $repopath/backups ]]; then
-        mkdir $repopath/backups
+    if [[ ! -d $repopath/backups/$2 ]]; then
+        mkdir -p $repopath/backups/$2
     fi
 
-    mv $1 $repopath/backups
+    mv $1 $repopath/backups/$2
 }
 
 function fetchRemoteDirectory() {
@@ -85,7 +85,7 @@ function fetchRemoteDirectory() {
     fi
 
     echo "fetching $1 from remote repository..."
-    svn checkout $githubRepo/trunk/$1
+    svn checkout $githubRepo/trunk/$1 && rm -rf $repopath/$1/.svn
     return $?
 }
 
@@ -103,38 +103,47 @@ function install() {
             dest=~/
         fi
         echo "Creating symlink for $install in $dest"
-        if [[ -f ~/$file ]]; then
-            if ! cmp -s $repopath/$install $dest/$install; then
-                echo "backup old config"
-                backup $dest/$install
-            else
-                echo "Files are the same. Continue next."
+        installFiles=`find $repopath/$install -maxdepth 1 -printf '%f\n'`
+        first=0
+        for file in ${installFiles[@]}; do
+            if [[ $first -eq 0 ]]; then
+                first=1
                 continue
             fi
-        elif [[ -d $dest/$install ]]; then
-            rm -rf $repopath/backups/$install
-            if [[ ! -L $dest/$install ]]; then
-                echo "backup old config directory"
-                backup $dest/$install
-            else
-                echo -n "$install configuration is link (already installed?), remove? (Y/n): "
-                read answer
-                if [[ $answer == 'Y' ]]; then
-                    rm $dest/$install
+            echo "file: $file"
+            if [[ -f $dest/$file ]]; then
+                if ! cmp -s $repopath/$install/$file $dest/$file; then
+                    echo "backup old config"
+                    backup $dest/$file $install
                 else
-                    echo "can't install configuration: $install"
+                    echo "Files are the same. Continue next."
                     continue
                 fi
+            elif [[ -d $dest/$file ]]; then
+                rm -rf $repopath/backups/$install
+                if [[ ! -L $dest/$file ]]; then
+                    echo "backup old config directory"
+                    backup $dest/$file $install
+                else
+                    echo -n "$install/$file configuration is link (already installed?), remove? (Y/n): "
+                    read answer
+                    if [[ $answer == 'Y' ]]; then
+                        rm $dest/$file
+                    else
+                        echo "can't install configuration: $install/$file"
+                        continue
+                    fi
+                fi
             fi
-        fi
-        
-        if ln -s $repopath/$install $dest/$install 2> /dev/null; then
-            echo "$install linked!"
-        else
-            echo "Can not create link to configuration $install."
-            echo "You can try do it with this command:"
-            echo "ln -s $repopath/$install $dest/$install"
-        fi
+            
+            if ln -s "$repopath/$install/$file" "$dest/$file"; then
+                echo "$install/$file linked!"
+            else
+                echo "Can not create link to configuration $install/$file."
+                echo "You can try do it with this command:"
+                echo "ln -s $repopath/$install/$file $dest/$file"
+            fi
+        done
     done
 }
 
