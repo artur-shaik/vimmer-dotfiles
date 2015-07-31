@@ -1,5 +1,10 @@
 #!/bin/bash
 
+
+# Installation script, it's main purpose is to install configurations
+# omiting clone git repository. 
+# It can fetch configuration that you need only.
+
 cd "$(dirname "$0")"
 
 declare -a installList
