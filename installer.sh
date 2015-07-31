@@ -79,7 +79,7 @@ function fetchRemoteList() {
 
 function fillListLocal() {
     i=1
-    for file in `ls -d */ | grep -v "backups" | cut -d/ -f 1`; do
+    for file in `ls -d */ 2> /dev/null | grep -v "backups" | cut -d/ -f 1`; do
         conflist[$i]=$file
         let i+=1
     done
