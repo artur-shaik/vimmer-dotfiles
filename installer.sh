@@ -18,7 +18,7 @@ local=0
 
 function usage() {
     echo "Usage:"
-    echo "  ./installer.sh command"
+    echo "  ./installer.sh [arguments] [command]"
     echo ""
     echo "commands:"
     echo "  install configuration [configuration [...]]"
@@ -29,6 +29,9 @@ function usage() {
     echo ""
     echo "interactive commands:"
     echo "  toggle x,y-z - switch, what configurations install/don't"
+    echo ""
+    echo "arguments:"
+    echo "  --local - don't fetch remote list"
 }
 
 function readArguments() {
