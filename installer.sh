@@ -11,7 +11,18 @@ githubRepo=https://github.com/artur-shaik/vimmer-dotfiles/
 singleShot=0
 
 function usage() {
-    echo "./installer.sh [install [configuration [configuration [...]]]]"
+    echo "Usage:"
+    echo "  ./installer.sh command"
+    echo ""
+    echo "commands:"
+    echo "  install configuration [configuration [...]]"
+    echo "  list - show all available configurations"
+    echo "  help - show this help"
+    echo ""
+    echo "  without command will run interactive mode"
+    echo ""
+    echo "interactive commands:"
+    echo "  toggle x,y-z - switch, what configurations install/don't"
 }
 
 function readArguments() {
@@ -26,6 +37,10 @@ function readArguments() {
             list)
                 command="list"
                 shift
+                ;;
+            ?|-h|help|--help)
+                usage
+                exit 0
                 ;;
             *)
                 if [[ "$command" = "install" ]]; then
@@ -204,7 +219,7 @@ function toggle() {
 function process() {
     case ${command[0]} in
         help)
-            echo "TODO: help"
+            usage
             ;;
         list)
             list
