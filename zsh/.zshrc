@@ -155,8 +155,8 @@ alias rnr=read_and_review
 
 # /GTD
 
-trr() { echo "$@" | trans ru:en }
-tre() { echo "$@" | trans en:ru }
+trr() { echo "$@" | trans -u 'Mozilla/5.0' ru:en }
+tre() { echo "$@" | trans -u 'Mozilla/5.0' en:ru }
 mcd() { mkdir -p "$1"; cd "$1"; }
 bkup() { cp "$1"{,.bak};}
 whoisaddress() {whois $1 | grep -E "(address|country)" | sort | uniq}
