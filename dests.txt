@@ -3,3 +3,4 @@ sxhkd=~/.config
 elinks=~/.elinks
 newsbeuter=~/.newsbeuter
 vifm~/.vifm
+weechat=~/.weechat
