@@ -1,0 +1,56 @@
+!#define #002b36 #002b36
+!#define #073642 #073642
+!#define #586e75 #586e75
+!#define #657b83 #657b83
+!#define #839496 #839496
+!#define #93a1a1 #93a1a1
+!#define #eee8d5 #eee8d5
+!#define #fdf6e6 #fdf6e3
+!#define #b58900 #b58900
+!#define #cb4b16 #cb4b16
+!#define #dc322f #dc322f
+!#define #d33682 #d33682
+!#define #6c71c4 #6c71c4
+!#define #268bd2 #268bd2
+!#define #2aa198 #2aa198
+!#define #859900 #859900
+
+urxvt*background: [95]#fdf6e6
+urxvt*foreground: #657b83
+!urxvt*fading: 40
+!urxvt*fadeColor: #fdf6e6
+urxvt*cursorColor: #586e75
+urxvt*pointerColorBackground:#93a1a1
+urxvt*pointerColorForeground:#586e75
+
+!! black dark/light
+urxvt*color0: #073642
+urxvt*color8: #002b36
+
+!! red dark/light
+urxvt*color1: #dc322f
+urxvt*color9: #cb4b16
+
+!! green dark/light
+urxvt*color2: #859900
+urxvt*color10: #586e75
+
+!! yellow dark/light
+urxvt*color3: #b58900
+urxvt*color11: #657b83
+
+!! blue dark/light
+urxvt*color4: #268bd2
+urxvt*color12: #839496
+
+!! magenta dark/light
+urxvt*color5: #d33682
+urxvt*color13: #6c71c4
+
+!! cyan dark/light
+urxvt*color6: #2aa198
+urxvt*color14: #93a1a1
+
+!! white dark/light
+urxvt*color7: #eee8d5
+urxvt*color15: #fdf6e6

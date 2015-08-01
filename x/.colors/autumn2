@@ -1,0 +1,10 @@
+*.foreground: #000000
+*.background: #f0f2f0
+*.cursorColor: #000000
+*.color0: #008b8b
+*.color1: #44aa44
+*.color2: #a9a9a9
+*.color3: #bb9900
+*.color4: #0055cc
+*.color5: #008b8b
+*.color6: #229900
