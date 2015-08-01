@@ -1,3 +1,4 @@
 bspwm=~/.config
 sxhkd=~/.config
 elinks=~/.elinks
+newsbeuter=~/.newsbeuter
