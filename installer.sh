@@ -51,7 +51,7 @@ function readArguments() {
                 local=1
                 shift
                 ;;
-            ?|-h|help|--help)
+            -h|help|--help)
                 usage
                 exit 0
                 ;;
@@ -126,7 +126,7 @@ function install() {
             fi
         fi
 
-        dest=$(eval echo `cat $repopath/dests.txt | grep "^$install*" | cut -d'=' -f 2`)
+        dest=$(eval echo `cat $repopath/dests.txt | grep "^\<$install\>=*" | cut -d'=' -f 2`)
         if [[ $dest = '' ]]; then
             dest=~/
         fi
