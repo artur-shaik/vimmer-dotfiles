@@ -6,3 +6,4 @@ vifm~/.vifm
 weechat=~/.weechat
 mpv=~/.config
 zathura=~/.config
+qutebrowser=~/.config/qutebrowser
