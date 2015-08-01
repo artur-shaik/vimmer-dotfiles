@@ -8,4 +8,5 @@ Session.vim
 tmux/.tmux/plugins/*
 mutt/.mutt/acct/
 mutt/.mutt/cache/
+ncmpcpp/.ncmpcpp/error.log
 backups/
