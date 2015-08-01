@@ -5,3 +5,4 @@ newsbeuter=~/.newsbeuter
 vifm~/.vifm
 weechat=~/.weechat
 mpv=~/.config
+zathura=~/.config
