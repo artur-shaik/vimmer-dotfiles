@@ -1,0 +1,8 @@
+set completion-ignore-case On
+set echo-control-characters Off
+set enable-keypad On
+set mark-symlinked-directories On
+set show-all-if-ambiguous On
+set show-all-if-unmodified On
+set skip-completed-text On
+set visible-stats On
