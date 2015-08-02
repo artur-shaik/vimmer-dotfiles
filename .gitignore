@@ -9,4 +9,6 @@ tmux/.tmux/plugins/*
 mutt/.mutt/acct/
 mutt/.mutt/cache/
 ncmpcpp/.ncmpcpp/error.log
+vim/.vim/bundle
+vim/.vim/sessions
 backups/
