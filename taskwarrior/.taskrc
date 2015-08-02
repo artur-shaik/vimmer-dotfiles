@@ -1,0 +1,34 @@
+# Files
+data.location=/home/ash/.task
+
+# Color theme (uncomment one to use)
+include /usr/share/doc/packages/task/rc/dark-16.theme
+
+journal.time=on
+dateformat.annotation=Y-M-d H:N
+default.command=long
+dateformat=D-M-Y
+report.list.sort=project+
+report.long.sort=project+,due+
+dateformat.report=D-M-Y
+dateformat.info=Y-M-D H:N:S
+urgency.user.tag.prev.coefficient=-5.0
+urgency.user.tag.later.coefficient=-4.0
+urgency.user.tag.mail.coefficient=0.0
+urgency.user.tag.in.coefficient=15
+urgency.tags.coefficient=0.0
+urgency.project.coefficient=0.1
+urgency.annotation.coefficient=0
+taskd.certificate=\/home\/ash\/.task\/ash.cert.pem
+taskd.key=\/home\/ash\/.task\/ash.key.pem
+taskd.server=192.168.0.104:55589
+taskd.credentials=Shaik\/Artur\/a10e3bd1-4753-4ee1-b39f-22d158bc89ca
+taskd.trust=allow all 
+
+debug=off
+debug.tls=0
+
+report.in.columns           = id,description
+report.in.description       = Inbox
+report.in.filter            = status:pending limit:page (+in)
+report.in.labels            = ID,Description
