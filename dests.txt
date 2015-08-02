@@ -2,7 +2,7 @@ bspwm=~/.config
 sxhkd=~/.config
 elinks=~/.elinks
 newsbeuter=~/.newsbeuter
-vifm~/.vifm
+vifm=~/.vifm
 weechat=~/.weechat
 mpv=~/.config
 zathura=~/.config
