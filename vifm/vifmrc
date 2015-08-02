@@ -68,6 +68,11 @@ set slowfs=curlftpfs
 " set custom status line look
 set statusline="  %t%= %A %10u:%-7g %15s %20d  "
 
+" What should be saved automatically between vifm runs
+" Like in vi
+set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
+    \phistory,fhistory,dirstack,registers,bookmarks
+
 "" marks {{{1
 " :mark mark /full/directory/path [filename]
 mark B ~/bin/
@@ -231,12 +236,7 @@ fileview .*/,*/ tree %f
 " uncommenting one of lines below will result in ignoring 'vi[x]cmd' option
 " for unknown file types.
 " For *nix:
-filetype * xdg-open
-
-" What should be saved automatically between vifm runs
-" Like in vi
-set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
-    \phistory,fhistory,dirstack,registers,bookmarks
+filetype * vim %c
 
 "" mappings {{{1
 
