@@ -1,0 +1,106 @@
+#! /bin/sh
+#
+# Example panel for LemonBoy's bar
+# updated for syntax change with my modifications
+# https://github.com/baskerville/bspwm/blob/master/examples/panel/panel_bar
+
+network_status() {
+
+    pinger=`cat /dev/shm/pinger 2> /dev/null`
+    if [[ $pinger -eq 0 ]]; then
+        networkStatus="%{F$COLOR_LOGO} ◼ %{F-}"
+    else
+        networkStatus="%{F#FFAC4142} x %{F-}"
+    fi
+
+}
+
+music_track() {
+
+    songStatus=$(mpc | wc -l)
+    #songStatus=$(mpc --host 192.168.0.104 | wc -l)
+    if [[ $songStatus -gt 1 ]]; then
+	    #song=$(mpc --host 192.168.0.104 -f '%artist% - %title%' | head -n 1)
+	    song=$(mpc -f '%artist% - %title%' | head -n 1)
+    else
+        song="Stopped"
+    fi
+	# cut anything in parens from song title
+	songy=${song}
+	song_final="%{F$COLOR_ICON}⮕%{F-} $songy"
+
+}
+
+# Colours#{{{
+. /home/ash/bin/panel_colors
+#}}}
+
+# bspwm
+#osname=`cat /etc/os-release | grep "PRETTY_NAME" | sed -s 's/PRETTY_NAME="\(.*\)"/\1/'`
+osname=◼
+bspwm="%{B$COLOR_BACKGROUND} %{F$COLOR_LOGO} $osname %{F-}"
+
+killall -9 pinger
+pinger &
+
+while read -r line ; do
+
+    music_track
+    network_status
+
+	case $line in
+		S*)
+			# clock output
+			sys_infos="%{F$COLOR_FREE}${line#?}%{F-}"
+			;;
+		T*)
+			# xtitle output
+			title=$(echo "${line#?}" | cut -c 1-70)
+			title_final="%{F$COLOR_FREE}[%{F$COLOR_TITLE} ${title% -*} %{F$COLOR_FREE}]%{F-}"
+			# title="%{F$TITLE_COLOR}⮠ ${line#?} ♠"
+			;;
+		W*)
+			# bspwm internal state
+			wm_infos=""
+			IFS=':'
+			set -- ${line#?}
+			while [ $# -gt 0 ] ; do
+				item=$1
+				name=${item#?}
+				case $item in
+					O*)
+						# focused occupied desktop
+						wm_infos="$wm_infos %{U$COLOR_ACTIVE}%{+u}${name}%{-u}"
+						;;
+					F*)
+						# focused free desktop
+						wm_infos="$wm_infos %{U$COLOR_ACTIVE}%{+u}${name}%{-u}"
+						;;
+					U*)
+						# focused urgent desktop
+						wm_infos="$wm_infos %{U$COLOR_URGENT}%{+u}${name}%{-u}"
+						;;
+					o*)
+						# occupied desktop
+						wm_infos="$wm_infos %{F$COLOR_OCCUPIED}${name}%{F-}"
+						;;
+					f*)
+						# free desktop
+						wm_infos="$wm_infos %{F$COLOR_FREE}${name}%{F-}"
+						;;
+					u*)
+						# urgent desktop
+                        wm_infos="$wm_infos %{B$COLOR_URGENT}${name}%{B-}"
+						;;
+					L*)
+						# layout
+						layout=$(printf "%s" "${name}" | sed 's/\(.\).*/\U\1/')
+						wm_infos="$wm_infos  %{F$COLOR_LAYOUT}$layout%{F-}"
+						;;
+				esac
+				shift
+			done
+			;;
+	esac
+	printf "%s\n" "%{l} $networkStatus $wm_infos $song_final %{c} $title_final %{r} $sys_infos"
+done

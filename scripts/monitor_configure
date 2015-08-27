@@ -1,0 +1,57 @@
+#!/bin/bash
+
+extra="HDMI1"
+#extra="DP1"
+
+single_monitor() {
+    echo "Single monitor"
+    if [[ `bspc query -D | wc -l` -lt 10 ]]; then
+        bspc monitor -d • • • • • • • • • •
+    fi
+}
+
+xrandr --output eDP1 --primary
+if [[ "$(xrandr | grep -e "^$extra connected" | wc -l)" -gt "0" ]]; then
+    xrandr --output $extra --auto --right-of eDP1
+
+    if [[ `bspc query -M | wc -l` -gt 1 ]]; then
+        d=$((10/($(bspc query -M | wc -l))))
+        i=0
+        for monitor in $(bspc query -M); do
+            if [[ `bspc query -D | wc -l` -lt 10 ]]; then
+                bspc monitor $monitor \
+                        -d • • • • • 
+            else
+                if [[ $i -eq 0 ]]; then
+                    let i++
+                    continue
+                fi
+                p1=$(($i*$d + 1))
+                p2=$((($i+1)*$d))
+                for j in $(seq $p1 $p2 | tac); do
+                    echo $j to $monitor
+                    bspc desktop "^$j" -m $monitor
+                done
+                let i++
+
+                for k in {1..9}; do
+                    echo $k
+                    bspc monitor $extra -r "Desktop$k"
+                done
+            fi
+        done
+        echo 1
+    else
+        single_monitor
+    fi
+else
+    single_monitor
+    xrandr --output $extra --off
+fi
+
+hour=`date +%H | sed 's/0*//'`
+if (( $hour > 6 && $hour < 18 )); then
+    feh --bg-scale $LIGHTBG
+else
+    feh --bg-scale $DARKBG
+fi

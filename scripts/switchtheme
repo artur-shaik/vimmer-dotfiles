@@ -1,0 +1,47 @@
+#!/bin/bash
+
+function light {
+    theme=$LIGHTTHEME
+    feh --bg-scale $LIGHTBG
+}
+
+function dark {
+    theme=$DARKTHEME
+    feh --bg-scale $DARKBG
+}
+
+if [ $# -ge 1 ]; then
+    theme=$1
+else
+    theme="no"
+fi
+
+hour=`date +%H | sed 's/0*//'`
+if [ $theme = "light" ]; then
+    light
+elif [ $theme = "dark" ]; then
+    dark
+else
+    if (( $hour > 6 && $hour < 18 )); then
+        light
+    else
+        dark
+    fi
+fi
+
+if [[ ! -f $theme || (${#theme} -eq 0) ]]; then
+    echo "Theme not found"
+    exit -1
+fi
+
+echo "Current theme: $theme"
+
+createtheme.sh $theme > ~/.dynamic-colors/colorschemes/current-theme.sh
+dynamic-colors switch current-theme
+
+if [ -f /dev/shm/current-theme ]; then
+    rm /dev/shm/current-theme
+fi
+
+ln -s $theme /dev/shm/current-theme
+restart_panel

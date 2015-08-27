@@ -1,0 +1,4 @@
+#!/bin/bash
+
+bspc rule -a urxvt -o floating=on;
+urxvt -geometry 60x10 -e vim $@

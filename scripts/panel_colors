@@ -1,0 +1,23 @@
+if [ -f /dev/shm/current-theme ]; then
+    xdef=/dev/shm/current-theme
+else
+    xdef=`cat ~/.Xdefaults | grep -e "^#.*\.colors" | cut -d '"' -f2`
+fi
+
+colors=($(sed -re '/^!/d; /^$/d; /^#/d; s/(\*color)([0-9]):/\10\2:/g;' $xdef | grep 'color[01][0-9]:' | sort | sed  's/^.*#/#ff/g'))
+background=($(cat $xdef | grep 'background:' | sort | sed  's/^.*#/#ff/g'))
+foreground=($(cat $xdef | grep 'foreground:' | sort | sed  's/^.*#/#ff/g'))
+
+COLOR_BACKGROUND="${background}"
+COLOR_FOREGROUND="${foreground}"
+
+COLOR_LOGO="${colors[13]}"
+COLOR_ICON="${colors[13]}"
+COLOR_ACTIVE="${colors[9]}"
+COLOR_OCCUPIED="${colors[10]}"
+COLOR_URGENT="#FF084A74"
+COLOR_FREE="#FF383838"
+COLOR_TITLE=$COLOR_FOREGROUND
+COLOR_LAYOUT=$COLOR_ICON
+COLOR_VOLUME='#FF282828'
+COLOR_VOLUME2=$COLOR_FOREGROUND

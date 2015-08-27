@@ -7,3 +7,4 @@ weechat=~/.weechat
 mpv=~/.config
 zathura=~/.config
 qutebrowser=~/.config/qutebrowser
+scripts=~/bin
