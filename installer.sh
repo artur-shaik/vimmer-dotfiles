@@ -69,7 +69,7 @@ function readArguments() {
     fi
 }
 
-ignore=(.gitignore dests.txt installer.sh)
+ignore=(.gitignore dests.txt installer.sh README.md)
 
 function fetchRemoteList() {
     echo "fetching list from github..."
