@@ -73,7 +73,7 @@ ignore=(.gitignore dests.txt installer.sh README.md)
 
 function fetchRemoteList() {
     echo "fetching list from github..."
-    for conf in `wget -qO- $githubRepo/tree/master | grep js-directory-link | sed 's/.*<a.*>\(.*\)<\/a>.*/\1/g'`; do
+    for conf in `wget -qO- https://github.com/artur-shaik/vimmer-dotfiles/tree/master | grep js-directory-link | sed 's/^.*<a.*">\(.*\)<\/a>.*/\1/g' | sed 's/\(.*\)\/<.*/\1/g'`; do
         if [[ " ${ignore[@]} " =~ " ${conf} " ]]; then
             continue
         fi
