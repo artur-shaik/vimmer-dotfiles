@@ -244,20 +244,10 @@
  filetype plugin indent on
  
  " enabling 256 colors mode
- set t_Co=256
+ " set t_Co=256
 
  set background=light
- " colorscheme default
- colorscheme delek
- " let hour = strftime("%H")
- " if 6 <= hour && hour < 18
- " else
- "   set background=dark
-   " colorscheme koehler
- " endif
- 
- " colorscheme darkblue
- " set background=light
+ colorscheme default
 
  syntax on 
 
