@@ -47,7 +47,7 @@ URxvt.keysym.C-S-Down: perl:font-size:decglobal
 !urxvt.boldFont: xft:Terminus:pixelsize=10:weight=bold
 
 urxvt.font: xft:Source Code Pro:pixelsize=11:weight=bold
-urxvt.boldFont: xft:Source Code Pro:pixelsize=11:weight=bold
+urxvt.boldFont: xft:Source Code Pro:italic:pixelsize=11:weight=bold
 
 !urxvt.font: -misc-liberation mono-medium-i-normal--0-0-0-0-m-0-koi8-ru
 !urxvt.boldFont: -misc-liberation mono-bold-i-normal--0-0-0-0-m-0-koi8-ru
