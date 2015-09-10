@@ -40,6 +40,10 @@ bspc control --subscribe | awk -F ':' '$3 ~ /^[FO]/ { exit(system("qutebrowser &
 bspc rule -a skype desktop=^9
 bspc rule -a gimp desktop=^6
 bspc rule -a blender desktop=^7
+bspc rule -a pim floating=on
+bspc rule -a mpv floating=on
+bspc rule -a libreoffice floating=on
+bspc rule -a zathura floating=on
 
 # Start bspc: {{{1
 killall -9 panel panel_bar
