@@ -163,6 +163,7 @@ whoisaddress() {whois $1 | grep -E "(address|country)" | sort | uniq}
 ts() { args=$@; tmux send-keys -t right "$args" C-m }
 rp() { pulseaudio -k; pulseaudio --start }
 gmail() { curl -u "$1" --silent "https://mail.google.com/mail/feed/atom" | sed -e 's/<\/fullcount.*/\n/' | sed -e 's/.*fullcount>//'}
+eraty() { raty $1 | elinks }
 
 # foreground process with ctrl-z
 fancy-ctrl-z () {
