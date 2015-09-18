@@ -296,8 +296,6 @@
 
  augroup initialautocommands
      autocmd!
-     " remove all spaces in the end of all python files
-     autocmd BufWritePre *.py normal m`:%s/\s\+$//e ``
      
      " smartident after keywords in python
      autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
@@ -305,7 +303,8 @@
      autocmd FileType java set omnifunc=javacomplete#Complete
      autocmd Filetype java compiler mvn
      autocmd Filetype pom compiler mvn
-     autocmd Filetype java no <F4> :call javacomplete#AddImport()<CR>
+     autocmd Filetype java no <F4> :JCimportAdd<CR>
+     autocmd Filetype java ino <F4> <esc>:JCimportAddI<CR>
      autocmd Filetype java no <F9> :make clean<CR>
      autocmd Filetype java no <F10> :wa<CR> :make compile<CR>
      autocmd Filetype java no <F11> :make exec:exec<CR>
