@@ -8,12 +8,12 @@ urxvt*perl-ext-common:	default,matcher,clipboard-osc,font-size,rotate-colors
 URxvt*matcher.button:   1
 urxvt*cursorUnderline:  0
 urxvt*letterspace:      4
-urxvt*fading: 			10
+urxvt*fading: 			11
 urxvt*fadeColor: 		#000000
 urxvt*cursorBlink:		true
 urxvt*scrollBar:		false
 urxvt*depth:			32 
-urxvt*internalBorder: 	0
+urxvt*internalBorder: 	4
 urxvt*dynamicColors:    on
 urxvt.urgentOnBell:     true
 urxvt*transparent: false
@@ -46,11 +46,11 @@ URxvt.keysym.C-S-Down: perl:font-size:decglobal
 !urxvt.font: xft:Terminus:pixelsize=10
 !urxvt.boldFont: xft:Terminus:pixelsize=10:weight=bold
 
-urxvt.font: xft:Source Code Pro:pixelsize=11:weight=bold
-urxvt.boldFont: xft:Source Code Pro:italic:pixelsize=11:weight=bold
+urxvt.font: xft:Source Code Pro:pixelsize=11
+urxvt.boldFont: xft:Source Code Pro:pixelsize=11:weight=bold
 
-!urxvt.font: xft:Input:pixelsize=12:weight=bold
-!urxvt.boldFont: xft:Input:pixelsize=12:italic:weight=bold
+!urxvt.font: xft:Input:pixelsize=12
+!urxvt.boldFont: xft:Input:pixelsize=14:weight=bold
 
 !urxvt.font: -misc-liberation mono-medium-i-normal--0-0-0-0-m-0-koi8-ru
 !urxvt.boldFont: -misc-liberation mono-bold-i-normal--0-0-0-0-m-0-koi8-ru
