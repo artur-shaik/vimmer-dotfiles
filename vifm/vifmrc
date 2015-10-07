@@ -226,6 +226,9 @@ fileview *.docx, docx2txt.pl %f -
 " Qt projects
 filextype *.pro qtcreator %f &
 
+" Swf files
+filextype *.swf gnash %f &
+
 " Directories
 filextype */
         \ {View in thunar}
