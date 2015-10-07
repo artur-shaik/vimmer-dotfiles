@@ -1,5 +1,5 @@
-set -g status-bg "colour16"
-set -g status-justify "left"
+set -g status-bg default
+set -g status-justify centre
 set -g status-left-length "100"
 set -g status "on"
 set -g pane-border-fg magenta
@@ -10,16 +10,16 @@ set -g message-style "fg=yellow,bg=default,bold"
 set -g message-command-style "fg=yellow,bg=default,bold"
 set -g status-attr "none"
 set -g status-utf8 "on"
-set -g pane-border-fg "colour15"
+set -g pane-border-fg default
 set -g status-left-attr "none"
 setw -g window-status-fg "white"
 setw -g window-status-attr "none"
-setw -g window-status-activity-bg "colour16"
+setw -g window-status-activity-bg default
 setw -g window-status-activity-attr "none"
 setw -g window-status-activity-fg "white"
 setw -g window-status-separator ""
-setw -g window-status-bg "colour16"
-set -g status-left "#[fg=white,bg=colour16] ☻ "
-set -g status-right "#[fg=white,bg=colour16] %a 2 %h-%d %H:%M "
-setw -g window-status-format "#[fg=white,bg=black] #I #[fg=white,bg=black]#W "
-setw -g window-status-current-format "#[fg=black,bg=brightwhite,bold] #W "
+setw -g window-status-bg default
+set -g status-left "#[fg=black] ☻ "
+set -g status-right "#[fg=black] %a 2 %h-%d %H:%M "
+setw -g window-status-format "#[fg=colour2] #I:#W "
+setw -g window-status-current-format "#[fg=black,bold] #W "
