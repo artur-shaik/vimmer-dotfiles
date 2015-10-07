@@ -159,7 +159,7 @@ trr() { echo "$@" | trans -u 'Mozilla/5.0' ru:en }
 tre() { echo "$@" | trans -u 'Mozilla/5.0' en:ru }
 mcd() { mkdir -p "$1"; cd "$1"; }
 bkup() { cp "$1"{,.bak};}
-whoisaddress() {whois $1 | grep -E "(address|country)" | sort | uniq}
+whoisaddress() {whois $1 | grep -i -E "(address|country|city|state)" | sort | uniq}
 ts() { args=$@; tmux send-keys -t right "$args" C-m }
 rp() { pulseaudio -k; pulseaudio --start }
 gmail() { curl -u "$1" --silent "https://mail.google.com/mail/feed/atom" | sed -e 's/<\/fullcount.*/\n/' | sed -e 's/.*fullcount>//'}
