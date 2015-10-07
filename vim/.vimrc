@@ -45,7 +45,7 @@
      \   'perl' : ['->'],
      \   'php' : ['->', '::'],
      \   'cs,javascript,d,python,perl6,scala,vb,elixir,go' : ['.'],
-     \   'java' : ['.', '::'],
+     \   'java,jsp' : ['.', '::'],
      \   'vim' : ['re![_a-zA-Z]+[_\w]*\.'],
      \   'ruby' : ['.', '::'],
      \   'lua' : ['.', ':'],
@@ -128,6 +128,8 @@
     \ '',
     \ ''
     \ ]
+
+ let g:startify_change_to_dir = 0
 
  NeoBundle 'vimwiki/vimwiki' " {{{2
  nnoremap <leader>W :VimwikiIndex<cr>
@@ -300,14 +302,13 @@
      " smartident after keywords in python
      autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 
-     autocmd FileType java set omnifunc=javacomplete#Complete
-     autocmd Filetype java compiler mvn
-     autocmd Filetype pom compiler mvn
-     autocmd Filetype java no <F4> :JCimportAdd<CR>
-     autocmd Filetype java ino <F4> <esc>:JCimportAddI<CR>
-     autocmd Filetype java no <F9> :make clean<CR>
-     autocmd Filetype java no <F10> :wa<CR> :make compile<CR>
-     autocmd Filetype java no <F11> :make exec:exec<CR>
+     autocmd FileType java,jsp set omnifunc=javacomplete#Complete
+     autocmd Filetype java,jsp,pom compiler mvn
+     autocmd Filetype java,jsp no <F4> :JCimportAdd<CR>
+     autocmd Filetype java,jsp ino <F4> <esc>:JCimportAddI<CR>
+     autocmd Filetype java,jsp no <F9> :make clean<CR>
+     autocmd Filetype java,jsp no <F10> :wa<CR> :make compile<CR>
+     autocmd Filetype java,jsp no <F11> :make exec:exec<CR>
  augroup END
 
  " ------------------
