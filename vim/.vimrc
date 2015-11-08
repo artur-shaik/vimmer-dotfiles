@@ -73,14 +73,7 @@
 
  NeoBundle 'tpope/vim-git' " {{{2
  
- NeoBundle 'bling/vim-airline' " {{{2
- let g:airline#extensions#tabline#enabled = 1
- let g:airline_theme='solarized'
- let g:airline#extensions#tmuxline#enabled = 0
-
  NeoBundle 'tfnico/vim-gradle.git' " {{{2
-
- NeoBundle 'sjl/clam.vim' " {{{2
 
  NeoBundle 'xolox/vim-misc' " {{{2
 
@@ -99,13 +92,9 @@
 
  NeoBundle 'dhruvasagar/vim-table-mode' " {{{2
 
- NeoBundle 'godlygeek/tabular' " {{{2
-
  NeoBundle 'plasticboy/vim-markdown' " {{{2
 
  NeoBundle 'christoomey/vim-tmux-navigator' " {{{2
-
- NeoBundle 'yakiang/excel.vim' " {{{2
 
  NeoBundle 'mhinz/vim-startify' " {{{2
  let g:startify_bookmarks = [ '~/.vimrc' ]
@@ -134,8 +123,6 @@
  NeoBundle 'vimwiki/vimwiki' " {{{2
  nnoremap <leader>W :VimwikiIndex<cr>
 
- NeoBundle 'scrooloose/nerdtree' " {{{2
- nnoremap <F7> :NERDTreeToggle<cr>
 
  NeoBundle 'powerman/vim-plugin-ruscmd' " {{{2
 
@@ -165,8 +152,6 @@
  NeoBundle 'MarcWeber/vim-addon-local-vimrc.git' " {{{2
 
  NeoBundle 'xolox/vim-session.git' " {{{2
-
- NeoBundle 'whatyouhide/vim-gotham' " {{{2
 
  NeoBundle 'xolox/vim-reload' " {{{2
 
@@ -214,6 +199,8 @@
  NeoBundle 'lyokha/vim-xkbswitch' " {{{2
  let g:XkbSwitchEnabled = 1
 
+ NeoBundle 'james9909/stackanswers.vim.git' " {{{2
+
  " others plugins {{{2
  let python_highlight_all = 1
  " }}}
@@ -228,6 +215,8 @@
      \ })
 
  execute pathogen#infect()
+
+ call neobundle#end()
 
  call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
@@ -249,19 +238,20 @@
  " set t_Co=256
 
  set background=light
- colorscheme default
+ colorscheme elflord
 
  syntax on 
 
  set cursorline
 
  hi Visual term=none cterm=none ctermbg=1 gui=none ctermfg=15
- hi CursorLine term=none cterm=bold ctermbg=15
+ hi CursorLine term=none cterm=bold ctermfg=8 ctermbg=15
  hi Pmenu ctermbg=2 ctermfg=15 guibg=2 guifg=none
+ hi PmenuSel ctermfg=2 ctermbg=15
+ hi LineNr ctermfg=5
  " hi SpellBad term=underline cterm=underline ctermbg=none ctermfg=1
  " hi Error term=none cterm=none ctermbg=none ctermfg=1
  " hi Search ctermbg=8
- " hi airline_tabsel term=none cterm=none ctermbg=1 gui=none ctermfg=15
 
  " --------------------
  "  Tabs and indenting {{{1
@@ -292,6 +282,8 @@
  set undolevels=500
  set undoreload=500
  set laststatus=2
+
+ let g:netrw_liststyle=3
  " -------------------
  "  Auto Commands {{{1
  " -------------------
@@ -389,6 +381,8 @@
  nnoremap gs :Gstatus<cr>
  nnoremap gC :Gcommit<cr>
 
+ nnoremap <leader>b :Explore<CR>
+
  function! RestoreRegister()
    let @" = s:restore_reg
    return ''
@@ -483,10 +477,150 @@
  
  set foldmethod=indent
  set foldlevel=20
- set foldcolumn=2
+ set foldcolumn=0
 
  " ------------------
  "  Abbr {{{1
  " ------------------
  cabbr <expr> %% expand('%:p:h')
  iabbr @@ Artur Shaikhullin <ashaihullin@gmail.com>
+
+ " Status Line: {{{1
+
+ function! Status(winnum)
+   let active = a:winnum == winnr()
+   let bufnum = winbufnr(a:winnum)
+ 
+   let stat = ''
+ 
+   " this function just outputs the content colored by the
+   " supplied colorgroup number, e.g. num = 2 -> User2
+   " it only colors the input if the window is the currently
+   " focused one
+ 
+   function! Color(active, group, content)
+     if a:active
+       return '%#' . a:group . '#' . a:content . '%*'
+     else
+       return a:content
+     endif
+   endfunction
+ 
+   " this handles alternative statuslines
+   let usealt = 0
+ 
+   let type = getbufvar(bufnum, '&buftype')
+   let name = bufname(bufnum)
+ 
+   let altstat = ''
+ 
+   if type ==# 'help'
+     let altstat .= '%#SLHelp# HELP %* ' . fnamemodify(name, ':t:r')
+     let usealt = 1
+   elseif name ==# '__Gundo__'
+     let altstat .= ' Gundo'
+     let usealt = 1
+   elseif name ==# '__Gundo_Preview__'
+     let altstat .= ' Gundo Preview'
+     let usealt = 1
+   endif
+ 
+   if usealt
+     return altstat
+   endif
+ 
+   " column
+   "   this might seem a bit complicated but all it amounts to is
+   "   a calculation to see how much padding should be used for the
+   "   column number, so that it lines up nicely with the line numbers
+ 
+   "   an expression is needed because expressions are evaluated within
+   "   the context of the window for which the statusline is being prepared
+   "   this is crucial because the line and virtcol functions otherwise
+   "   operate on the currently focused window
+ 
+   function! Column()
+     let vc = virtcol('.')
+     let ruler_width = max([strlen(line('$')), (&numberwidth - 1)]) + &l:foldcolumn
+     let column_width = strlen(vc)
+     let padding = ruler_width - column_width
+     let column = ''
+ 
+     if padding <= 0
+       let column .= vc
+     else
+       " + 1 because for some reason vim eats one of the spaces
+       let column .= repeat(' ', padding + 1) . vc
+     endif
+ 
+     return column . ' '
+   endfunction
+ 
+   let stat .= '%#SLColumn#'
+   let stat .= '%{Column()}'
+   let stat .= '%*'
+   
+   " file name
+   let stat .= Color(active, 'SLArrows', active ? ' »' : ' «')
+   let stat .= ' %<'
+   let stat .= '%f'
+   let stat .= ' ' . Color(active, 'SLArrows', active ? '«' : '»')
+ 
+   " file modified
+   let modified = getbufvar(bufnum, '&modified')
+   let stat .= Color(active, 'SLLineNr', modified ? ' +' : '')
+ 
+   " read only
+   let readonly = getbufvar(bufnum, '&readonly')
+   let stat .= Color(active, 'SLLineNR', readonly ? ' ‼' : '')
+ 
+   " paste
+   if active
+     if getwinvar(a:winnum, '&spell')
+       let stat .= Color(active, 'SLLineNr', ' S')
+     endif
+ 
+     if getwinvar(a:winnum, '&paste')
+       let stat .= Color(active, 'SLLineNr', ' P')
+     endif
+   endif
+ 
+   " right side
+   let stat .= '%='
+
+   " git branch
+   if exists('*fugitive#head')
+     let head = fugitive#head()
+ 
+     if empty(head) && exists('*fugitive#detect') && !exists('b:git_dir')
+       call fugitive#detect(getcwd())
+       let head = fugitive#head()
+     endif
+   endif
+ 
+   if !empty(head)
+     let stat .= Color(active, 'SLBranch', ' ← ') . head . ' '
+   endif
+
+   " file type
+   let stat .= ' %y'
+
+   " progress
+   let stat .= Color(active, 'SLProgress', ' %P ')
+
+   return stat
+ endfunction
+ 
+ function! s:RefreshStatus()
+   for nr in range(1, winnr('$'))
+     call setwinvar(nr, '&statusline', '%!Status(' . nr . ')')
+   endfor
+ endfunction
+ 
+ command! RefreshStatus :call <SID>RefreshStatus()
+ 
+ augroup status
+   autocmd!
+   autocmd VimEnter,VimLeave,WinEnter,WinLeave,BufWinEnter,BufWinLeave * :RefreshStatus
+ augroup END
+ " }}}
