@@ -249,6 +249,13 @@ super + shift + m
     bspc rule -a urxvt -o floating=on; \
     urxvt -geometry 130x40 -e ncmpcpp &;
 
+# start terminal with ncmpcpp
+super + shift + p
+    bspc rule -a urxvt -o floating=on; \
+    urxvt -geometry 40x40 -e tmux new-session -A -s translate 'zsh' &; \
+    sleep 0.4; \
+    xdo move -x +400
+
 # start terminal with elinks
 super + shift + b
     OLDTMUX="$TMUX"; \
