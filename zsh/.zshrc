@@ -8,7 +8,10 @@ bgnotify_threshold=6
 function bgnotify_formatted {
     # $1=exit_status, $2=command, $3=elapsed_time
     [ $1 -eq 0 ] && title="Success" || title="Failure"
-    notify "$2: $title -- after $3 s";
+
+    if whence notify-send > /dev/null; then
+        notify-send "$title" "$2 -- after $3 s";
+    fi
 }
 
 plugins=(git taskwarrior lol pip python suse vi-mode web-search wd zsh-syntax-highlighting bgnotify)
@@ -83,13 +86,17 @@ if whence task > /dev/null; then
 fi
 
 # show how much files that should be sorted
-lsinbox=`ls ~/INBOX | wc -l`
-if [[ $lsinbox -gt 0  ]]; then
-    print
-    print "$fg_bold[red]Warning! INBOX has $lsinbox file(s)!$reset_color"
+if [[ -d ~/INBOX ]]; then
+    lsinbox=`ls ~/INBOX | wc -l`
+    if [[ $lsinbox -gt 0  ]]; then
+        print
+        print "$fg_bold[red]Warning! INBOX has $lsinbox file(s)!$reset_color"
+    fi
 fi
 
-export PAGER=~/bin/vimpager 
+if whence vimpager > /dev/null; then
+    export PAGER=~/bin/vimpager 
+fi
 
 # aliases
 hi() { if [ -z "$*" ]; then history; else history | egrep "$@"; fi; }
