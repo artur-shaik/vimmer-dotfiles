@@ -6,11 +6,9 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 # snippet notify for long processes
 bgnotify_threshold=6
 function bgnotify_formatted {
-    # $1=exit_status, $2=command, $3=elapsed_time
     [ $1 -eq 0 ] && title="Success" || title="Failure"
-
     if whence notify-send > /dev/null; then
-        notify-send "$title" "$2 -- after $3 s";
+        notify-send $title "$2: after $3 s";
     fi
 }
 
