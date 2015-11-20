@@ -152,7 +152,7 @@ read_and_review (){
     title=$(webpage_title $link)
     echo $title
     descr="\"Read and review: $title\""
-    id=$(task add +next +rnr +in "$descr" | sed -n 's/Created task \(.*\)./\1/p')
+    id=$(task add +rnr +in "$descr" | sed -n 's/Created task \(.*\)./\1/p')
     task "$id" annotate "$link"
 }
 
