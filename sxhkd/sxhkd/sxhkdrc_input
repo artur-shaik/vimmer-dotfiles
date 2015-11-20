@@ -169,16 +169,19 @@ super + shift + alt + {1-9}
 # mpd {{{1
 
 ctrl + alt + s
-    mpc stop
+    mpc stop; mpc -h 192.168.0.104 stop;
 
 ctrl + alt + c
-    mpc toggle
+    mpc -h 192.168.0.104 toggle || mpc toggle
+
 
 ctrl + alt + z
     mpc prev
 
+
 ctrl + alt + n
     mpc next
+
 
 # aijmixer {{{1
 
@@ -249,7 +252,7 @@ super + shift + m
     bspc rule -a urxvt -o floating=on; \
     urxvt -geometry 130x40 -e ncmpcpp &;
 
-# start terminal with ncmpcpp
+# start floating terminal
 super + shift + p
     bspc rule -a urxvt -o floating=on; \
     urxvt -geometry 40x40 -e tmux new-session -A -s translate 'zsh' &; \
