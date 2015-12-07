@@ -34,7 +34,7 @@ set norunexec
 set noiec
 
 " Selected color scheme
-colorscheme matrix2
+colorscheme solarized-dark
 
 " the FUSE_HOME directory will be used as a root dir for all FUSE mounts.
 " unless it exists with write/exec permissions set, vifm will attempt to
@@ -269,7 +269,7 @@ nmap A cw<c-w>
 nmap dD :!rm -rf %f
 
 " Copy file with rsync and notify
-nmap cP :!rsync -rltzuv --info=progress2 --temp-dir=/tmp/ %f %D; notify upload finished<cr>
+nmap cP :!rsync -rltzuv --info=progress2 --temp-dir=/tmp/ %f %D; notify-send "rsync" "upload finished: %f"<cr>
 
 " Opening console in current directory
 nmap ,t :!xterm &<cr>
@@ -292,6 +292,11 @@ nmap <f8> :delete<cr>
 
 nmap <C-p> :!tar -czf %f.tar.gz %f<cr>
 nmap <a-u> :!extract %f<cr>
+
+nmap <C-h> :!tmux select-pane -L 2> /dev/null &<cr>
+nmap <C-j> :!tmux select-pane -D 2> /dev/null &<cr>
+nmap <C-k> :!tmux select-pane -U 2> /dev/null &<cr>
+nmap <C-l> :!tmux select-pane -R 2> /dev/null &<cr>
 
 nmap ; :
 nmap ! :!
