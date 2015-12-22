@@ -25,12 +25,65 @@
  NeoBundle 'Shougo/unite.vim' " {{{2
  let g:unite_source_history_yank_enable = 1
  
+ " Use ag in unite grep source.
+ let g:unite_source_grep_command = 'ag'
+ let g:unite_source_grep_default_opts =
+ \ '-i --vimgrep --hidden --ignore ' .
+ \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+ let g:unite_source_grep_recursive_opt = ''
+
  nnoremap <space>/ :Unite grep:.<cr>
- nnoremap <silent> <C-p> :<C-u>Unite -no-split -buffer-name=files -start-insert file_rec/async:!<cr>
- nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files -start-insert file<cr>
- nnoremap <leader>m :<C-u>Unite -no-split -buffer-name=mru -start-insert file_mru<cr>
- nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank history/yank<cr>
- nnoremap <silent> <C-b> :<C-u>Unite -start-insert -buffer-name=buffer buffer<cr>
+ nnoremap <silent> <C-p> :Unite -no-split -buffer-name=files -start-insert file_rec/async:!<cr>
+ nnoremap <leader>f :Unite -no-split -buffer-name=files -start-insert file<cr>
+ nnoremap <leader>m :Unite -no-split -buffer-name=mru -start-insert file_mru<cr>
+ nnoremap <leader>y :Unite -no-split -buffer-name=yank history/yank<cr>
+ nnoremap <silent> <C-b> :Unite -start-insert -buffer-name=buffer buffer<cr>
+
+ 
+ " Interface for Git
+ let g:unite_source_menu_menus = {}
+ let g:unite_source_menu_menus.git = {
+     \ 'description' : 'Fugitive interface',
+     \}
+ let g:unite_source_menu_menus.git.command_candidates = [
+     \[' git status', 'Gstatus'],
+     \[' git diff', 'Gvdiff'],
+     \[' git commit', 'Gcommit'],
+     \[' git stage/add', 'Gwrite'],
+     \[' git checkout', 'Gread'],
+     \[' git rm', 'Gremove'],
+     \[' git cd', 'Gcd'],
+     \[' git push', 'exe "Git! push -u origin " input("branch: ")'],
+     \[' git pull', 'exe "Git! pull " input("branch: ")'],
+     \[' git fetch', 'Gfetch'],
+     \[' git merge', 'Gmerge'],
+     \[' git browse', 'Gbrowse'],
+     \[' git head', 'Gedit HEAD^'],
+     \[' git parent', 'edit %:h'],
+     \[' git log commit buffers', 'Glog --'],
+     \[' git log current file', 'Glog -- %'],
+     \[' git log last n commits', 'exe "Glog -" input("num: ")'],
+     \[' git log first n commits', 'exe "Glog --reverse -" input("num: ")'],
+     \[' git log until date', 'exe "Glog --until=" input("day: ")'],
+     \[' git log grep commits',  'exe "Glog --grep= " input("string: ")'],
+     \[' git log pickaxe',  'exe "Glog -S" input("string: ")'],
+     \[' git index', 'exe "Gedit " input("branchname\:filename: ")'],
+     \[' git mv', 'exe "Gmove " input("destination: ")'],
+     \[' git grep',  'exe "Ggrep " input("string: ")'],
+     \[' git prompt', 'exe "Git! " input("command: ")'],
+     \] " Append ' --' after log to get commit info commit buffers
+ nnoremap <silent> <space>g :Unite -direction=botright -silent -buffer-name=git menu:git<CR>
+
+ NeoBundle 'Shougo/unite-outline' " {{{2
+ nnoremap <space>o :Unite outline<cr>
+
+ NeoBundle 'osyo-manga/vim-anzu' " {{{2
+ nmap n <Plug>(anzu-n-with-echo)
+ nmap N <Plug>(anzu-N-with-echo)
+ nmap * <Plug>(anzu-star-with-echo)
+ nmap # <Plug>(anzu-sharp-with-echo)
+ 
+ nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
 
  NeoBundle 'Lokaltog/vim-easymotion' " {{{2
  map <space> <Plug>(easymotion-prefix)
@@ -55,6 +108,7 @@
  let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
  let g:ycm_confirm_extra_conf = 0
  let g:ycm_collect_identifiers_from_tags_files = 1
+ let g:ycm_autoclose_preview_window_after_completion = 1
 
  NeoBundle 'Raimondi/delimitMate.git' " {{{2
  let delimitMate_expand_cr = 1
@@ -167,6 +221,7 @@
 
  NeoBundle 'artur-shaik/vim-javacomplete2' " {{{2
  let g:JavaComplete_MavenRepositoryDisable = 0
+ let g:JavaComplete_UseFQN = 1
  
  NeoBundle 'kana/vim-vspec' " {{{2
 
@@ -200,6 +255,27 @@
  let g:XkbSwitchEnabled = 1
 
  NeoBundle 'james9909/stackanswers.vim.git' " {{{2
+
+ NeoBundle 'rdnetto/YCM-Generator' " {{{2
+
+ NeoBundle 'lervag/vimtex' " {{{2
+
+ let g:vimtex_view_method = 'zathura'
+
+ if !exists('g:ycm_semantic_triggers')
+   let g:ycm_semantic_triggers = {}
+ endif
+ let g:ycm_semantic_triggers.tex = [
+       \ 're!\\[A-Za-z]*(ref|cite)[A-Za-z]*([^]]*])?{([^}]*, ?)*'
+       \ ]
+
+ NeoBundle '907th/vim-auto-save' " {{{2
+
+ NeoBundle 'wellle/tmux-complete.vim' " {{{2
+
+ let g:tmuxcomplete#trigger = 'omnifunc'
+
+ NeoBundle 'wellle/visual-split.vim' " {{{2
 
  " others plugins {{{2
  let python_highlight_all = 1
@@ -249,8 +325,8 @@
  hi Pmenu ctermbg=2 ctermfg=15 guibg=2 guifg=none
  hi PmenuSel ctermfg=2 ctermbg=15
  hi LineNr ctermfg=5
- " hi SpellBad term=underline cterm=underline ctermbg=none ctermfg=1
- " hi Error term=none cterm=none ctermbg=none ctermfg=1
+ hi SpellBad term=underline cterm=underline ctermbg=none ctermfg=1
+ hi Error term=none cterm=none ctermbg=none ctermfg=1
  " hi Search ctermbg=8
 
  " --------------------
@@ -292,9 +368,9 @@
      autocmd!
      
      " smartident after keywords in python
-     autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+     autocmd BufRead *.py setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 
-     autocmd FileType java,jsp set omnifunc=javacomplete#Complete
+     autocmd FileType java,jsp setlocal omnifunc=javacomplete#Complete
      autocmd Filetype java,jsp,pom compiler mvn
      autocmd Filetype java,jsp no <F4> :JCimportAdd<CR>
      autocmd Filetype java,jsp ino <F4> <esc>:JCimportAddI<CR>
@@ -309,6 +385,7 @@
 
  " set leader for comma
  let mapleader = ","
+ let maplocalleader = ","
  let g:mapleader = ","
 
  " F3 to toggle paste and nopaste
@@ -348,8 +425,6 @@
  imap лл <esc>
  imap <F1> <Esc>
  map <F1> <Esc>
-
- " shortcuts for BS
  imap <C-h> <backspace>
 
  imap <C-b> <Left>
@@ -361,15 +436,19 @@
  imap <C-n> <Down>
  imap <C-p> <Up>
 
+ cmap <Esc>k <Up>
+ cmap <Esc>j <Down>
+ cmap <Esc>l <Enter>
+
  " replace word under cursor with entered 
  " in all document
  nnoremap <Leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/g<Left><Left>
 
  " easy split navigation
- nnoremap <C-J> <C-W>J
- nnoremap <C-K> <C-W>K
- nnoremap <C-L> <C-W>L
- nnoremap <C-H> <C-W>H
+ nnoremap <C-j> <C-W>j
+ nnoremap <C-k> <C-W>k
+ nnoremap <C-l> <C-W>l
+ nnoremap <C-h> <C-W>h
 
  " Tab/Shift+Tab for switching between buffers
  nnoremap  <silent>   <tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
@@ -380,6 +459,8 @@
 
  nnoremap gs :Gstatus<cr>
  nnoremap gC :Gcommit<cr>
+
+ nnoremap g= gg=Gg``
 
  nnoremap <leader>b :Explore<CR>
 
