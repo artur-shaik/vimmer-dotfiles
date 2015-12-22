@@ -38,7 +38,27 @@ super + {_,shift + }c
 
 # focus/move window
 super + {_,shift + }{h,j,k,l}
-    bspc window -{f,s} {left,down,up,right}
+    mod={f,s}; \
+    dir={left,down,up,right}; \
+    if [[ "$mod" == "f" ]]; then \
+        step=20; \
+    else \
+        step=200; \
+    fi; \
+    if [[ "$dir" == "left" ]]; then \
+        ord=x; \
+        move="-$step"; \
+    elif [[ "$dir" == "right" ]]; then \
+        ord=x; \
+        move="+$step"; \
+    elif [[ "$dir" == "up" ]]; then \
+        ord=y; \
+        move="-$step"; \
+    elif [[ "$dir" == "down" ]]; then \
+        ord=y; \
+        move="+$step"; \
+    fi; \
+    bspc window -$mod $dir || xdo move -$ord $move
 
 # show desktop, send window to desktop
 super + {_,shift + }{1-9,0}
@@ -72,7 +92,21 @@ super + ctrl + {_,shift + }space
 
 # resize tiled windows
 super + alt + {h,j,k,l}
-	bspc window -e {left -10,down +10,up -10,right +10}
+    dir={left,down,up,right}; \
+    if [[ $dir == "left" ]]; then \
+        side="w"; \
+        step=-20; \
+    elif [[ $dir == "right" ]]; then \
+        side="w"; \
+        step=+20; \
+    elif [[ $dir == "up" ]]; then \
+        side="h"; \
+        step=-20; \
+    elif [[ $dir == "down" ]]; then \
+        side="h"; \
+        step=+20; \
+    fi; \
+	bspc window -e $dir $step || xdo resize -$side $step
 
 # resize another side
 super + alt + shift + {h,j,k,l}
@@ -204,8 +238,12 @@ super + ctrl + alt + {h,j,k,l}
     xdotool mousemove_relative {-- -8 0, 0 8, -- 0 -8, 8 0}
 
 # emulate mouse click
-super + {shift,alt} + i
-    xdotool click 1 --delay 300
+super + alt + i
+    xdotool click 1
+
+# emulate mouse click at screen center
+super + shift + i
+    xdotool mousemove --polar 0 0 click --clearmodifiers 1
 
 # emulate mouse scroll down
 super + alt + d
@@ -254,6 +292,7 @@ super + shift + m
 
 # start floating terminal
 super + shift + p
+    unset TMUX; \
     bspc rule -a urxvt -o floating=on; \
     urxvt -geometry 40x40 -e tmux new-session -A -s translate 'zsh' &; \
     sleep 0.4; \
