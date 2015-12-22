@@ -5,7 +5,7 @@
 # Colors {{{1
 
 #fetch colors from current X theme
-colors=( $( sed -re '/^!/d; /^$/d; /^#/d; s/(\*color)([0-9]):/\10\2:/g;' ~/current-theme | grep 'color[01][0-9]:' | sort | sed 's/^.*: *//g' ) )
+colors=( $( sed -re '/^!/d; /^$/d; /^#/d; s/(\*color)([0-9]):/\10\2:/g;' /dev/shm/current-theme | grep 'color[01][0-9]:' | sort | sed 's/^.*: *//g' ) )
 
 bspc config presel_border_color "#B0FFF2"
 bspc config focused_border_color ${colors[13]}
@@ -15,14 +15,14 @@ bspc config urgent_border_color "#4e9a06"
 
 # Settings {{{1
 bspc config split_ratio                 0.60
-bspc config borderless_monocle          true
+bspc config borderless_monocle          false
 bspc config gapless_monocle             true
 bspc config focus_follows_pointer       true
 bspc config pointer_follows_monitor     true
 bspc config pointer_follows_focus       false
 bspc config auto_cancel                 true
 bspc config ignore_emwh_focus           true
-bspc config border_width                1
+bspc config border_width                5
 bspc config window_gap                  48
 bspc config normal_frame_opacity        0.0
 bspc config focused_frame_opacity       0.05
