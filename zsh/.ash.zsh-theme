@@ -11,8 +11,8 @@ function tasks_num {
     fi
 }
 
-PROMPT='%(?, ,%{$fg[red]%}FAIL%{$reset_color%})
-╭%{$(tasks_num)%}╼ %{$FG[147]%}%n%{$reset_color%}: %{$FX[bold]$FG[153]%}%~%{$reset_color%}$(git_prompt_info) 
-╰╼ '
+PROMPT='%(?, ,%{$fg[red]%}✘%{$reset_color%})
+%{$(tasks_num)%}╼ %{$FG[147]%}%n%{$reset_color%}: %{$FX[bold]$FG[153]%}%~%{$reset_color%}$(git_prompt_info) 
+'
 
 RPROMPT='%{$FG[151]%}[%*]%{$reset_color%}'
