@@ -35,6 +35,7 @@ set noiec
 
 " Selected color scheme
 colorscheme solarized-dark
+highlight CmdLine cterm=none ctermfg=lightwhite ctermbg=black
 
 " the FUSE_HOME directory will be used as a root dir for all FUSE mounts.
 " unless it exists with write/exec permissions set, vifm will attempt to
@@ -234,6 +235,8 @@ filextype */
         \ {View in thunar}
         \ Thunar %f &,
 fileview .*/,*/ tree %f
+
+filextype *.ymp xdg-open %f &
 
 " Open all other files with default system programs (you can also remove all
 " :file[x]type commands above to ensure they don't interfere with system-wide
