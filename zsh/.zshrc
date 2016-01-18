@@ -12,7 +12,7 @@ function bgnotify_formatted {
     fi
 }
 
-plugins=(git taskwarrior lol pip python suse vi-mode web-search wd zsh-syntax-highlighting bgnotify)
+plugins=(vi-mode git taskwarrior lol pip python suse web-search wd zsh-syntax-highlighting bgnotify)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -68,7 +68,7 @@ bindkey -M vicmd '^s' history-incremental-search-backward
 function zle-line-init zle-keymap-select {
     VIM_PROMPT_NORMAL="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
     VIM_PROMPT_INSERT="%{$fg_bold[white]%} -- INSERT --  %{$reset_color%}"
-    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT_NORMAL}/(main|viins)/$VIM_PROMPT_INSERT} [%*] $EPS1"
+    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT_NORMAL}/(main|viins)/$VIM_PROMPT_INSERT} $EPS1"
     zle reset-prompt
     xkb-switch -s us
 }
@@ -92,10 +92,6 @@ if [[ -d ~/INBOX ]]; then
     fi
 fi
 
-if whence vimpager > /dev/null; then
-    export PAGER=~/bin/vimpager 
-fi
-
 # aliases
 hi() { if [ -z "$*" ]; then history; else history | egrep "$@"; fi; }
 alias gv='gwenview'
@@ -115,8 +111,6 @@ alias nb='newsbeuter'
 alias qb='qutebrowser'
 alias ytd='youtube-dl --write-sub --sub-lang "en,ru" -o "~/INBOX/%(title)s-%(id)s.%(ext)s"'
 alias ipinfo="dig +short my.ip @outsideip.net"
-alias less=$PAGER 
-alias zless=$PAGER 
 
 #
 # GTD task {{{1
@@ -169,6 +163,7 @@ ts() { args=$@; tmux send-keys -t right "$args" C-m }
 rp() { pulseaudio -k; pulseaudio --start }
 gmail() { curl -u "$1" --silent "https://mail.google.com/mail/feed/atom" | sed -e 's/<\/fullcount.*/\n/' | sed -e 's/.*fullcount>//'}
 eraty() { raty $1 | elinks }
+dbase64() { echo $@|base64 -d && echo }
 
 # foreground process with ctrl-z
 fancy-ctrl-z () {
