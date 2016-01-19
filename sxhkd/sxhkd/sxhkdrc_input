@@ -3,14 +3,20 @@
 
 # bspwm hotkeys {{{1
 
-# restart bspwm
+# kill panel, nicely ask all windows to close, quit.
+# todo: ask nicely for real.
 super + alt + Escape
-	pkill -x panel; \
-    bspc quit;
+    pkill -x panel; \
+    for win in $(bspc query -N); do bspc node $win -c ; done; \
+    bspc quit
+
+# rotate desktops.
+super + {_,shift} + semicolon
+    bspc node @/ -R {90,270}
 
 # close window
-super + w
-	bspc window -c
+super + {_,shift} + w
+	bspc node {-c,-k}
 
 # toggle tiling | monocle
 super + t
@@ -18,11 +24,17 @@ super + t
 
 # balance size of windows
 super + b
-	bspc desktop -B
+	bspc node -B
 
 # toggle floating and fullscreen
-super + {s,f}
-	bspc window -t {floating,fullscreen}
+super + s
+    bspc query -N -n focused.tiled && state=floating || state=tiled; \
+    bspc node -t $state
+
+super + f
+    state=fullscreen; \
+    bspc query -N -n "focused.$state" && state=$(bspc query -T -n | jshon -e client -e lastState -u); \
+    bspc node -t "$state"
 
 # toggle last window with ` and last desktop with Tab
 super + {grave,Tab}
@@ -30,87 +42,83 @@ super + {grave,Tab}
 
 # swap window with last selected
 super + apostrophe
-	bspc window -s last
+	bspc node -s last
 
 # switch desktop's windows
 super + {_,shift + }c
-	bspc window -f {next,prev}
+	bspc node -f {next,prev}
 
 # focus/move window
 super + {_,shift + }{h,j,k,l}
     mod={f,s}; \
-    dir={left,down,up,right}; \
+    dir={west,south,north,east}; \
     if [[ "$mod" == "f" ]]; then \
         step=20; \
     else \
         step=200; \
     fi; \
-    if [[ "$dir" == "left" ]]; then \
+    if [[ "$dir" == "west" ]]; then \
         ord=x; \
         move="-$step"; \
-    elif [[ "$dir" == "right" ]]; then \
+    elif [[ "$dir" == "east" ]]; then \
         ord=x; \
         move="+$step"; \
-    elif [[ "$dir" == "up" ]]; then \
+    elif [[ "$dir" == "north" ]]; then \
         ord=y; \
         move="-$step"; \
-    elif [[ "$dir" == "down" ]]; then \
+    elif [[ "$dir" == "south" ]]; then \
         ord=y; \
         move="+$step"; \
     fi; \
-    bspc window -$mod $dir || xdo move -$ord $move
+    bspc node -$mod $dir || xdo move -$ord $move
 
 # show desktop, send window to desktop
 super + {_,shift + }{1-9,0}
-	bspc {desktop -f,window -d} ^{1-9,10}
+	bspc {desktop -f,node -d} '^{1-9,10}'
 
 # jump throught window selection history
 super + {o,i}
-	bspc control --record-history off; \
-	bspc window {older,newer} -f; \
-	bspc control --record-history on
+	bspc wm --record-history off; \
+	bspc node {older,newer} -f; \
+	bspc wm --record-history on
 
 # transplant selected window to the given window
 super + y
-	bspc window -w last
+	bspc node -n last
 
 # make window biggest
 super + ctrl + m
-	bspc window -s biggest
+	bspc node -s biggest
 
 # preselect split ratio side
-super + ctrl + {h,j,k,l}
-	bspc window -p {left,down,up,right}
+super + ctrl + {h,j,k,l,0}
+	bspc node -p {west,south,north,east,cancel}
 
 # change select ratio
 super + ctrl + {1-9}
-	bspc window -r 0.{1-9}
-
-# cancel selection
-super + ctrl + {_,shift + }space
-	bspc {window -p cancel,desktop -c}
+	bspc node -r 0.{1-9}
 
 # resize tiled windows
 super + alt + {h,j,k,l}
-    dir={left,down,up,right}; \
-    if [[ $dir == "left" ]]; then \
+    dir={west,south,north,east}; \
+    if [[ $dir == "west" ]]; then \
         side="w"; \
         step=-20; \
-    elif [[ $dir == "right" ]]; then \
+    elif [[ $dir == "east" ]]; then \
         side="w"; \
         step=+20; \
-    elif [[ $dir == "up" ]]; then \
+    elif [[ $dir == "north" ]]; then \
         side="h"; \
         step=-20; \
-    elif [[ $dir == "down" ]]; then \
+    elif [[ $dir == "south" ]]; then \
         side="h"; \
         step=+20; \
     fi; \
-	bspc window -e $dir $step || xdo resize -$side $step
+	bspc node @$dir -r $step || xdo resize -$side $step
 
 # resize another side
 super + alt + shift + {h,j,k,l}
-	bspc window -e {right -10,up +10,down -10,left +10}
+	bspc node @{east -r -10,north -r +10,south -r -10,west -r +10}
 
 # reducing gap on the fly 
 super + {minus,equal}
@@ -122,15 +130,14 @@ super + alt + {8,9}
 
 # make window sticky
 super + e
-    bspc window -t sticky
+    bspc node -g sticky
 
 # preventing closing 
 super + r
-    bspc window -t locked
+    bspc node -g locked
 
-# hide all windows on all desktops
-super + z
-    bspc control --toggle-visibility 
+super + {comma,period}
+    bspc desktop -a {prev,next}
 
 # move floating windows (requires baskerville's xdo)
 super + {Left,Right,Up,Down}
@@ -287,13 +294,13 @@ super + space
 
 # start terminal with ncmpcpp
 super + shift + m
-    bspc rule -a urxvt -o floating=on; \
+    bspc rule -a URxvt -o state=floating; \
     urxvt -geometry 130x40 -e ncmpcpp &;
 
 # start floating terminal
 super + shift + p
     unset TMUX; \
-    bspc rule -a urxvt -o floating=on; \
+    bspc rule -a URxvt -o state=floating; \
     urxvt -geometry 40x40 -e tmux new-session -A -s translate 'zsh' &; \
     sleep 0.4; \
     xdo move -x +400
@@ -307,7 +314,7 @@ super + shift + b
 
 # start terminal with weechat
 super + shift + o
-    bspc rule -a urxvt -o floating=on; \
+    bspc rule -a URxvt -o state=floating; \
     OLDTMUX="$TMUX"; \
     unset TMUX; \
     urxvt -geometry 150x40 -e tmux new-session -A -s weechat 'weechat' \; new-window -d -n skyped 'skyped -n -d'; \

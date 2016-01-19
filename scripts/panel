@@ -17,9 +17,11 @@ mkfifo "$PANEL_FIFO"
 
 PANEL_HEIGHT=14
 bspc config top_padding $PANEL_HEIGHT
-#bspc config top_padding 15
 
-bspc control --subscribe > "$PANEL_FIFO" &
+bspc subscribe report |\
+    grep -oE "[Mm]$i[^TM]*[TML]" --line-buffered |\
+    while read line; do echo W$line; done \
+        > "$PANEL_FIFO$i" &
 xtitle -sf 'T%s' > "$PANEL_FIFO" &
 
 # Colours#{{{
@@ -161,14 +163,9 @@ kb_layout() {
     echo "%{F$COLOR_FREE}[%{F-}" $(xkb-switch | head -c 2 | tr "[:lower:]" "[:upper:]") "%{F$COLOR_FREE}]%{F-}"
 }
 
-jmode() {
-    if [[ -f /dev/shm/jmode ]]; then
-        JMODE=`cat /dev/shm/jmode`;
-    else
-        JMODE="JOY";
-    fi;
-
-    echo "%{F$COLOR_FREE}[%{F-}" ${JMODE:0:1} "%{F$COLOR_FREE}]%{F-}"
+inputmode() {
+    mode=`inputmode.sh`
+    echo "%{F$COLOR_FREE}[%{F-}" ${mode:0:1} "%{F$COLOR_FREE}]%{F-}"
 }
 
 cpu_temp() {
@@ -183,8 +180,8 @@ task_status() {
 }
 
 while true; do
-    echo "S" "%{F-} $(task_status) $(mempercent) $(cpu_temp) $(panel_volume) $(panel_battery) $(kb_layout) $(jmode) $(panel_clock) " > "$PANEL_FIFO"
-    sleep 0.7s
+    echo "S" "%{F-} $(panel_volume) $(panel_battery) $(task_status) $(kb_layout) $(inputmode) $(panel_clock) " > "$PANEL_FIFO"
+    sleep 1.5s
 done &
 
 case "$flavor" in
@@ -192,7 +189,7 @@ case "$flavor" in
 		# change to bar-aint-recursive since using git version
 		# -b to put at bottom
 		# use uushi font
-		cat "$PANEL_FIFO" | panel_bar | bar -f -benis-uushi-medium-r-normal--11-90-75-75-p-58-iso10646-1 -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
+		cat "$PANEL_FIFO" | panel_bar | lemonbar -f -benis-uushi-medium-r-normal--11-90-75-75-p-58-iso10646-1 -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
 		;;
 	dzen2)
 		FONT_FAMILY='DejaVu Sans'

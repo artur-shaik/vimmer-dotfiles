@@ -14,7 +14,7 @@ bspc config active_border_color "#555753"
 bspc config urgent_border_color "#4e9a06"
 
 # Settings {{{1
-bspc config split_ratio                 0.60
+bspc config split_ratio                 0.54
 bspc config borderless_monocle          false
 bspc config gapless_monocle             true
 bspc config focus_follows_pointer       true
@@ -22,7 +22,7 @@ bspc config pointer_follows_monitor     true
 bspc config pointer_follows_focus       false
 bspc config auto_cancel                 true
 bspc config ignore_emwh_focus           true
-bspc config border_width                5
+bspc config border_width                3
 bspc config window_gap                  48
 bspc config normal_frame_opacity        0.0
 bspc config focused_frame_opacity       0.05
@@ -36,7 +36,7 @@ bspc config merge_overlapping_monitors  true
 monitor_configure
 
 # Window rules: {{{1
-bspc control --subscribe | awk -F ':' '$3 ~ /^[FO]/ { exit(system("qutebrowser &")); }' &
+bspc subscribe | awk -F ':' '$3 ~ /^[FO]/ { exit(system("qutebrowser &")); }' &
 bspc rule -a skype desktop=^9
 bspc rule -a gimp desktop=^6
 bspc rule -a blender desktop=^7
@@ -50,4 +50,4 @@ bspc rule -a gtk-gnash floating=on
 killall -9 panel panel_bar
 
 panel &
-bspc desktop -f ^1
+# bspc desktop -f ^1
