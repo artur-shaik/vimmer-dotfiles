@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo --slang en,ru $1
-/usr/local/bin/mpv --slang en,ru "$@"
+/usr/bin/mpv --slang en,ru "$@"
