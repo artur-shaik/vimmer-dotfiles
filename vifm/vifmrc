@@ -34,7 +34,7 @@ set norunexec
 set noiec
 
 " Selected color scheme
-colorscheme solarized-dark
+colorscheme istib-solarized-dark
 highlight CmdLine cterm=none ctermfg=lightwhite ctermbg=black
 
 " the FUSE_HOME directory will be used as a root dir for all FUSE mounts.
@@ -221,7 +221,7 @@ filetype *.7z
 fileviewer *.7z l %c
 
 " Office files
-filextype *.doc,*.docx,*.xls,*.xlsx,*.dbf,*.ods libreoffice %f &
+filextype *.doc,*.docx,*.xls,*.xlsx,*.dbf,*.ods,*.odt,*.odp libreoffice %f &
 fileview *.docx, docx2txt.pl %f -
 
 " Qt projects
