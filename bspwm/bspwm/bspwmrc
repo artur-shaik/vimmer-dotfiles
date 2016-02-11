@@ -22,7 +22,7 @@ bspc config pointer_follows_monitor     true
 bspc config pointer_follows_focus       false
 bspc config auto_cancel                 true
 bspc config ignore_emwh_focus           true
-bspc config border_width                3
+bspc config border_width                4
 bspc config window_gap                  48
 bspc config normal_frame_opacity        0.0
 bspc config focused_frame_opacity       0.05
@@ -37,14 +37,12 @@ monitor_configure
 
 # Window rules: {{{1
 bspc subscribe | awk -F ':' '$3 ~ /^[FO]/ { exit(system("qutebrowser &")); }' &
-bspc rule -a skype desktop=^9
-bspc rule -a gimp desktop=^6
-bspc rule -a blender desktop=^7
-bspc rule -a pim floating=on
-bspc rule -a mpv floating=on
-bspc rule -a libreoffice floating=on
-bspc rule -a zathura floating=on
-bspc rule -a gtk-gnash floating=on
+bspc rule -a skype desktop='^9'
+bspc rule -a Pwm state=floating
+bspc rule -a mpv state=floating
+bspc rule -a libreoffice state=floating
+bspc rule -a Zathura state=floating
+bspc rule -a gtk-gnash state=floating
 
 # Start bspc: {{{1
 killall -9 panel panel_bar

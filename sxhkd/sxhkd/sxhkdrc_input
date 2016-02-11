@@ -24,7 +24,7 @@ super + t
 
 # balance size of windows
 super + b
-	bspc node -B
+	bspc node @/ -B
 
 # toggle floating and fullscreen
 super + s
@@ -197,11 +197,11 @@ super + n
 
 # move current window to next monitor
 super + shift + n
-	bspc window -m next
+	bspc node -m next
 
 # move current window to monitor
 super + alt + {1-9}
-    bspc window -m {1-9}
+    bspc node -m {1-9}
 
 # move current desktop to monitor
 super + shift + alt + {1-9}
