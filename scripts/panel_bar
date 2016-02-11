@@ -17,17 +17,12 @@ network_status() {
 
 music_track() {
 
-    songStatus=$(mpc | wc -l)
-    #songStatus=$(mpc --host 192.168.0.104 | wc -l)
-    if [[ $songStatus -gt 1 ]]; then
-	    #song=$(mpc --host 192.168.0.104 -f '%artist% - %title%' | head -n 1)
-	    song=$(mpc -f '%artist% - %title%' | head -n 1)
+    if [[ -f /dev/shm/currentMPDTrack ]]; then
+        song=`cat /dev/shm/currentMPDTrack`
     else
-        song="Stopped"
+        song=""
     fi
-	# cut anything in parens from song title
-	songy=${song}
-	song_final="%{F$COLOR_ICON}⮕%{F-} $songy"
+        song_final="%{F$COLOR_ICON}⮕%{F-} $song"
 
 }
 
@@ -42,6 +37,9 @@ bspwm="%{B$COLOR_BACKGROUND} %{F$COLOR_LOGO} $osname %{F-}"
 
 killall -9 pinger
 pinger &
+
+killall -9 mplayer_pooler.sh
+mplayer_pooler.sh &
 
 while read -r line ; do
 
@@ -70,37 +68,38 @@ while read -r line ; do
 				case $item in
 					O*)
 						# focused occupied desktop
-						wm_infos="$wm_infos %{U$COLOR_ACTIVE}%{+u}${name}%{-u}"
+						wm_infos="$wm_infos%{U$COLOR_ACTIVE}%{+u}${name}%{-u}"
 						;;
 					F*)
 						# focused free desktop
-						wm_infos="$wm_infos %{U$COLOR_ACTIVE}%{+u}${name}%{-u}"
+						wm_infos="$wm_infos%{U$COLOR_ACTIVE}%{+u}${name}%{-u}"
 						;;
 					U*)
 						# focused urgent desktop
-						wm_infos="$wm_infos %{U$COLOR_URGENT}%{+u}${name}%{-u}"
+						wm_infos="$wm_infos%{U$COLOR_URGENT}%{+u}${name}%{-u}"
 						;;
 					o*)
 						# occupied desktop
-						wm_infos="$wm_infos %{F$COLOR_OCCUPIED}${name}%{F-}"
+						wm_infos="$wm_infos%{F$COLOR_OCCUPIED}${name}%{F-}"
 						;;
 					f*)
 						# free desktop
-						wm_infos="$wm_infos %{F$COLOR_FREE}${name}%{F-}"
+						wm_infos="$wm_infos%{F$COLOR_FREE}${name}%{F-}"
 						;;
 					u*)
 						# urgent desktop
-                        wm_infos="$wm_infos %{B$COLOR_URGENT}${name}%{B-}"
+                        wm_infos="$wm_infos%{B$COLOR_URGENT}${name}%{B-}"
 						;;
 					L*)
 						# layout
 						layout=$(printf "%s" "${name}" | sed 's/\(.\).*/\U\1/')
-						wm_infos="$wm_infos  %{F$COLOR_LAYOUT}$layout%{F-}"
+						wm_infos="$wm_infos %{F$COLOR_LAYOUT}$layout%{F-} "
 						;;
 				esac
+
 				shift
 			done
 			;;
 	esac
-	printf "%s\n" "%{l} $networkStatus $wm_infos $song_final %{c} $title_final %{r} $sys_infos"
+	printf "%s\n" "%{l} $networkStatus $wm_infos$song_final %{c} $title_final %{r} $sys_infos"
 done

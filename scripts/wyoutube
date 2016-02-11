@@ -2,4 +2,4 @@
 
 #vlc `youtube-dl -g $1`
 # (youtube-dl -o - $1 | mpv - > /dev/null 2>&1) || notify 'fail'
-(mpv $1) || notify 'fail'
+(mpv $1) || notify-send "failed to play with mpv" "uri address: $1"

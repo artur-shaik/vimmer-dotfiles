@@ -18,10 +18,7 @@ mkfifo "$PANEL_FIFO"
 PANEL_HEIGHT=14
 bspc config top_padding $PANEL_HEIGHT
 
-bspc subscribe report |\
-    grep -oE "[Mm]$i[^TM]*[TML]" --line-buffered |\
-    while read line; do echo W$line; done \
-        > "$PANEL_FIFO$i" &
+bspc subscribe report > "$PANEL_FIFO$i" &
 xtitle -sf 'T%s' > "$PANEL_FIFO" &
 
 # Colours#{{{
@@ -55,27 +52,11 @@ panel_volume()
 {
         volStatus=$(amixer get Master | tail -n 1 | cut -d '[' -f 3 | sed 's/].*//g')
         volLevel=$(amixer get Master | tail -n 1 | cut -d '[' -f 2 | sed 's/\%].*//g')
-        headphone=$(amixer -c 1 contents | grep 'Headphone.*Volume' -A 2 | awk 'NR==3 { print $2 }' | cut -d '=' -f 2 | cut -d ',' -f 1)
-# doesn't work
-        # if [ "$volStatus" == "on" ] && [ "$headphone" == "off" ];
-        #         then icon="%{F$COLOR_ICON}⮜"
-        # elif [ "$volStatus" == "on" ] && [ "$headphone" == "on" ];
-        #         then icon="%{F$COLOR_ICON}⮜"
-        # elif [ "$volStatus" == "off" ] && [ "$headphone" == "on" ];
-        #         then icon="%{F$BATTERY_COLOR}⮝"
-        # elif [ "$volStatus" == "off" ] && [ "$headphone" == "off" ];
-        #         then icon="%{F$BATTERY_COLOR}⮜"
-        # else icon="%{F$BATTERY_COLOR} "
-        # fi
 
         icon="%{F$COLOR_ICON} ⮜%{F-}"
         case $volLevel in
-                100)    if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_VOLUME2}——————————"%{F-}
+                10*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_ICON}——————————"%{F-}
                         else echo "$icon" "%{F$COLOR_VOLUME2}——————————"%{F-}
-                        fi
-                        ;;
-                [0-9]) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_VOLUME2}—%{F$COLOR_VOLUME}—————————"%{F-}
-                        else echo "$icon" "%{F$COLOR_VOLUME2}—%{F$COLOR_VOLUME}—————————"%{F-}
                         fi
                         ;;
                 1*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_VOLUME2}——%{F$COLOR_VOLUME}————————"%{F-}
@@ -160,12 +141,21 @@ mempercent() {
 #}}}
 
 kb_layout() {
-    echo "%{F$COLOR_FREE}[%{F-}" $(xkb-switch | head -c 2 | tr "[:lower:]" "[:upper:]") "%{F$COLOR_FREE}]%{F-}"
+    mode=" `xkb-switch | head -c 2 | tr "[:lower:]" "[:upper:]"` "
+    if [[ $mode != " US " ]]; then
+        mode=%{B$COLOR_URGENT}%{F$COLOR_FREE}"$mode"%{F-}%{B-}
+    fi
+    echo "%{F$COLOR_FREE}[%{F-}"$mode"%{F$COLOR_FREE}]%{F-}"
 }
 
 inputmode() {
     mode=`inputmode.sh`
-    echo "%{F$COLOR_FREE}[%{F-}" ${mode:0:1} "%{F$COLOR_FREE}]%{F-}"
+    if [[ $mode != "INPUT" ]]; then
+        decorated=%{B$COLOR_URGENT}%{F$COLOR_FREE}" ${mode:0:1} "%{F-}%{B-}
+    else
+        decorated=" ${mode:0:1} "
+    fi
+    echo "%{F$COLOR_FREE}[%{F-}"$decorated"%{F$COLOR_FREE}]%{F-}"
 }
 
 cpu_temp() {
@@ -189,7 +179,8 @@ case "$flavor" in
 		# change to bar-aint-recursive since using git version
 		# -b to put at bottom
 		# use uushi font
-		cat "$PANEL_FIFO" | panel_bar | lemonbar -f -benis-uushi-medium-r-normal--11-90-75-75-p-58-iso10646-1 -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
+		# cat "$PANEL_FIFO" | panel_bar | lemonbar -d -f "DejaVu Sans Mono for Powerline" -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
+		cat "$PANEL_FIFO" | panel_bar | lemonbar -d -f -benis-uushi-medium-r-normal--11-90-75-75-p-58-iso10646-1 -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
 		;;
 	dzen2)
 		FONT_FAMILY='DejaVu Sans'

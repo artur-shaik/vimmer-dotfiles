@@ -1,7 +1,7 @@
 #!/bin/bash
 
-extra="HDMI1"
-#extra="DP1"
+#extra="HDMI1"
+extra="DP1"
 
 single_monitor() {
     echo "Single monitor"
