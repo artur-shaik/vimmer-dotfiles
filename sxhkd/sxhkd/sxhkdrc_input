@@ -90,6 +90,10 @@ super + y
 super + ctrl + m
 	bspc node -s biggest
 
+# move node to next free desktop
+super + ctrl + f
+    bspc node -d 'next.!occupied'
+
 # preselect split ratio side
 super + ctrl + {h,j,k,l,0}
 	bspc node -p {west,south,north,east,cancel}
@@ -275,6 +279,10 @@ super + m
 # copy buffer to clipboard
 ctrl + shift + c
     xclip -o -sel clipboard | xclip -i
+
+# translate clipboard content
+ctrl + shift + t
+    notify-send tr "`xclip -o -sel clipboard | trans -no-ansi en:ru`"
 
 # lock screen
 ctrl + alt + l
