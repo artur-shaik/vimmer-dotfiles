@@ -8,9 +8,9 @@ network_status() {
 
     pinger=`cat /dev/shm/pinger 2> /dev/null`
     if [[ $pinger -eq 0 ]]; then
-        networkStatus="%{F$COLOR_LOGO} ◼ %{F-}"
+        networkStatus="%{F$COLOR_LOGO}  %{F-}"
     else
-        networkStatus="%{F#FFAC4142} x %{F-}"
+        networkStatus="%{F#FFAC4142}  %{F-}"
     fi
 
 }
@@ -22,7 +22,7 @@ music_track() {
     else
         song=""
     fi
-        song_final="%{F$COLOR_ICON}⮕%{F-} $song"
+        song_final="%{F$COLOR_ICON}%{F-} $song"
 
 }
 
@@ -93,6 +93,11 @@ while read -r line ; do
 					L*)
 						# layout
 						layout=$(printf "%s" "${name}" | sed 's/\(.\).*/\U\1/')
+                        if [ "$layout" == "T" ]; then
+                            layout=
+                        elif [ "$layout" == "M" ]; then
+                            layout=
+                        fi
 						wm_infos="$wm_infos %{F$COLOR_LAYOUT}$layout%{F-} "
 						;;
 				esac
@@ -101,5 +106,5 @@ while read -r line ; do
 			done
 			;;
 	esac
-	printf "%s\n" "%{l} $networkStatus $wm_infos$song_final %{c} $title_final %{r} $sys_infos"
+    printf "%s\n" "%{l} $networkStatus $wm_infos$(p)$song_final %{c} $title_final %{r} $sys_infos"
 done

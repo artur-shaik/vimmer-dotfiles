@@ -16,6 +16,8 @@ flavor=${1:-bar}
 mkfifo "$PANEL_FIFO"
 
 PANEL_HEIGHT=14
+PANEL_BG_OPACITY=bb
+
 bspc config top_padding $PANEL_HEIGHT
 
 bspc subscribe report > "$PANEL_FIFO$i" &
@@ -28,7 +30,7 @@ xtitle -sf 'T%s' > "$PANEL_FIFO" &
 
 panel_clock()
 {
-        echo  "%{F$COLOR_ICON}⭧%{F-}" $(clock -f '%a %d %H:%M')
+        echo  "%{F$COLOR_ICON}%{F-}" $(clock -f '%a %d %H:%M')
 }
 
 panel_battery()
@@ -39,10 +41,10 @@ panel_battery()
                 echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} ⮎ %{F$COLOR_FOREGROUND}AC %{F$COLOR_FREE}]%{F-}"
         elif [[ "$batStats" == "Full" || "$batStats" == "Charging" || "$batStats" == "Unknown" ]]
         then
-                echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} ⮒" %{F$COLOR_FOREGROUND}$(acpi --battery | cut -d' ' -f4 | sed 's/%,//')"+"%{F-} "%{F$COLOR_FREE}]%{F-}"
+                echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} " %{F$COLOR_FOREGROUND}$(acpi --battery | cut -d' ' -f4 | sed 's/%//' | sed 's/%,//')"+"%{F-} "%{F$COLOR_FREE}]%{F-}"
         elif [ "$batStats" == "Discharging" ]
         then
-                echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} ⮑" %{F$COLOR_FOREGROUND}$(acpi --battery | cut -d' ' -f4 | sed 's/%,//')"-"%{F-} "%{F$COLOR_FREE}]%{F-}"
+                echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} " %{F$COLOR_FOREGROUND}$(acpi --battery | cut -d' ' -f4 | sed 's/%,//')"-"%{F-} "%{F$COLOR_FREE}]%{F-}"
         else    echo "%{F$COLOR_FREE}[%{F$COLOR_FOREGROUND} Refreshing..."%{F-} "%{F$COLOR_FREE}]%{F-}"
         fi
 
@@ -53,7 +55,7 @@ panel_volume()
         volStatus=$(amixer get Master | tail -n 1 | cut -d '[' -f 3 | sed 's/].*//g')
         volLevel=$(amixer get Master | tail -n 1 | cut -d '[' -f 2 | sed 's/\%].*//g')
 
-        icon="%{F$COLOR_ICON} ⮜%{F-}"
+        icon="%{F$COLOR_ICON} %{F-}"
         case $volLevel in
                 10*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_ICON}——————————"%{F-}
                         else echo "$icon" "%{F$COLOR_VOLUME2}——————————"%{F-}
@@ -174,13 +176,16 @@ while true; do
     sleep 1.5s
 done &
 
+panelBg="#$PANEL_BG_OPACITY"${COLOR_BACKGROUND:3:7}
+
 case "$flavor" in
 	bar)
 		# change to bar-aint-recursive since using git version
 		# -b to put at bottom
 		# use uushi font
-		# cat "$PANEL_FIFO" | panel_bar | lemonbar -d -f "DejaVu Sans Mono for Powerline" -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
-		cat "$PANEL_FIFO" | panel_bar | lemonbar -d -f -benis-uushi-medium-r-normal--11-90-75-75-p-58-iso10646-1 -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
+		cat "$PANEL_FIFO" | panel_bar | lemonbar -g 1366x$PANEL_HEIGHT+0+0 -d -f "Sauce Code Pro:style=NerdFontPlusFontAwesomePlusOcticonsPlusPomiconsMono:size=7:bold" -u 2 -F "$COLOR_FOREGROUND" -B "$panelBg" &
+		# cat "$PANEL_FIFO" | panel_bar | lemonbar -d -f "DejaVu Sans Mono for Powerline:size=7" -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
+		# cat "$PANEL_FIFO" | panel_bar | lemonbar -d -f -benis-uushi-medium-r-normal--11-90-75-75-p-58-iso10646-1 -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
 		;;
 	dzen2)
 		FONT_FAMILY='DejaVu Sans'
