@@ -38,7 +38,6 @@
  nnoremap <leader>m :Unite -no-split -buffer-name=mru -start-insert file_mru<cr>
  nnoremap <leader>y :Unite -no-split -buffer-name=yank history/yank<cr>
  nnoremap <silent> <C-b> :Unite -start-insert -buffer-name=buffer buffer<cr>
-
  
  " Interface for Git
  let g:unite_source_menu_menus = {}
@@ -88,7 +87,7 @@
  NeoBundle 'Lokaltog/vim-easymotion' " {{{2
  map <space> <Plug>(easymotion-prefix)
 
- NeoBundle 'Valloric/YouCompleteMe' " {{{2
+ NeoBundle 'Valloric/YouCompleteMe' "{{{2
  let g:ycm_server_log_level = 'debug'
  let g:ycm_semantic_triggers =  {
      \   'c' : ['->', '.'],
@@ -202,6 +201,7 @@
 
  NeoBundle 'vim-scripts/LanguageTool.git' " {{{2
  let g:languagetool_jar='$HOME/Soft/LanguageTool/languagetool-commandline.jar'
+ let g:languagetool_lang='ru'
  
  NeoBundle 'MarcWeber/vim-addon-local-vimrc.git' " {{{2
 
@@ -221,7 +221,7 @@
 
  NeoBundle 'artur-shaik/vim-javacomplete2' " {{{2
  let g:JavaComplete_MavenRepositoryDisable = 0
- let g:JavaComplete_UseFQN = 1
+ let g:JavaComplete_UseFQN = 0
  
  NeoBundle 'kana/vim-vspec' " {{{2
 
@@ -277,6 +277,19 @@
 
  NeoBundle 'wellle/visual-split.vim' " {{{2
 
+ NeoBundle 'tpope/vim-vinegar' " {{{2
+
+ NeoBundle 'vifm/vifm.vim' " {{{2
+
+ NeoBundle 'junegunn/gv.vim' " {{{2
+
+ " NeoBundle 'hsanson/vim-android' " {{{2
+
+ " let g:android_sdk_path = '/home/ash/Android/Sdk/'
+ " let g:gradle_quickfix_show = 0
+
+ NeoBundle 'cosminadrianpopescu/filesync' " {{{2
+
  " others plugins {{{2
  let python_highlight_all = 1
  " }}}
@@ -314,7 +327,7 @@
  " set t_Co=256
 
  set background=light
- colorscheme elflord
+ colorscheme paradox
 
  syntax on 
 
@@ -450,6 +463,8 @@
  nnoremap <C-l> <C-W>l
  nnoremap <C-h> <C-W>h
 
+ nnoremap <Leader>b :EditVifm<CR>
+
  " Tab/Shift+Tab for switching between buffers
  nnoremap  <silent>   <tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
  nnoremap  <silent> <s-tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
@@ -461,8 +476,6 @@
  nnoremap gC :Gcommit<cr>
 
  nnoremap g= gg=Gg``
-
- nnoremap <leader>b :Explore<CR>
 
  function! RestoreRegister()
    let @" = s:restore_reg
@@ -572,7 +585,7 @@
    let active = a:winnum == winnr()
    let bufnum = winbufnr(a:winnum)
  
-   let stat = ''
+   let stat = ''
  
    " this function just outputs the content colored by the
    " supplied colorgroup number, e.g. num = 2 -> User2
@@ -680,7 +693,7 @@
    endif
  
    if !empty(head)
-     let stat .= Color(active, 'SLBranch', ' ← ') . head . ' '
+     let stat .= Color(active, 'SLBranch', '  ') . head . ' '
    endif
 
    " file type
