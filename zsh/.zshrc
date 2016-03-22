@@ -12,7 +12,7 @@ function bgnotify_formatted {
     fi
 }
 
-plugins=(vi-mode git taskwarrior lol pip python suse web-search wd zsh-syntax-highlighting bgnotify)
+plugins=(mvn vi-mode git taskwarrior lol pip python suse web-search wd zsh-syntax-highlighting bgnotify)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -131,6 +131,7 @@ ticklet () {
 alias tick=tickle
 alias tickt=ticklet
 alias think='tickle 1d'
+alias killl='kill -9 %1'
 
 thinkt () {
     id=$1
@@ -164,6 +165,9 @@ rp() { pulseaudio -k; pulseaudio --start }
 gmail() { curl -u "$1" --silent "https://mail.google.com/mail/feed/atom" | sed -e 's/<\/fullcount.*/\n/' | sed -e 's/.*fullcount>//'}
 eraty() { raty $1 | elinks }
 dbase64() { echo $@|base64 -d && echo }
+
+transfer() { if [ $# -eq 0 ]; then echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"; return 1; fi 
+tmpfile=$( mktemp -t transferXXX ); if tty -s; then basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g'); curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile; else curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ; fi; cat $tmpfile; rm -f $tmpfile; } 
 
 # foreground process with ctrl-z
 fancy-ctrl-z () {
