@@ -10,7 +10,7 @@ color hdrdefault cyan default
 color markers   brightred default
 color quoted    green default
 color signature cyan default
-color status    brightgreen black
+color status    brightgreen cyan
 color tilde blue default
 color tree  red default
 

@@ -56,7 +56,7 @@ unbind-key p
 bind-key p prev-unread-feed
 
 ## colors {{{1
-color   info        green black bold
+color   info        green cyan bold
 color   listfocus   cyan black bold
 color   listfocus_unread   white black bold
 
