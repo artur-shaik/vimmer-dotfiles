@@ -13,6 +13,10 @@
 
  set runtimepath-=~/.vim/bundle/ultisnips/plugin
 
+ if exists("vimpager")
+     let g:loaded_surround = 1
+ endif
+
  " -----------------------
  "  Bundles {{{1
  " -----------------------
@@ -148,6 +152,8 @@
  NeoBundle 'plasticboy/vim-markdown' " {{{2
 
  NeoBundle 'christoomey/vim-tmux-navigator' " {{{2
+    
+     let g:tmux_navigator_save_on_switch = 1
 
  NeoBundle 'mhinz/vim-startify' " {{{2
  let g:startify_bookmarks = [ '~/.vimrc' ]
@@ -203,8 +209,6 @@
  let g:languagetool_jar='$HOME/Soft/LanguageTool/languagetool-commandline.jar'
  let g:languagetool_lang='ru'
  
- NeoBundle 'MarcWeber/vim-addon-local-vimrc.git' " {{{2
-
  NeoBundle 'xolox/vim-session.git' " {{{2
 
  NeoBundle 'xolox/vim-reload' " {{{2
@@ -290,6 +294,14 @@
 
  NeoBundle 'cosminadrianpopescu/filesync' " {{{2
 
+ NeoBundle 'mattn/emmet-vim' " {{{2
+
+ NeoBundle 'KabbAmine/zeavim.vim' " {{{2
+
+ NeoBundle 'ludovicchabant/vim-gutentags' " {{{2
+
+ NeoBundle 'MarcWeber/vim-addon-local-vimrc.git' " {{{2
+
  " others plugins {{{2
  let python_highlight_all = 1
  " }}}
@@ -302,8 +314,6 @@
      \     'unix' : 'make -f make_unix.mak',
      \    },
      \ })
-
- execute pathogen#infect()
 
  call neobundle#end()
 
@@ -340,6 +350,8 @@
  hi LineNr ctermfg=5
  hi SpellBad term=underline cterm=underline ctermbg=none ctermfg=1
  hi Error term=none cterm=none ctermbg=none ctermfg=1
+ hi TabLine ctermbg=8 cterm=none
+ hi TabLineSel ctermbg=15
  " hi Search ctermbg=8
 
  " --------------------
@@ -385,8 +397,10 @@
 
      autocmd FileType java,jsp setlocal omnifunc=javacomplete#Complete
      autocmd Filetype java,jsp,pom compiler mvn
-     autocmd Filetype java,jsp no <F4> :JCimportAdd<CR>
-     autocmd Filetype java,jsp ino <F4> <esc>:JCimportAddI<CR>
+     autocmd Filetype java,jsp nmap <F5> <Plug>(JavaComplete-Imports-Add)
+     autocmd Filetype java,jsp imap <F5> <Plug>(JavaComplete-Imports-Add)
+     autocmd Filetype java,jsp nmap <F4> <Plug>(JavaComplete-Imports-AddSmart)
+     autocmd Filetype java,jsp imap <F4> <Plug>(JavaComplete-Imports-AddSmart)
      autocmd Filetype java,jsp no <F9> :make clean<CR>
      autocmd Filetype java,jsp no <F10> :wa<CR> :make compile<CR>
      autocmd Filetype java,jsp no <F11> :make exec:exec<CR>
