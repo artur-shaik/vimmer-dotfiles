@@ -111,6 +111,7 @@ alias nb='newsbeuter'
 alias qb='qutebrowser'
 alias ytd='youtube-dl --write-sub --sub-lang "en,ru" -o "~/INBOX/%(title)s-%(id)s.%(ext)s"'
 alias ipinfo="dig +short my.ip @outsideip.net"
+alias notes="vi ~/.notes"
 
 #
 # GTD task {{{1
