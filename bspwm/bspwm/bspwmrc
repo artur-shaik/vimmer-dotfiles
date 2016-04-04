@@ -38,9 +38,9 @@ monitor_configure
 # Window rules: {{{1
 bspc subscribe | awk -F ':' '$3 ~ /^[FO]/ { exit(system("qutebrowser &")); }' &
 bspc rule -a skype desktop='^9'
-bspc rule -a Pwm state=floating
+bspc rule -a Pim state=floating
 bspc rule -a mpv state=floating
-bspc rule -a libreoffice state=floating
+bspc rule -a libreoffice-calc state=floating
 bspc rule -a Zathura state=floating
 bspc rule -a gtk-gnash state=floating
 

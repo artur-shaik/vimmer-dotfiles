@@ -41,7 +41,7 @@ panel_battery()
                 echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} ⮎ %{F$COLOR_FOREGROUND}AC %{F$COLOR_FREE}]%{F-}"
         elif [[ "$batStats" == "Full" || "$batStats" == "Charging" || "$batStats" == "Unknown" ]]
         then
-                echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} " %{F$COLOR_FOREGROUND}$(acpi --battery | cut -d' ' -f4 | sed 's/%//' | sed 's/%,//')"+"%{F-} "%{F$COLOR_FREE}]%{F-}"
+                echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} " %{F$COLOR_FOREGROUND}$(acpi --battery | cut -d' ' -f4 | sed 's/%,//' | sed 's/%,//')"+"%{F-} "%{F$COLOR_FREE}]%{F-}"
         elif [ "$batStats" == "Discharging" ]
         then
                 echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} " %{F$COLOR_FOREGROUND}$(acpi --battery | cut -d' ' -f4 | sed 's/%,//')"-"%{F-} "%{F$COLOR_FREE}]%{F-}"
