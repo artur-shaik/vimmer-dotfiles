@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# Call libre office to convers doc/odt to pdf file
-
-loffice --invisible --convert-to pdf $1

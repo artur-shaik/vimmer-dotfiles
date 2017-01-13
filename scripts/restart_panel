@@ -1,4 +1,0 @@
-#!/bin/bash
-
-killall -9 panel panel_bar
-panel &

@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if [[ -f /dev/shm/jmode ]]; then
-    JMODE=`cat /dev/shm/jmode`;
-else
-    JMODE="JOY";
-fi;
-
-if [[ $JMODE == "MOUSE" ]]; then echo "JOY" > /dev/shm/jmode; else echo "MOUSE" > /dev/shm/jmode; fi

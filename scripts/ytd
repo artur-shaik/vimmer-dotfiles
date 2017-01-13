@@ -1,3 +1,0 @@
-#!/bin/bash
-
-youtube-dl --write-sub --sub-lang "en,ru" -o "~/INBOX/%(title)s-%(id)s.%(ext)s" "$@"

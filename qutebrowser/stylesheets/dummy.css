@@ -1,8 +1,0 @@
-html {
-    -webkit-font-smoothing: subpixel-antialiased !important;
-}
-
-::-webkit-scrollbar { width: 2px; height: 2px; } 
-::-webkit-scrollbar-thumb { background: rgba(255,0,0,0.8); }
-
-html, body, input, textarea { background-color: white; color: black; }
