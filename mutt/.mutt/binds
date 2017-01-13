@@ -63,15 +63,5 @@ bind editor <space> noop
 bind editor ^T complete
 bind editor <Tab> complete-query
 
-## sidebar {{{1
-macro index b "<enter-command>toggle sidebar_visible<enter><refresh>"
-macro pager b "<enter-command>toggle sidebar_visible<enter><redraw-screen>"
-bind index \cP sidebar-prev
-bind index \cN sidebar-next
-bind index \cO sidebar-open
-bind pager \cP sidebar-prev
-bind pager \cN sidebar-next
-bind pager \cO sidebar-open
-
 # Remap bounce-message function to “B”
 bind index B bounce-message

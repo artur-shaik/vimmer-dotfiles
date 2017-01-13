@@ -49,12 +49,3 @@ set query_command="goobook query '%s'" # Configures contacts
 set header_cache    =~/.mutt/cache/headers
 set message_cachedir    =~/.mutt/cache/bodies
 set certificate_file    =~/.mutt/certificates
-
-## sidebar {{{1
-set sidebar_width=60
-set sidebar_visible=no
-set sidebar_delim='│'
-set sidebar_sort=yes
-
-# color of folders with new mail
-color sidebar_new yellow default
