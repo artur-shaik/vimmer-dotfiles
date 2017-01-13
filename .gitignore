@@ -6,6 +6,7 @@ Session.vim
 *~
 
 tmux/.tmux/plugins/*
+tmux/.tmux/resurrect/
 mutt/.mutt/acct/
 mutt/.mutt/cache/
 mutt/.mutt/certificates
