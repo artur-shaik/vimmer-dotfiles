@@ -43,7 +43,7 @@ set mailcap_path = ~/.mutt/mailcap
 auto_view text/html application/x-tar-gz
 
 ## contacts {{{1
-set query_command="goobook query '%s'" # Configures contacts
+set query_command="abook --mutt-query '%s'" # Configures contacts
 
 ## files {{{1
 set header_cache    =~/.mutt/cache/headers
