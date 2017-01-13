@@ -199,3 +199,10 @@ export DE=kde
 export DISABLE_AUTO_TITLE=true
 
 source ~/.profile
+
+export _LP_ENABLE_TMUX=0
+[[ $- = *i* ]] && source ~/Soft/liquidprompt/liquidprompt
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/ash/.sdkman"
+[[ -s "/home/ash/.sdkman/bin/sdkman-init.sh" ]] && source "/home/ash/.sdkman/bin/sdkman-init.sh"
