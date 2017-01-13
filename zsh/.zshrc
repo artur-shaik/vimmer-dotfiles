@@ -8,7 +8,7 @@ bgnotify_threshold=6
 function bgnotify_formatted {
     [ $1 -eq 0 ] && title="Success" || title="Failure"
     if whence notify-send > /dev/null; then
-        notify-send $title "$2: after $3 s";
+        DISPLAY=:0 notify-send $title "$2: after $3 s";
     fi
 }
 
@@ -70,7 +70,9 @@ function zle-line-init zle-keymap-select {
     VIM_PROMPT_INSERT="%{$fg_bold[white]%} -- INSERT --  %{$reset_color%}"
     RPS1="${${KEYMAP/vicmd/$VIM_PROMPT_NORMAL}/(main|viins)/$VIM_PROMPT_INSERT} $EPS1"
     zle reset-prompt
-    xkb-switch -s us
+    if whence xkb-switch > /dev/null; then
+        xkb-switch -s us
+    fi
 }
 zle -N zle-line-init
 zle -N zle-keymap-select
@@ -78,18 +80,8 @@ zle -N zle-keymap-select
 export KEYTIMEOUT=100
 
 # show urgent (due) taskwarrior's tasks on init
-if whence task > /dev/null; then
-    task '+in and +PENDING' or +OVERDUE or due.before:3d or priority:H or pro:Study
-    task active
-fi
-
-# show how much files that should be sorted
-if [[ -d ~/INBOX ]]; then
-    lsinbox=`ls ~/INBOX | wc -l`
-    if [[ $lsinbox -gt 0  ]]; then
-        print
-        print "$fg_bold[red]Warning! INBOX has $lsinbox file(s)!$reset_color"
-    fi
+if whence show_inbox > /dev/null; then
+    show_inbox
 fi
 
 # aliases
