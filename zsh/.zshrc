@@ -86,13 +86,13 @@ fi
 
 # aliases
 hi() { if [ -z "$*" ]; then history; else history | egrep "$@"; fi; }
-alias gv='gwenview'
+tasknext() {task next "$@" | head -n 8}
 alias si='show_inbox'
 alias tn='tasknext'
 alias ta='task add'
+alias to='taskopen'
 alias c='clear'
 alias vf='vifm'
-alias vm='cmus'
 alias tmux='tmux -2'
 alias gs='git status'
 alias vi='vim'
@@ -103,7 +103,10 @@ alias nb='newsbeuter'
 alias qb='qutebrowser'
 alias ytd='youtube-dl --write-sub --sub-lang "en,ru" -o "~/INBOX/%(title)s-%(id)s.%(ext)s"'
 alias ipinfo="dig +short my.ip @outsideip.net"
-alias notes="vi ~/.notes"
+alias killl='kill -9 %1'
+alias mux='tmuxinator'
+alias rm='trash-put'
+alias git=hub
 
 #
 # GTD task {{{1
@@ -124,7 +127,6 @@ ticklet () {
 alias tick=tickle
 alias tickt=ticklet
 alias think='tickle 1d'
-alias killl='kill -9 %1'
 
 thinkt () {
     id=$1
@@ -143,8 +145,16 @@ read_and_review (){
     id=$(task add +rnr +in "$descr" | sed -n 's/Created task \(.*\)./\1/p')
     task "$id" annotate "$link"
 }
-
 alias rnr=read_and_review
+
+ta_link () {
+    link="$1"
+    shift
+    title=$(webpage_title $link)
+    echo $title
+    id=$(task add "[$title]" "($@)" +link | sed -n 's/Created task \(.*\)./\1/p')
+    task "$id" annotate "$link"
+}
 
 # /GTD
 
@@ -158,9 +168,18 @@ rp() { pulseaudio -k; pulseaudio --start }
 gmail() { curl -u "$1" --silent "https://mail.google.com/mail/feed/atom" | sed -e 's/<\/fullcount.*/\n/' | sed -e 's/.*fullcount>//'}
 eraty() { raty $1 | elinks }
 dbase64() { echo $@|base64 -d && echo }
+bmadd() {
+    link=$1
+    shift
+    bm add $link "`webpage_title $link`" $@
+}
 
 transfer() { if [ $# -eq 0 ]; then echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"; return 1; fi 
 tmpfile=$( mktemp -t transferXXX ); if tty -s; then basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g'); curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile; else curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ; fi; cat $tmpfile; rm -f $tmpfile; } 
+
+tws() {
+    echo "TW Done:$(task count end.after:today) Due:$(task count +DUE) Overdue:$(task count +OVERDUE) Next:$(task count +next)"
+}
 
 # foreground process with ctrl-z
 fancy-ctrl-z () {
