@@ -31,8 +31,27 @@ URxvt.keysym.C-S-Up:   perl:font-size:incglobal
 URxvt.keysym.C-S-Down: perl:font-size:decglobal
 
 !# current font {{{1
-!urxvt.font: xft:DejaVu Sans Mono:pixelsize=10
-!urxvt.boldFont: xft:DejaVu Sans Mono:pixelsize=10:weight=bold
+
+!urxvt.font: xft:DejaVu Sans Mono for Powerline:pixelsize=13
+!urxvt.boldFont: xft:DejaVu Sans Mono for Powerline:pixelsize=13:weight=bold
+
+!urxvt.font: xft:FuraMono-Regular Powerline:pixelsize=11
+!urxvt.boldFont: xft:FuraMono-Regular Powerline:pixelsize=11:weight=bold
+
+urxvt.font: xft:Meslo LG S for Powerline:pixelsize=14
+urxvt.boldFont: xft:Meslo LG S for Powerline:pixelsize=14:weight=bold
+
+!urxvt.font: xft:Literation Mono Powerline:pixelsize=14
+!urxvt.boldFont: xft:Literation Mono Powerline:pixelsize=14:weight=bold
+
+!urxvt.font: xft:Hack-Regular:pixelsize=14
+!urxvt.boldFont: xft:Hack-Regular:pixelsize=14:weight=bold
+
+!urxvt.font: xft:Anonymice Powerline:pixelsize=17
+!urxvt.boldFont: xft:Anonymice Powerline:pixelsize=17:weight=bold
+
+!urxvt.font: xft:DejaVu Sans Mono:pixelsize=11
+!urxvt.boldFont: xft:DejaVu Sans Mono:pixelsize=11:weight=bold
 
 !urxvt.font: xft:Inconsolata for Powerline:pixelsize=13
 !urxvt.boldFont: xft:Inconsolata for Powerline:pixelsize=13:weight=bold
@@ -46,8 +65,8 @@ URxvt.keysym.C-S-Down: perl:font-size:decglobal
 !urxvt.font: xft:Terminus:pixelsize=10
 !urxvt.boldFont: xft:Terminus:pixelsize=10:weight=bold
 
-urxvt.font: xft:Source Code Pro:pixelsize=11
-urxvt.boldFont: xft:Source Code Pro:pixelsize=11:weight=bold
+!urxvt.font: xft:Source Code Pro:pixelsize=11
+!urxvt.boldFont: xft:Source Code Pro:pixelsize=11:weight=bold
 
 !urxvt.font: xft:Input:pixelsize=12
 !urxvt.boldFont: xft:Input:pixelsize=14:weight=bold
@@ -55,8 +74,11 @@ urxvt.boldFont: xft:Source Code Pro:pixelsize=11:weight=bold
 !urxvt.font: -misc-liberation mono-medium-i-normal--0-0-0-0-m-0-koi8-ru
 !urxvt.boldFont: -misc-liberation mono-bold-i-normal--0-0-0-0-m-0-koi8-ru
 
-!urxvt.font: xft:Ubuntu Mono:pixelsize=15
-!urxvt.boldFont: xft:Ubuntu Mono:pixelsize=15:weight=bold
+!urxvt.font: xft:Tinos for Powerline:pixelsize=13
+!urxvt.boldFont: xft:Tinos for Powerline:pixelsize=13:weight=bold
+
+!urxvt.font: xft:Ubuntu Mono derivative Powerline:pixelsize=13
+!urxvt.boldFont: xft:Ubuntu Mono derivative Powerline:pixelsize=13:weight=bold
 
 !# xft settings {{{1
 Xft.antialias: true
