@@ -1,0 +1,12 @@
+#!/bin/zsh
+# show urgent (due) taskwarrior's tasks
+if whence task > /dev/null; then
+    task +OVERDUE or due.before:3d or priority:H or pro:Study
+    task active
+fi
+
+lsinbox=`ls ~/INBOX | wc -l`
+if [[ $lsinbox -gt 0  ]]; then
+    print
+    print "$fg_bold[red]Warning! INBOX has $lsinbox file(s)!$reset_color"
+fi

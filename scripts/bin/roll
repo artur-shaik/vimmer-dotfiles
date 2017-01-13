@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# Creates an archive
+#
+if [ "$#" -ne 0 ] ; then
+FILE="$1"
+case "$FILE" in
+      *.tar.bz2|*.tbz2) shift && tar cvjf "$FILE" $* ;;
+      *.tar.gz|*.tgz)   shift && tar cvzf "$FILE" $* ;;
+      *.tar)            shift && tar cvf "$FILE" $* ;;
+      *.zip)            shift && zip -r "$FILE" $* ;;
+      *.rar)            shift && rar a "$FILE" $* ;;
+      *.7z)             shift && 7zr a "$FILE" $* ;;
+      *)                echo "'$1' cannot be rolled" ;;
+esac
+else
+    echo "usage: roll [file] [contents]"
+fi
+

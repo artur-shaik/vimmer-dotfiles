@@ -1,0 +1,197 @@
+#!/bin/sh
+# my modification of the below two bars
+# https://github.com/baskerville/bspwm/blob/master/examples/panel/panel
+# https://github.com/esn89/dotfiles/blob/master/bspwm/.barScripts/panel
+
+if [ $(pgrep -cx panel) -gt 1 ] ; then
+	printf "%s\n" "The panel is already running." >&2
+	exit 1
+fi
+
+trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
+
+flavor=${1:-bar}
+
+[ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
+mkfifo "$PANEL_FIFO"
+
+PANEL_HEIGHT=14
+PANEL_BG_OPACITY=dd
+
+bspc config top_padding $PANEL_HEIGHT
+
+bspc subscribe report > "$PANEL_FIFO$i" &
+xtitle -sf 'T%s' > "$PANEL_FIFO" &
+
+# Colours#{{{
+# add alpha channel (opacity); no opacity
+. /home/ash/bin/panel_colors
+#}}}
+
+panel_clock()
+{
+        echo  "%{F$COLOR_ICON}%{F-}" $(clock -f '%a %d %H:%M')
+}
+
+panel_battery()
+{
+        batStats=$(acpi --battery | cut -d' ' -f3 | sed 's/,//')
+        if [ "$batStats" == "" ]
+        then
+                echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} ⮎ %{F$COLOR_FOREGROUND}AC %{F$COLOR_FREE}]%{F-}"
+        elif [[ "$batStats" == "Full" || "$batStats" == "Charging" || "$batStats" == "Unknown" ]]
+        then
+                echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} " %{F$COLOR_FOREGROUND}$(acpi --battery | cut -d' ' -f4 | sed 's/%,//' | sed 's/%,//')"+"%{F-} "%{F$COLOR_FREE}]%{F-}"
+        elif [ "$batStats" == "Discharging" ]
+        then
+                echo "%{F$COLOR_FREE}[%{F$COLOR_ICON} " %{F$COLOR_FOREGROUND}$(acpi --battery | cut -d' ' -f4 | sed 's/%,//')"-"%{F-} "%{F$COLOR_FREE}]%{F-}"
+        else    echo "%{F$COLOR_FREE}[%{F$COLOR_FOREGROUND} Refreshing..."%{F-} "%{F$COLOR_FREE}]%{F-}"
+        fi
+
+}
+
+panel_volume()
+{
+        volStatus=$(amixer get Master | tail -n 1 | cut -d '[' -f 3 | sed 's/].*//g')
+        volLevel=$(amixer get Master | tail -n 1 | cut -d '[' -f 2 | sed 's/\%].*//g')
+
+        icon="%{F$COLOR_ICON} %{F-}"
+        case $volLevel in
+                10*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_ICON}——————————"%{F-}
+                        else echo "$icon" "%{F$COLOR_VOLUME2}——————————"%{F-}
+                        fi
+                        ;;
+                1*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_VOLUME2}——%{F$COLOR_VOLUME}————————"%{F-}
+                        else echo "$icon" "%{F$COLOR_VOLUME2}——%{F$COLOR_VOLUME}————————"%{F-}
+                        fi
+                        ;;
+                2*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_VOLUME2}———%{F$COLOR_VOLUME}———————"%{F-}
+                        else echo "$icon" "%{F$COLOR_VOLUME2}———%{F$COLOR_VOLUME}———————"%{F-}
+                        fi
+                        ;;
+                3*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_VOLUME2}————%{F$COLOR_VOLUME}——————"%{F-}
+                        else echo "$icon" "%{F$COLOR_VOLUME2}————%{F$COLOR_VOLUME}——————"%{F-}
+                        fi
+                        ;;
+                4*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_VOLUME2}—————%{F$COLOR_VOLUME}—————"%{F-}
+                        else echo "$icon" "%{F$COLOR_VOLUME2}—————%{F$COLOR_VOLUME}—————"%{F-}
+                        fi
+                        ;;
+                5*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_VOLUME2}——————%{F$COLOR_VOLUME}————"%{F-}
+                        else echo "$icon" "%{F$COLOR_VOLUME2}——————%{F$COLOR_VOLUME}————"%{F-}
+                        fi
+                        ;;
+                6*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_VOLUME2}———————%{F$COLOR_VOLUME}———"%{F-}
+                        else echo "$icon" "%{F$COLOR_VOLUME2}———————%{F$COLOR_VOLUME}———"%{F-}
+                        fi
+                        ;;
+                7*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_ICON}————————%{F$COLOR_VOLUME}——"%{F-}
+                        else echo "$icon" "%{F$COLOR_VOLUME2}————————%{F$COLOR_VOLUME}——"%{F-}
+                        fi
+                        ;;
+                8*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_ICON}——————————%{F$COLOR_VOLUME}—"%{F-}
+                        else echo "$icon" "%{F$COLOR_VOLUME2}——————————%{F$COLOR_VOLUME}—"%{F-}
+                        fi
+                        ;;
+                9*) if [ "$volStatus" == "on" ]; then echo "$icon" "%{F$COLOR_ICON}——————————"%{F-}
+                        else echo "$icon" "%{F$COLOR_VOLUME2}——————————"%{F-}
+                        fi
+                        ;;
+        esac
+}
+
+
+# modified from: https://github.com/esn89/dotfiles/blob/master/bspwm/.barScripts/
+# brightnessScript
+panel_brightness()
+{
+    brightnessLevel=`expr $(xbacklight | cut -d '.' -f 1) / 10`
+
+    icon="%{F$COLOR_ICON}☀%{F-}"
+    case $brightnessLevel in
+            0)      echo "$icon" "○○○○○○○○○○";;
+            1)      echo "$icon" "•○○○○○○○○○";;
+            2)      echo "$icon" "••○○○○○○○○";;
+            3)      echo "$icon" "•••○○○○○○○";;
+            4)      echo "$icon" "••••○○○○○○";;
+            5)      echo "$icon" "•••••○○○○○";;
+            6)      echo "$icon" "••••••○○○○";;
+            7)      echo "$icon" "•••••••○○○";;
+            8)      echo "$icon" "••••••••○○";;
+            9)      echo "$icon" "•••••••••○";;
+            *)     echo "$icon"  "••••••••••";;
+    esac
+}
+
+# Ram Usage#{{{
+# add ram percent
+memused() {
+	free | grep Mem | awk '{print $6}'
+}
+
+memtotal() { 
+	free | grep Mem | awk '{print $2}'
+}
+
+memavailable() {
+    free | grep Mem | awk '{print $7}'
+}
+
+mempercent() { 
+	echo "%{F$COLOR_FREE}[%{F-}" "$((100-$(memavailable)*100/$(memtotal)))%%" "%{F$COLOR_FREE}]%{F-}"
+}
+#}}}
+
+kb_layout() {
+    mode=" `xkb-switch | head -c 2 | tr "[:lower:]" "[:upper:]"` "
+    if [[ $mode != " US " ]]; then
+        mode=%{B$COLOR_URGENT}%{F$COLOR_FREE}"$mode"%{F-}%{B-}
+    fi
+    echo "%{F$COLOR_FREE}[%{F-}"$mode"%{F$COLOR_FREE}]%{F-}"
+}
+
+inputmode() {
+    mode=`inputmode.sh`
+    if [[ $mode != "INPUT" ]]; then
+        decorated=%{B$COLOR_URGENT}%{F$COLOR_FREE}" ${mode:0:1} "%{F-}%{B-}
+    else
+        decorated=" ${mode:0:1} "
+    fi
+    echo "%{F$COLOR_FREE}[%{F-}"$decorated"%{F$COLOR_FREE}]%{F-}"
+}
+
+cpu_temp() {
+    temp=`expr $(cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp1_input) / 1000`
+	#echo "%{F$COLOR_FREE}[%{F-}" "$(acpi -t | tail -n 1 | awk '{print $4}')°C" "%{F$COLOR_FREE}]%{F-}"
+	echo "%{F$COLOR_FREE}[%{F-}" "$temp°C" "%{F$COLOR_FREE}]%{F-}"
+}
+
+task_status() {
+    taskCount=`task count status:pending`
+    echo "%{F$COLOR_FREE}[%{F-}" "$taskCount t" "%{F$COLOR_FREE}]%{F-}"
+}
+
+while true; do
+    echo "S" "%{F-} $(panel_volume) $(panel_battery) $(task_status) $(kb_layout) $(inputmode) $(panel_clock) " > "$PANEL_FIFO"
+    sleep 1.5s
+done &
+
+panelBg="#$PANEL_BG_OPACITY"${COLOR_BACKGROUND:3:7}
+
+case "$flavor" in
+	bar)
+		# change to bar-aint-recursive since using git version
+		# -b to put at bottom
+		# use uushi font
+		cat "$PANEL_FIFO" | panel_bar | lemonbar -g 1366x$PANEL_HEIGHT+0+0 -d -f "Sauce Code Pro:style=NerdFontPlusFontAwesomePlusOcticonsPlusPomiconsMono:size=7:bold" -u 2 -F "$COLOR_FOREGROUND" -B "$panelBg" &
+		# cat "$PANEL_FIFO" | panel_bar | lemonbar -d -f "DejaVu Sans Mono for Powerline:size=7" -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
+		# cat "$PANEL_FIFO" | panel_bar | lemonbar -d -f -benis-uushi-medium-r-normal--11-90-75-75-p-58-iso10646-1 -u 1 -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" &
+		;;
+	dzen2)
+		FONT_FAMILY='DejaVu Sans'
+		FONT_SIZE=11
+		cat "$PANEL_FIFO" | panel_dzen2 -f "$FONT_FAMILY" -s "$FONT_SIZE" | dzen2 -h $PANEL_HEIGHT -dock -ta l -title-name panel -fn "${FONT_FAMILY}:pixelsize=${FONT_SIZE}" -fg "$COLOR_FOREGROUND" -bg "$COLOR_BACKGROUND" &
+		;;
+esac
+
+wait

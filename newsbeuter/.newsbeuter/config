@@ -1,0 +1,67 @@
+# vim:foldlevel=0
+# vim:foldmethod=marker
+
+## common {{{1
+browser "elinks %u"
+player smplayer2
+download-path "~/podcasts/"
+max-downloads 3
+podcast-auto-enqueue no
+reload-time 60
+keep-articles-days 30
+auto-reload yes
+suppress-first-reload yes
+refresh-on-startup no
+always-display-description true
+article-sort-order date-dsc
+cleanup-on-quit yes
+display-article-progress yes
+goto-first-unread yes
+goto-next-feed no
+notify-program notify-send
+notify-always yes
+notify-format "newsbeuter: finished reload, %f unread feeds (%n unread articles total)"
+delete-read-articles-on-quit no
+
+## ttrss {{{1
+urls-source "ttrss"
+ttrss-url "http://ttrss.trance.kg/"
+ttrss-login admin
+ttrss-passwordfile ~/private/ttrss-pwd
+ttrss-flag-star "s"
+ttrss-flag-publish "p"
+
+## custom bindings {{{1
+bind-key a mark-feed-read
+unbind-key ^U
+bind-key ^U pageup
+unbind-key ^D
+bind-key ^D pagedown
+bind-key G end
+unbind-key g
+bind-key g home
+bind-key k up
+bind-key j down
+bind-key q quit
+bind-key d mark-feed-read
+bind-key D mark-all-feeds-read
+unbind-key l
+bind-key l open
+unbind-key h
+bind-key h quit
+bind-key m toggle-show-read-feeds
+unbind-key n
+bind-key n next-unread-feed
+unbind-key p
+bind-key p prev-unread-feed
+
+## colors {{{1
+color   info        green cyan bold
+color   listfocus   cyan black bold
+color   listfocus_unread   white black bold
+
+## macros {{{1
+macro ^E set browser "defaultbrowser %u"; open-in-browser-and-mark-read ; set browser "elinks %u"
+macro o set browser "raty %u | elinks"; open-in-browser-and-mark-read ; set browser "elinks %u"
+macro X set browser "ytd %u > /dev/null &"; open-in-browser-and-mark-read ; set browser "elinks %u"
+macro x set browser "wyoutube %u"; open-in-browser-and-mark-read ; set browser "elinks %u"

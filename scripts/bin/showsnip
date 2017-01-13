@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ $# -ne 1 ] 
+then
+    echo "Usage: $1 sniptype"
+    exit 1
+fi
+
+cat ~/.vim/bundle/vim-snippets/snippets/$1.snippets | egrep '^(#|snippet)[^#]'
