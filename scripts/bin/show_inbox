@@ -10,3 +10,9 @@ if [[ $lsinbox -gt 0  ]]; then
     print
     print "$fg_bold[red]Warning! INBOX has $lsinbox file(s)!$reset_color"
 fi
+
+cd ~/projects/dotfiles
+if [[ -n $(git status --porcelain) ]]; then
+    print
+    print "$fg_bold[red]Warning! Dotfiles has untracked files $reset_color"
+fi
