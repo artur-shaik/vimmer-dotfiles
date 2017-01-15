@@ -38,8 +38,8 @@ URxvt.keysym.C-S-Down: perl:font-size:decglobal
 !urxvt.font: xft:FuraMono-Regular Powerline:pixelsize=11
 !urxvt.boldFont: xft:FuraMono-Regular Powerline:pixelsize=11:weight=bold
 
-urxvt.font: xft:Meslo LG S for Powerline:pixelsize=14
-urxvt.boldFont: xft:Meslo LG S for Powerline:pixelsize=14:weight=bold
+urxvt.font: xft:Meslo LG S for Powerline:pixelsize=13
+urxvt.boldFont: xft:Meslo LG S for Powerline:pixelsize=13:weight=bold
 
 !urxvt.font: xft:Literation Mono Powerline:pixelsize=14
 !urxvt.boldFont: xft:Literation Mono Powerline:pixelsize=14:weight=bold
