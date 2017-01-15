@@ -1,1 +1,1 @@
-/home/ash/.vimrc
+../.vimrc
