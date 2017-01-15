@@ -319,3 +319,11 @@ super + shift + o
     unset TMUX; \
     urxvt -geometry 140x28 -e tmux new-session -A -s internet 'mux iternet'; \
     xport TMUX="$OLDTMUX";
+
+# start terminal with ssh servers
+super + ctrl + o
+    bspc rule -a URxvt -o state=floating; \
+    OLDTMUX="$TMUX"; \
+    unset TMUX; \
+    urxvt -geometry 140x28 -e tmux new-session -A -s servers 'mux servers'; \
+    xport TMUX="$OLDTMUX";
