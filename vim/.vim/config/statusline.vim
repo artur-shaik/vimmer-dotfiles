@@ -110,7 +110,9 @@ function! Status(winnum)
   endif
 
   " file type
-  let stat .= ' %{WebDevIconsGetFileTypeSymbol()}'
+  if exists('*WebDevIconsGetFileTypeSymbol')
+    let stat .= ' %{WebDevIconsGetFileTypeSymbol()}'
+  endif
 
   " progress
   let stat .= Color(active, 'SLProgress', ' %P ')
