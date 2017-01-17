@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if (( $# == 0 )); then
+	SEARCHQUERY="."
+elif (( $# > 0 )); then
+	SEARCHQUERY=$@
+fi
+
+echo """<!DOCTYPE HTML><HTML><HEAD><META CHARSET="UTF-8"></HEAD><BODY>
+`cat "$HOME"/.local/share/qutebrowser/history |#pointless lol
+sort -r |#sort by most recent
+cut -d " " -f 2- |#remove first column (times)
+grep -v "^data:" |#remove urls with "data:"
+awk '!a[$1]++' |#remove duplicate urls
+sed -e "s/\&/\&amp;/g" -e "s/</\&lt;/g" -e "s/>/\&gt;/g" |#deactive html in titles and perhaps urls
+awk '{$1 = "<a href="$1">"$1"</a>"; print $0, "<br>"}' |#make urls clickable and on their own lines
+grep -i "$SEARCHQUERY" #filter by search query`""" > /tmp/qbhistory.html
+
+echo """<br>Total URLs:<br>
+`grep -c "<a href" /tmp/qbhistory.html`
+</BODY></HTML>""" >> /tmp/qbhistory.html
+
+if [[ "$QUTE_URL" == "file:///tmp/qbhistory.html" ]]; then
+	echo "open file:///tmp/qbhistory.html" >> "$QUTE_FIFO"
+else
+	echo "open -t file:///tmp/qbhistory.html" >> "$QUTE_FIFO"
+fi
