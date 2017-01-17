@@ -5,7 +5,7 @@ filetype plugin on
 filetype plugin indent on
 
 set background=light
-colorscheme xemacs
+colorscheme default
 
 syntax on 
 
