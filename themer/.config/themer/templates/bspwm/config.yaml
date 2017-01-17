@@ -1,0 +1,29 @@
+variables:
+  primary: magenta
+  secondary: green
+  tertiary: red
+  special: yellow
+  transparency: 100
+  fontName: Meslo LG S for Powerline
+  fontSize: 11
+  font: "Meslo LG S for Powerline:pixelsize=11"
+plugins:
+  parsers:
+    - themer.parsers.SweylaColorParser
+    - themer.parsers.WallhavenColorParser
+    - themer.parsers.KmeansColorParser
+    - themer.parsers.CachedColorParser
+    - themer.parsers.unsplash.UnsplashColorParser
+  # - themer.parsers.vim.VimColorParser
+    - themer.ColorParser
+  activators:
+    - themer.activators.wallfix.WallfixActivator
+    - themer.activators.bspwm.AfterThemeActivator
+  # - themer.activators.i3.I3Activator
+  # - themer.activators.acyl.ACYLActivator
+files:
+  Xdefaults.tpl: Xdefaults
+  index.tpl: index.html
+  bspwm_theme.tpl: bspwm_theme
+  dc-color.sh.tpl: dc-color.sh
+  dunstrc.tpl: dunstrc
