@@ -28,13 +28,10 @@ super + b
 
 # toggle floating and fullscreen
 super + s
-    bspc query -N -n focused.tiled && state=floating || state=tiled; \
-    bspc node -t $state
+    bspc node -t $(bspc query -N -n -n .tiled >/dev/null && echo floating || echo tiled)
 
 super + f
-    state=fullscreen; \
-    bspc query -N -n "focused.$state" && state=$(bspc query -T -n | jshon -e client -e lastState -u); \
-    bspc node -t "$state"
+    bspc node -t '~fullscreen'
 
 # toggle last window with ` and last desktop with Tab
 super + {grave,Tab}
@@ -48,30 +45,8 @@ super + apostrophe
 super + {_,shift + }c
 	bspc node -f {next,prev}.local
 
-# focus/move window
-super + {_,shift + }{h,j,k,l}
-    mod={f,s}; \
-    dir={west,south,north,east}; \
-    if [[ "$mod" == "f" ]]; then \
-        step=20; \
-    else \
-        step=200; \
-    fi; \
-    if [[ "$dir" == "west" ]]; then \
-        ord=x; \
-        move="-$step"; \
-    elif [[ "$dir" == "east" ]]; then \
-        ord=x; \
-        move="+$step"; \
-    elif [[ "$dir" == "north" ]]; then \
-        ord=y; \
-        move="-$step"; \
-    elif [[ "$dir" == "south" ]]; then \
-        ord=y; \
-        move="+$step"; \
-    fi; \
-    bspc node -$mod $dir || xdo move -$ord $move
-    # xdo move -$ord $move
+super + {_,shift,alt,ctrl} + {h,j,k,l}
+    ~/.config/bspwm/scripts/{focus,move,resize,presel}.sh {west,south,north,east}
 
 # show desktop, send window to desktop
 super + {_,shift + }{1-9,0}
@@ -85,7 +60,7 @@ super + {o,i}
 
 # transplant selected window to the given window
 super + y
-	bspc node -n last
+	bspc query -N -n focused.automatic && bspc node -n last.!automatic || bspc node last.leaf -n focused
 
 # make window biggest
 super + ctrl + m
@@ -102,28 +77,6 @@ super + ctrl + {h,j,k,l,0}
 # change select ratio
 super + ctrl + {1-9}
 	bspc node -r 0.{1-9}
-
-# resize tiled windows
-super + alt + {h,j,k,l}
-    dir={west,south,north,east}; \
-    if [[ $dir == "west" ]]; then \
-        side="w"; \
-        step=-20; \
-    elif [[ $dir == "east" ]]; then \
-        side="w"; \
-        step=+20; \
-    elif [[ $dir == "north" ]]; then \
-        side="h"; \
-        step=-20; \
-    elif [[ $dir == "south" ]]; then \
-        side="h"; \
-        step=+20; \
-    fi; \
-	bspc node @$dir -r $step || xdo resize -$side $step
-
-# resize another side
-super + alt + shift + {h,j,k,l}
-	bspc node @{east -r -10,north -r +10,south -r -10,west -r +10}
 
 # reducing gap on the fly 
 super + {minus,equal}
@@ -282,9 +235,17 @@ super + Escape
 super + Return
 	urxvt
 
+# run pass menu
+super + ctrl + space
+	passmenu -l 14 -nb '#000000' -nf '#d8d8d8' -sb '#d8d8d8' -sf '#000000' -fn 'Meslo Lg S For Powerline:pixelsize=11'
+
 # run menu
 super + space
-	dmenu_run
+	dmenu_recent -l 14 -nb '#000000' -nf '#d8d8d8' -sb '#d8d8d8' -sf '#000000' -fn 'Meslo Lg S For Powerline:pixelsize=11'
+
+# run custom menu
+super + shift + space
+	dmenu_custom -l 14 -nb '#000000' -nf '#d8d8d8' -sb '#d8d8d8' -sf '#000000' -fn 'Meslo Lg S For Powerline:pixelsize=11'
 
 # start terminal with ncmpcpp
 super + shift + m
@@ -305,25 +266,18 @@ super + shift + b
     bspc rule -a URxvt -o state=floating; \
     urxvt -geometry 80x25 -e tmux new-session -A -s eratys 'raty `xclip -o` | elinks' \; 
 
-# start terminal with elinks
-# super + shift + b
-#     OLDTMUX="$TMUX"; \
-#     unset TMUX; \
-#     urxvt -geometry 120x45 -e tmux new-session -A -s elinks 'elinks' \; split-window -h \; select-pane -t 0 \; resize-pane -L 10 \; send-keys -t right "c" C-m
-#     export TMUX="$OLDTMUX";
-
 # start terminal with weechat
 super + shift + o
     bspc rule -a URxvt -o state=floating; \
     OLDTMUX="$TMUX"; \
     unset TMUX; \
-    urxvt -geometry 140x28 -e tmux new-session -A -s internet 'mux iternet'; \
-    xport TMUX="$OLDTMUX";
+    urxvt -geometry 140x28 -e tmuxinator start internet \; \
+    export TMUX="$OLDTMUX";
 
 # start terminal with ssh servers
 super + ctrl + o
     bspc rule -a URxvt -o state=floating; \
     OLDTMUX="$TMUX"; \
     unset TMUX; \
-    urxvt -geometry 140x28 -e tmux new-session -A -s servers 'mux servers'; \
-    xport TMUX="$OLDTMUX";
+    urxvt -geometry 140x28 -e tmuxinator start servers \; \
+    export TMUX="$OLDTMUX";

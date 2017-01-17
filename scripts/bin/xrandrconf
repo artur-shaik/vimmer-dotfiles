@@ -1,0 +1,14 @@
+#!/bin/bash
+
+xrandr --output eDP1 --primary
+connected=`xrandr | grep -Po '^(.*) connected' | cut -d' ' -f'1' | grep -v 'eDP1'`
+if [[ $? -eq 0 && "$(echo $connected | wc -l)" -gt "0" ]]; then
+    xrandr --output $connected --auto --right-of eDP1
+    sed -i 's/alignment.*/alignment br/' ~/.conky/conkyrc_tasks
+else
+    xrandr --output HDMI1 --off
+    xrandr --output DP1 --off
+    sed -i 's/alignment.*/alignment bl/' ~/.conky/conkyrc_tasks
+fi
+
+~/.config/bspwm/scripts/configure_monitors "$(bspc query -M | wc -l)"
