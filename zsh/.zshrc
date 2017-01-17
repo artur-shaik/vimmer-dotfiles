@@ -12,7 +12,7 @@ function bgnotify_formatted {
     fi
 }
 
-plugins=(mvn vi-mode git taskwarrior lol pip python suse web-search wd zsh-syntax-highlighting bgnotify)
+plugins=(mvn git taskwarrior lol pip python suse web-search wd zsh-syntax-highlighting bgnotify)
 
 source $ZSH/oh-my-zsh.sh
 
