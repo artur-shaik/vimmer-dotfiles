@@ -8,6 +8,35 @@ function! s:bundle(config_name, ...)
   endif
 endfunction
 
+function! s:enableDev()
+
+  call s:bundle('tpope/vim-fugitive', 1)
+  call s:bundle('peterhoeg/vim-qml', 1)
+  call s:bundle('tpope/vim-git', 1)
+  call s:bundle('tagbar')
+  call s:bundle('airblade/vim-rooter', 1)
+  call s:bundle('vim-scripts/Maven-Compiler', 1)
+  call s:bundle('xolox/vim-session', 1)
+  call s:bundle('xolox/vim-reload', 1)
+  call s:bundle('tpope/vim-commentary', 1)
+  call s:bundle('kana/vim-vspec', 1)
+  call s:bundle('rdnetto/YCM-Generator', 1)
+  call s:bundle('junegunn/gv.vim', 1)
+  call s:bundle('cosminadrianpopescu/filesync', 1)
+  call s:bundle('mattn/emmet-vim', 1)
+  call s:bundle('Xuyuanp/nerdtree-git-plugin', 1)
+  call s:bundle('vim-javacomplete2')
+  call s:bundle('goyo')
+  call s:bundle('vimtex')
+  call s:bundle('completers')
+  call s:bundle('zeavim')
+  call s:bundle('ludovicchabant/vim-gutentags', 1)
+  call s:bundle('MarcWeber/vim-addon-local-vimrc', 1)
+  call s:bundle('syntastic')
+
+  call plug#end()
+endfunction
+
 silent! call plug#begin('~/.vim/bundle')
 
 call s:bundle('xolox/vim-misc', 1)
@@ -59,34 +88,11 @@ if filereadable('$HOME/.cheats')
   call s:bundle('wsdjeg/vim-cheat', 1)
 endif
 
-if $VIM_ENV == 'developer'
-
-  call s:bundle('tpope/vim-fugitive', 1)
-  call s:bundle('peterhoeg/vim-qml', 1)
-  call s:bundle('tpope/vim-git', 1)
-  call s:bundle('tagbar')
-  call s:bundle('airblade/vim-rooter', 1)
-  call s:bundle('vim-scripts/Maven-Compiler', 1)
-  call s:bundle('xolox/vim-session', 1)
-  call s:bundle('xolox/vim-reload', 1)
-  call s:bundle('tpope/vim-commentary', 1)
-  call s:bundle('kana/vim-vspec', 1)
-  call s:bundle('rdnetto/YCM-Generator', 1)
-  call s:bundle('junegunn/gv.vim', 1)
-  call s:bundle('cosminadrianpopescu/filesync', 1)
-  call s:bundle('mattn/emmet-vim', 1)
-  call s:bundle('Xuyuanp/nerdtree-git-plugin', 1)
-  call s:bundle('vim-javacomplete2')
-  call s:bundle('goyo')
-  call s:bundle('vimtex')
-  call s:bundle('completers')
-  call s:bundle('zeavim')
-  call s:bundle('ludovicchabant/vim-gutentags', 1)
-  call s:bundle('MarcWeber/vim-addon-local-vimrc', 1)
-  call s:bundle('syntastic')
-
-endif
-
 call plug#end()
+
+if $VIM_ENV == 'dev'
+  call s:enableDev()
+endif
+command! -nargs=0 -bar EnableDev call s:enableDev()
 
 " vim:set fdm=marker sw=2 nowrap:
