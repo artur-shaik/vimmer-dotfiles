@@ -23,7 +23,7 @@
 
 [frame]
     width = 3
-    color = "{{ black }}"
+    color = "{{ alt_black }}"
 
 [shortcuts]
     close = ctrl+space
@@ -32,12 +32,12 @@
     context = ctrl+shift+period
 
 [urgency_low]
-    background = "{{ alt_black }}"
+    background = "{{ black }}"
     foreground = "{{ alt_white }}"
     timeout = 10
 
 [urgency_normal]
-    background = "{{ alt_black }}"
+    background = "{{ black }}"
     foreground = "{{ alt_white }}"
     timeout = 10
 
@@ -51,7 +51,7 @@
     appname = weechat
     timeout = 10
     background = "{{ black }}"
-    foreground = "{{ white }}"
+    foreground = "{{ yellow }}"
 
 [espeak]
     summary="*"
