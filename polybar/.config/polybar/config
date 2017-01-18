@@ -49,7 +49,7 @@ font-0 = fixed:pixelsize=10;0
 font-1 = unifont:size=6:heavy:fontformat=truetype;-2
 font-2 = WunconSiji:pixelsize=10
 
-modules-left = bspwm mpd
+modules-left = pinger bspwm mpd
 modules-center = xwindow
 modules-right = backlight volume xkeyboard tasks-count battery temperature date
 
@@ -398,6 +398,17 @@ interval = 30
 
 format-underline = #a000d2
 format-prefix = "🖧 "
+format-prefix-foreground = #5b
+
+[module/pinger]
+type = custom/script
+
+exec = ping -W 1 -A -c 1 -s 1 $(cat ~/.ping_host) &> /dev/null && echo  || echo 
+label = %output%
+interval = 3
+
+format-underline = #111111
+format-prefix = ""
 format-prefix-foreground = #5b
 
 ; vim:ft=dosini
