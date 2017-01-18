@@ -27,7 +27,7 @@ udiskie -n -T &
 kbdd
 export DE=kde
 /usr/sbin/bitlbee -F -c /etc/bitlbee/bitlbee.conf
-xautolock -locker 'i3lock -i ~/.wallpaper.png' &
+xautolock -locker 'xlock -mode space' &
 bash -c "export LC_TYPE=en_EN.UTF-8; export LANG=en_EN.UTF-8; conky -c ~/.conky/conkyrc_lunatico;" &
 bash -c "conky -c ~/.conky/conkyrc_tasks;" &
 setxkbmap -layout 'us,ru' -option 'grp:alt_space_toggle,grp_led:caps,ctrl:nocaps'
