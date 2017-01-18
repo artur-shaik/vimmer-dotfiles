@@ -12,10 +12,10 @@ syntax on
 set cursorline
 
 function! s:CustomHighlights()
-  hi Visual term=none cterm=none ctermbg=1 gui=none ctermfg=15
-  hi CursorLine term=none cterm=bold ctermfg=8 ctermbg=15
-  hi Pmenu ctermbg=2 ctermfg=15
-  hi PmenuSel ctermfg=2 ctermbg=15
+  hi Visual term=none cterm=none ctermbg=8 gui=none ctermfg=0
+  hi CursorLine term=none cterm=bold ctermfg=15 ctermbg=0
+  hi Pmenu ctermbg=15 ctermfg=0
+  hi PmenuSel ctermfg=15 ctermbg=0
   hi LineNr ctermfg=5 cterm=none
   hi SpellBad term=underline cterm=underline ctermbg=none ctermfg=1
   hi Error term=none cterm=none ctermbg=none ctermfg=1
