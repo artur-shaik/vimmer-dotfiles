@@ -187,7 +187,7 @@ type = internal/mpd
 format-online = <label-song> <icon-stop> <toggle>
 
 label-song = %title%
-label-song-maxlen = 30
+label-song-maxlen = 50
 label-song-ellipsis = true
 
 icon-prev = 
