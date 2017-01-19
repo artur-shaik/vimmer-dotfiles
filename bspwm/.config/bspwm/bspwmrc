@@ -19,11 +19,7 @@ bspc config focused_frame_opacity       0.1
 bspc config remove_unplugged_monitors   true
 bspc config merge_overlapping_monitors  true
 
-bspc rule -a Pim state=floating
-bspc rule -a mpv state=floating
-bspc rule -a libreoffice-calc state=floating
-bspc rule -a Zathura state=floating
-bspc rule -a gtk-gnash state=floating
+bspc rule -a '*:*' state=floating
 
 bspc subscribe monitor | while read -r line; do
 case $line in
