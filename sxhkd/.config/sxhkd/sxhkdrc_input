@@ -256,7 +256,7 @@ super + shift + m
 super + shift + p
     unset TMUX; \
     bspc rule -a URxvt -o state=floating; \
-    urxvt -geometry 40x40 -e tmux new-session -A -s translate 'zsh' &; \
+    urxvt -geometry 40x40 -e tmuxinator translater \;
     sleep 0.4; \
     xdo move -x +400
 
