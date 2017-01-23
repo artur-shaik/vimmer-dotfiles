@@ -1,10 +1,5 @@
 " custom mappings
 
-" set leader for '
-let mapleader = "'"
-let maplocalleader = "'"
-let g:mapleader = "'"
-
 " F3 to toggle paste and nopaste
 nnoremap <F3> :set paste!<CR>
 
@@ -24,9 +19,6 @@ vmap <Leader>p "+p
 vmap <Leader>P "+P
 nnoremap <Leader><Leader> <C-^>
 map q: :q
-
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " change window size with arrow keys
 noremap <up>    <C-W>+

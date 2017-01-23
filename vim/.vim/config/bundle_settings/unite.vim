@@ -21,6 +21,8 @@ nnoremap <leader>y :Unite -no-split -buffer-name=yank history/yank<cr>
 nnoremap <silent> <C-b> :Unite -start-insert -buffer-name=buffer buffer<cr>
 nnoremap <silent> <C-t> :Unite -start-insert -buffer-name=buffer_tab buffer_tab<cr>
 
+nnoremap <leader>ev :Unite -no-split -start-insert -path=$HOME/.vim/ file_rec/async:<cr>
+
 " Interface for Git
 let g:unite_source_menu_menus = {}
 let g:unite_source_menu_menus.git = {
