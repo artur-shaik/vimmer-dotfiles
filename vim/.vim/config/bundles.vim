@@ -4,7 +4,7 @@ function! s:bundle(config_name, ...)
   if a:0 > 0
     Plug a:config_name
   else
-    execute 'source $HOME/.vim/config/bundle_settings/'. a:config_name. '.vim'
+    execute 'source '. $HOME. '/.vim/config/bundle_settings/'. a:config_name. '.vim'
   endif
 endfunction
 
@@ -79,12 +79,12 @@ if !empty($VIMWIKI)
   call s:bundle('vimwiki')
 endif
 
-let g:languagetool_jar = '$HOME/Soft/LanguageTool/languagetool-commandline.jar'
+let g:languagetool_jar = $HOME. '/Soft/LanguageTool/languagetool-commandline.jar'
 if filereadable(g:languagetool_jar)
   call s:bundle('LanguageTool')
 endif
 
-if filereadable('$HOME/.cheats')
+if isdirectory($HOME. '/.cheat')
   call s:bundle('wsdjeg/vim-cheat', 1)
 endif
 
