@@ -29,7 +29,7 @@ function! s:goyo_leave()
   let g:goyo_enabled = 0
   set laststatus=2
 
-  call s:CustomHighlights()
+  execute ':CustomHighlights'
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
