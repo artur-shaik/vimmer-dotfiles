@@ -135,6 +135,8 @@ filextype *.epub,*.fb2,*.mobi FBReader %f &
 
 " Audio
 filetype *.wav,*.mp3,*.flac,*.ogg,*.m4a,*.aif
+       \ {Play using mpv}
+       \ mpv %f,
        \ {Play using ffplay}
        \ ffplay %c,
        \ {Play using MPlayer}
