@@ -1,4 +1,4 @@
 #!/bin/bash
 
-echo --slang en,ru $1
-/usr/bin/mpv --slang en,ru "$@"
+echo "opening in mpv: $1"
+/usr/bin/mpv --pause --ytdl-format="best[height=720]" --slang en,ru "$@"
