@@ -5,8 +5,8 @@ variables:
   special: yellow
   transparency: 100
   fontName: Meslo LG S for Powerline
-  fontSize: 11
-  font: "Meslo LG S for Powerline:pixelsize=11"
+  fontSize: 13
+  font: "Meslo LG S for Powerline:pixelsize=13"
 plugins:
   parsers:
     - themer.parsers.SweylaColorParser

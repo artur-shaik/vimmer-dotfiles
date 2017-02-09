@@ -1,3 +1,19 @@
 #!/bin/sh
 
-play -q ~/Sounds/242502__gabrielaraujo__pop-up-notification.wav
+appname=$1
+summary=$2
+
+echo "appname: $1, summary: $2" >> ~/notify.log
+
+case "$appname" in
+    "weechat")
+        case "$summary" in
+            *)
+                play -q /usr/share/skype/sounds/ChatIncoming.wav
+                ;;
+        esac
+        ;;
+    *)
+        play -q ~/Sounds/242502__gabrielaraujo__pop-up-notification.wav
+        ;;
+esac

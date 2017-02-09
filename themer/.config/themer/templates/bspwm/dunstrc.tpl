@@ -1,5 +1,5 @@
 [global]
-    font = "{{ fontName.title() }} {{ fontSize - 3 }}"
+    font = "{{ fontName.title() }} {{ fontSize - 5 }}"
     allow_markup = yes
     format = "<b>%s %p</b>\n%b"
     sort = yes
