@@ -3,7 +3,7 @@
 dir=$1
 
 follows_monitor_current=$(bspc config pointer_follows_monitor)
-follows_focus_current=$(bspc config pointer_focus_monitor)
+follows_focus_current=$(bspc config pointer_follows_focus)
 bspc config pointer_follows_monitor true
 bspc config pointer_follows_focus true
 if ! bspc node -f $dir.local; then
