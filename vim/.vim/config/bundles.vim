@@ -66,7 +66,6 @@ call s:bundle('tpope/vim-vinegar', 1)
 call s:bundle("vifm")
 call s:bundle('tpope/vim-dispatch', 1)
 call s:bundle('ryanoasis/vim-devicons', 1)
-call s:bundle('vim-rsi')
 call s:bundle('vim-xkbswitch')
 call s:bundle('nerdtree')
 
@@ -77,6 +76,7 @@ endif
 
 if !empty($VIMWIKI)
   call s:bundle('vimwiki')
+  call s:bundle('markdown')
 endif
 
 let g:languagetool_jar = $HOME. '/Soft/LanguageTool/languagetool-commandline.jar'

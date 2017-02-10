@@ -40,20 +40,24 @@ imap kk <esc>
 imap лл <esc>
 imap <F1> <Esc>
 map <F1> <Esc>
-imap <C-h> <backspace>
 
+" readline style in insert mode
 imap <C-b> <Left>
 imap <C-a> <esc>^i
 imap <C-f> <Right>
 imap <C-e> <End>
 imap <C-d> <Del>
 imap <C-h> <BS>
-imap <C-n> <Down>
-imap <C-p> <Up>
 
+" in command line mode: alt+k for Up, alt+j for Down, alt+l for Enter and
+" readline defaults
 cmap <Esc>k <Up>
 cmap <Esc>j <Down>
 cmap <Esc>l <Enter>
+cmap <C-a> <Home>
+cmap <C-b> <Left>
+cmap <C-f> <Right>
+cmap <C-d> <Del>
 
 " replace word under cursor with entered 
 " in all document
@@ -67,11 +71,6 @@ nnoremap <C-h> <C-W>h
 
 nnoremap E :Explore<CR>
 nnoremap <Leader>b :EditVifm<CR>
-
-" Tab/Shift+Tab for switching between buffers
-" nnoremap  <silent>   <tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
-" nnoremap  <silent> <s-tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
-" nnoremap <tab> za
 
 " delete current buffer and keep split
 nnoremap <leader>d :bp\|bd #<CR>
