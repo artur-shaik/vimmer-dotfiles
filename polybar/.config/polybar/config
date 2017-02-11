@@ -15,7 +15,7 @@ foreground-alt = ${xrdb:color2}
 primary = ${xrdb:color4}
 secondary = ${xrdb:color6}
 alert = ${xrdb:color8}
-dimmed = ${xrdb:color14}
+dimmed = ${xrdb:color0}
 
 [global/wm]
 margin-top = 5
@@ -34,13 +34,13 @@ foreground = ${colors.foreground}
 
 overline-size = 2
 overline-color = #f00
-underline-size = 1
+underline-size = 2
 underline-color = #00f
 
-border-bottom-size = 1
+border-bottom-size = 0
 border-bottom-color = #333
 
-padding-left = 0
+padding-left = 1
 padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
