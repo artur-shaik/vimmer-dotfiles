@@ -107,6 +107,7 @@ alias killl='kill -9 %1'
 alias mux='tmuxinator'
 alias rm='trash-put'
 alias git=hub
+alias devvim='VIM_ENV=dev vim'
 
 #
 # GTD task {{{1
