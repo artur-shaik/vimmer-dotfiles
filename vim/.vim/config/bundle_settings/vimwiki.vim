@@ -1,3 +1,4 @@
 Plug 'vimwiki/vimwiki'
 
-nnoremap <leader>W :VimwikiIndex<cr>
+let g:vimwiki_list = [{'path': '~/vimwiki/', 
+                   \ 'syntax': 'markdown', 'ext': ''}]
