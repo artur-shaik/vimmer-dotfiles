@@ -68,6 +68,8 @@ call s:bundle('tpope/vim-dispatch', 1)
 call s:bundle('ryanoasis/vim-devicons', 1)
 call s:bundle('vim-xkbswitch')
 call s:bundle('nerdtree')
+call s:bundle('tpope/vim-speeddating', 1)
+call s:bundle('skywind3000/asyncrun.vim', 1)
 
 if !empty($TMUX)
   call s:bundle('tmuxline')
