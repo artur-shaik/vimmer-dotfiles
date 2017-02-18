@@ -108,6 +108,7 @@ alias mux='tmuxinator'
 alias rm='trash-put'
 alias git=hub
 alias devvim='VIM_ENV=dev vim'
+alias vimwiki='VIMWIKI=1 vim ~/vimwiki/index.md'
 
 #
 # GTD task {{{1
