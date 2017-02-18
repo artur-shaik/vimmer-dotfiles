@@ -18,6 +18,7 @@ bspc config normal_frame_opacity        0.0
 bspc config focused_frame_opacity       0.1
 bspc config remove_unplugged_monitors   true
 bspc config merge_overlapping_monitors  true
+bspc config top_padding                 14
 
 bspc rule -a '*:*' state=floating
 
