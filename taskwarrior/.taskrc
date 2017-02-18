@@ -2,7 +2,8 @@
 data.location=/home/ash/.task
 
 # Color theme (uncomment one to use)
-include /usr/share/doc/packages/task/rc/dark-16.theme
+# include /usr/share/doc/packages/task/rc/dark-violets-256.theme
+include ~/.taskrc.dark-16.theme
 
 journal.time=on
 dateformat.annotation=Y-M-d H:N
@@ -14,16 +15,12 @@ dateformat.report=D-M-Y
 dateformat.info=Y-M-D H:N:S
 urgency.user.tag.prev.coefficient=-5.0
 urgency.user.tag.later.coefficient=-4.0
-urgency.user.tag.mail.coefficient=0.0
+urgency.user.tag.mail.coefficient=3.0
 urgency.user.tag.in.coefficient=15
+urgency.user.tag.rnr.coefficient=0
 urgency.tags.coefficient=0.0
 urgency.project.coefficient=0.1
 urgency.annotation.coefficient=0
-taskd.certificate=\/home\/ash\/.task\/ash.cert.pem
-taskd.key=\/home\/ash\/.task\/ash.key.pem
-taskd.server=192.168.0.104:55589
-taskd.credentials=Shaik\/Artur\/a10e3bd1-4753-4ee1-b39f-22d158bc89ca
-taskd.trust=allow all 
 
 debug=off
 debug.tls=0
@@ -34,3 +31,25 @@ report.in.filter            = status:pending limit:page (+in)
 report.in.labels            = ID,Description
 uda.blocks.type=string
 uda.blocks.label=Blocks
+
+# Bugwarrior UDAs
+uda.githubcreatedon.type=date
+uda.githubcreatedon.label=Github Created
+uda.githubtitle.type=string
+uda.githubtitle.label=Github Title
+uda.githubnumber.type=numeric
+uda.githubnumber.label=Github Issue/PR #
+uda.githubbody.type=string
+uda.githubbody.label=Github Body
+uda.githubrepo.type=string
+uda.githubrepo.label=Github Repo Slug
+uda.githuburl.type=string
+uda.githuburl.label=Github URL
+uda.githubupdatedat.type=date
+uda.githubupdatedat.label=Github Updated
+uda.githubtype.type=string
+uda.githubtype.label=Github Type
+uda.githubmilestone.type=numeric
+uda.githubmilestone.label=Github Milestone
+# END Bugwarrior UDAs
+
