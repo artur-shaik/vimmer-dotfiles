@@ -103,6 +103,9 @@ modules-right = date
 
 dim-value=0.5
 
+wm-restack = bspwm
+override-redirect = true
+
 [module/xwindow]
 type = internal/xwindow
 label = %title:0:30:...%
