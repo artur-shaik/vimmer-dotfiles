@@ -1,7 +1,7 @@
 #!/bin/zsh
 # show urgent (due) taskwarrior's tasks
 if whence task > /dev/null; then
-    task '(+OVERDUE or due.before:3d or priority:H or pro:Study or +in)' minimal
+    task '(+OVERDUE or due.before:3d or priority:H or pro:Study or +in or +mail)' minimal
     task active
 fi
 
