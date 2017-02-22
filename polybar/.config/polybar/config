@@ -108,7 +108,7 @@ override-redirect = true
 
 [module/xwindow]
 type = internal/xwindow
-label = %title:0:30:...%
+label = ╌─╌ %title:0:30:...% ╌─╌
 
 [module/xkeyboard]
 type = internal/xkeyboard
@@ -185,7 +185,7 @@ label-visible-padding = ${self.label-focused-padding}
 [module/mpd]
 type = internal/mpd
 
-format-online = <label-song> <icon-stop> <toggle>
+format-online =  <icon-stop> <toggle> <label-song>
 
 label-song = %title%
 label-song-maxlen = 50
@@ -393,12 +393,12 @@ menu-2-1-exec = menu-open-0
 [module/tasks-count]
 type = custom/script
 
-exec = task count status:pending
-label = %output% t
+exec = task count '(+mail or +in or +OVERDUE or due.before:3d or priority:H or pro:Study)' and status:pending
+label = %output%
 interval = 30
 
 format-underline = #a000d2
-format-prefix = "🖧 "
+format-prefix = " "
 format-prefix-foreground = #5b
 
 [module/pinger]
