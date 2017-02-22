@@ -16,6 +16,7 @@ from optparse import OptionParser
 HOME = os.path.expanduser('~')
 VIMWIKI_HOME = "%s/vimwiki" % HOME
 VIMWIKI_HTML = "%s/vimwiki_html" % HOME
+TMP_DIRECTORY = "%s/.tmp" % VIMWIKI_HTML
 META = ["CSS:  file://%s/markdown.css\n" % VIMWIKI_HTML, "\n"]
 VIMWIKI_EXT = ".md"
 MD_CONVERTER = "multimarkdown -f"
@@ -128,11 +129,10 @@ def copy_file_html_dir(wiki_file):
 
 
 def get_tmp_directory():
-    tmp_dir = "%s/tmp" % VIMWIKI_HTML
-    if os.path.isdir(tmp_dir):
-        shutil.rmtree(tmp_dir)
-    os.mkdir(tmp_dir)
-    return tmp_dir
+    if os.path.isdir(TMP_DIRECTORY):
+        shutil.rmtree(TMP_DIRECTORY)
+    os.mkdir(TMP_DIRECTORY)
+    return TMP_DIRECTORY
 
 
 def get_wiki_files():
