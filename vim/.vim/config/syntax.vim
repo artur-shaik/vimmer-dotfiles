@@ -1,13 +1,13 @@
 " syntax and highlights settings
 
+syntax on 
+
 filetype on
 filetype plugin on
 filetype plugin indent on
 
 set background=light
-colorscheme default
-
-syntax on 
+colorscheme anokha
 
 set cursorline
 
