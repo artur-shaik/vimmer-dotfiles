@@ -76,7 +76,7 @@ if !empty($TMUX)
   call s:bundle('christoomey/vim-tmux-navigator', 1)
 endif
 
-if !empty($VIMWIKI)
+if $VIM_ENV == 'wiki'
   call s:bundle('vimwiki')
   call s:bundle('markdown')
 endif
@@ -94,7 +94,8 @@ call plug#end()
 
 if $VIM_ENV == 'dev'
   call s:enableDev()
+else
+  command! -nargs=0 -bar EnableDev call s:enableDev()
 endif
-command! -nargs=0 -bar EnableDev call s:enableDev()
 
 " vim:set fdm=marker sw=2 nowrap:
