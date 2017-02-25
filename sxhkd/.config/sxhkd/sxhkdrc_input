@@ -153,10 +153,10 @@ super + shift + alt + {1-9}
 # mpd {{{1
 
 ctrl + alt + s
-    mpc stop; mpc -h 192.168.0.104 stop;
+    mpc stop
 
 ctrl + alt + c
-    mpc -h 192.168.0.104 toggle || mpc toggle
+    mpc toggle
 
 
 ctrl + alt + z
