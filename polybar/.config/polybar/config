@@ -67,7 +67,7 @@ scroll-down = bspwm-deskprev
 ;scroll-up = i3wm-wsnext
 ;scroll-down = i3wm-wsprev
 
-dim-value=0.5
+dim-value=0.9
 
 [bar/right-mon]
 monitor = ${env:MONITOR:DP1}
@@ -101,7 +101,7 @@ modules-left = bspwm
 modules-center = xwindow
 modules-right = date
 
-dim-value=0.5
+dim-value=0.9
 
 wm-restack = bspwm
 override-redirect = true
