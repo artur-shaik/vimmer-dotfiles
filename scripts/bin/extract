@@ -2,12 +2,20 @@
 #
 # Extract an archive of any type
 #
-if [ $# -lt 1 ]
-then
+if [ $# -lt 1 ]; then
    echo Usage: extract file
    return 1
 fi
-echo $1
+echo $#
+if [ $# -eq 2 ]; then
+    output_directory=$2
+    if [ ! -d "$output_directory" ]; then
+        mkdir "$output_directory"
+    fi
+else
+    output_directory="."
+fi
+echo "$1" to "$2"
 if [[ -f $1 ]] ; then
    case $1 in
        *.tar.bz2)   tar xvjf "$1"    ;;
@@ -18,7 +26,7 @@ if [[ -f $1 ]] ; then
        *.tar)       tar xvf "$1"     ;;
        *.tbz2)      tar xvjf "$1"    ;;
        *.tgz)       tar xvzf "$1"    ;;
-       *.zip)       unzip "$1"       ;;
+       *.zip)       unzip "$1" -d $output_directory       ;;
        *.war|*.jar) unzip "$1"       ;;
        *.Z)         uncompress "$1"  ;;
        *.7z)        7z x "$1"        ;;
