@@ -70,6 +70,7 @@ call s:bundle('vim-xkbswitch')
 call s:bundle('nerdtree')
 call s:bundle('tpope/vim-speeddating', 1)
 call s:bundle('skywind3000/asyncrun.vim', 1)
+call s:bundle('markdown')
 
 if !empty($TMUX)
   call s:bundle('tmuxline')
@@ -78,7 +79,6 @@ endif
 
 if $VIM_ENV == 'wiki'
   call s:bundle('vimwiki')
-  call s:bundle('markdown')
 endif
 
 let g:languagetool_jar = $HOME. '/Soft/LanguageTool/languagetool-commandline.jar'
