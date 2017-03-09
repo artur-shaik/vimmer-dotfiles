@@ -1,8 +1,4 @@
-function! PostLoad(info)
-  call unite#filters#matcher_default#use(['matcher_fuzzy'])
-endfunction
-
-Plug 'Shougo/unite.vim', {'do': function('PostLoad')}
+Plug 'Shougo/unite.vim'
 
 let g:unite_source_history_yank_enable = 1
 
@@ -56,5 +52,13 @@ let g:unite_source_menu_menus.git.command_candidates = [
   \[' git prompt', 'exe "Git! " input("command: ")'],
   \] " Append ' --' after log to get commit info commit buffers
 nnoremap <silent> <space>g :Unite -direction=botright -silent -buffer-name=git menu:git<CR>
+
+function s:PostLoad()
+  call unite#filters#matcher_default#use(['matcher_fuzzy'])
+endfunction
+
+augroup unite
+  autocmd VimEnter * call s:PostLoad()
+augroup END
 
 " vim:set fdm=marker sw=2 nowrap:
