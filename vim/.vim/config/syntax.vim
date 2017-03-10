@@ -7,7 +7,7 @@ filetype plugin on
 filetype plugin indent on
 
 set background=light
-colorscheme anokha
+colorscheme default
 
 set cursorline
 
