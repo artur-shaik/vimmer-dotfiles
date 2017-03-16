@@ -170,6 +170,8 @@ rp() { pulseaudio -k; pulseaudio --start }
 gmail() { curl -u "$1" --silent "https://mail.google.com/mail/feed/atom" | sed -e 's/<\/fullcount.*/\n/' | sed -e 's/.*fullcount>//'}
 eraty() { raty $1 | elinks }
 dbase64() { echo $@|base64 -d && echo }
+
+# buku wrappers
 bma() {
     link=$1
     shift
@@ -177,6 +179,60 @@ bma() {
 }
 bms() { buku --deep -s $@ }
 bmo() { buku -o $@ }
+# /buku
+
+# themer wrappers
+themergen() {
+    themename=$1
+    themelink=$2
+    echo "generating dark theme"
+    themer -t bspwm generate "$themename" "$themelink"
+    echo "generating bright theme"
+    themer -b -t bspwm generate "$themename"_l "$themelink"
+}
+themerlist() { 
+    current=$(themer -t bspwm current)
+    for theme in $(themer -t bspwm list); do
+        if [[ $theme == $current ]]; then
+            echo "* $theme"
+        else
+            if echo $theme | grep "_l$" > /dev/null; then
+                continue
+            fi
+            echo $theme
+        fi
+    done
+}
+themerdel() {
+    themename=$1
+    themer -t bspwm delete "$themename"
+    themer -t bspwm delete "$themename"_l
+}
+dark() { 
+    if [ $# -eq 1 ]; then
+        themename=$1
+    else
+        themename=$(themer -t bspwm current)
+    fi
+    if echo $themename | grep '_l$' > /dev/null; then
+        len=${#themename}
+        themename=${themename[0, len-2]}
+    fi
+    themer -t bspwm activate "$themename" 
+}
+bright() { 
+    if [ $# -eq 1 ]; then
+        themename=$1
+    else
+        themename=$(themer -t bspwm current)
+    fi
+    if ! echo $themename | grep '_l$' > /dev/null; then
+        themename="$themename"_l
+    fi
+    themer -t bspwm activate "$themename"
+}
+
+# /themer
 
 transfer() { if [ $# -eq 0 ]; then echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"; return 1; fi 
 tmpfile=$( mktemp -t transferXXX ); if tty -s; then basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g'); curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile; else curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ; fi; cat $tmpfile; rm -f $tmpfile; } 
