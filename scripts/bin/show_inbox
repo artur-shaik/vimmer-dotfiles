@@ -11,6 +11,21 @@ if [[ $lsinbox -gt 0  ]]; then
     print "$fg_bold[red]Warning! INBOX has $lsinbox file(s)!$reset_color"
 fi
 
+ls_to_download=`ls ~/to_download_query/ | wc -l`
+if [[ $ls_to_download -gt 0  ]]; then
+    print "$fg_bold[red]In download query: $ls_to_download file(s)!$reset_color"
+fi
+
+ls_to_watch=`ls ~/to_watch_query/ | wc -l`
+if [[ $ls_to_watch -gt 0  ]]; then
+    print "$fg_bold[red]In 'watch' query: $ls_to_watch file(s)!$reset_color"
+fi
+
+ls_to_read=`ls ~/to_read_query// | wc -l`
+if [[ $ls_to_read -gt 0  ]]; then
+    print "$fg_bold[red]In 'read' query: $ls_to_read file(s)!$reset_color"
+fi
+
 cd ~/projects/dotfiles
 if [[ -n $(git status --porcelain) ]]; then
     print
