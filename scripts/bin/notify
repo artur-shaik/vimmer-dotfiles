@@ -8,12 +8,18 @@ echo "appname: $1, summary: $2" >> ~/notify.log
 case "$appname" in
     "weechat")
         case "$summary" in
+            freenode)
+                play -v 0.5 -q ~/Sounds/notify_01.wav
+                ;;
             *)
                 play -q /usr/share/skype/sounds/ChatIncoming.wav
                 ;;
         esac
         ;;
+    "mutt")
+        play -v 0.5 -q ~/Sounds/south-park-you-got-mail-bastards.mp3
+        ;;
     *)
-        play -q ~/Sounds/242502__gabrielaraujo__pop-up-notification.wav
+        play -v 0.5 -q ~/Sounds/notify_01.wav
         ;;
 esac
