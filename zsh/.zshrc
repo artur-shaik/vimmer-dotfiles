@@ -1,5 +1,5 @@
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="ash"
+#ZSH_THEME="ash"
 COMPLETION_WAITING_DOTS="true"
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
@@ -12,7 +12,7 @@ function bgnotify_formatted {
     fi
 }
 
-plugins=(mvn git taskwarrior lol pip python suse web-search wd zsh-syntax-highlighting bgnotify)
+plugins=(vi-mode mvn git taskwarrior lol pip python suse web-search wd zsh-syntax-highlighting bgnotify)
 
 source $ZSH/oh-my-zsh.sh
 
