@@ -29,6 +29,7 @@ report.in.columns           = id,description
 report.in.description       = Inbox
 report.in.filter            = status:pending limit:page (+in)
 report.in.labels            = ID,Description
+report.minimal.filter       = status:pending
 uda.blocks.type=string
 uda.blocks.label=Blocks
 
@@ -53,3 +54,9 @@ uda.githubmilestone.type=numeric
 uda.githubmilestone.label=Github Milestone
 # END Bugwarrior UDAs
 
+uda.reviewed.type=date
+uda.reviewed.label=Reviewed
+report._reviewed.description=Tasksh review report.  Adjust the filter to your needs.
+report._reviewed.columns=uuid
+report._reviewed.sort=reviewed+,modified+
+report._reviewed.filter=( reviewed.none: or reviewed.before:now-1week ) and ( +PENDING or +WAITING )
