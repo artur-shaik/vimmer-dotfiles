@@ -281,15 +281,10 @@ nmap A cw<c-w>
 nmap dD :!rm -rf %f
 
 " Copy file with rsync and notify
-nmap cP :!rsync -rltzuv --info=progress2 --temp-dir=/tmp/ %f %D; notify-send "rsync" "upload finished: %f"<cr>
+nmap cP :!rsync -rltzuv --info=progress2 --temp-dir=/tmp/ %f %D; notify-send --app-name=vifm-finished "rsync" "upload finished: %f"<cr>
 
-" Opening console in current directory
-nmap ,t :!xterm &<cr>
-
-" Opening vim to edit .vifmrc
-nmap ,c :execute ':!vim $MYVIFMRC' | restart<cr>
-" Opening gvim to edit .vifmrc
-nmap ,C :!gvim --remote-tab-silent $MYVIFMRC &<cr>
+" Move file with rsync and notify
+nmap mv :!rsync -rltzuv --remove-source-files --info=progress2 --temp-dir=/tmp/ %f %D; notify-send --app-name=vifm-finished "rsync" "upload finished: %f"<cr>
 
 " Toggle wrap setting on ,w key
 nmap ,w :set wrap!<cr>
@@ -300,7 +295,6 @@ nmap <f4> :edit<cr>
 nmap <f5> :copy<cr>
 nmap <f6> :move<cr>
 nmap <f7> :mkdir<space>
-nmap <f8> :delete<cr>
 
 nmap <C-p> :!tar -czf %f.tar.gz %f<cr>
 nmap <a-u> :!extract %f<cr>
