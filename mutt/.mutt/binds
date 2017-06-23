@@ -26,7 +26,7 @@ macro index gs "<change-folder>=[Gmail]/Отправленные<enter>" "Go to 
 macro index gd "<change-folder>=[Gmail]/Черновики<enter>" "Go to drafts"
 macro index gt "<change-folder>=[Gmail]/Спам<enter>" "Go to drafts"
 macro index,pager t "<pipe-message>mutt2task.py<enter>"
-macro index,pager a "<pipe-message>abook --add-email-quietn<return>" "add sender to google contacts"
+macro index,pager a "<pipe-message>abook --add-email-quiet<return>" "add sender to google contacts"
 
 ## pager {{{1
 bind pager j next-line

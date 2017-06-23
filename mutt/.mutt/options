@@ -7,6 +7,7 @@ set fast_reply              # No ask for recipients and subject when replying
 set include                 # Include message in reply
 set editor	= "vim"
 set move = no               # Stop asking to "move read messages to mbox"!
+set mime_fwd                # Forward mail with attachements
 
 ## pager options {{{1
 set pager_index_lines = 7   # number of index lines to show 
@@ -48,4 +49,17 @@ set query_command="abook --mutt-query '%s'" # Configures contacts
 ## files {{{1
 set header_cache    =~/.mutt/cache/headers
 set message_cachedir    =~/.mutt/cache/bodies
-set certificate_file    =~/.mutt/certificates
+#set certificate_file    =~/.mutt/certificates
+
+## new mail {{{1
+set new_mail_command="notify-send --app-name=mutt 'New Email in %f' '%n new messages, %u unread.' &"
+
+## sidebar {{{1
+bind index,pager b sidebar-toggle-visible
+bind index \CP sidebar-prev
+bind index \CN sidebar-next
+bind index \CO sidebar-open
+bind pager \CP sidebar-prev
+bind pager \CN sidebar-next
+bind pager \CO sidebar-open
+set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
