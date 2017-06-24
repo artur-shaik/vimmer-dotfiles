@@ -13,7 +13,7 @@ set cursorline
 
 function! s:CustomHighlights()
   hi Visual term=none cterm=none ctermbg=8 gui=none ctermfg=0
-  hi CursorLine term=none cterm=bold ctermfg=15 ctermbg=0
+  hi CursorLine term=none cterm=bold ctermbg=0
   hi Pmenu ctermbg=15 ctermfg=0
   hi PmenuSel ctermfg=15 ctermbg=0
   hi LineNr ctermfg=5 cterm=none

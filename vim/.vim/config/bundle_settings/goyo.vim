@@ -36,7 +36,7 @@ autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " F6 toggle Goyo
-nnoremap <F6> :Goyo<cr>
+nnoremap <leader>f :Goyo<cr>
 
 Plug 'junegunn/limelight.vim' " {{{2
 let g:limelight_conceal_ctermfg = 14
