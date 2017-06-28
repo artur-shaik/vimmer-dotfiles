@@ -8,6 +8,7 @@ set softtabstop=4
 set autoindent
 
 set tags+=./.tags
+set undodir=~/.vim/undodir
 
 set history=700
 set showtabline=0
