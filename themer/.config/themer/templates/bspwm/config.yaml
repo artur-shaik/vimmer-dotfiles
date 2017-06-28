@@ -4,9 +4,9 @@ variables:
   tertiary: red
   special: yellow
   transparency: 100
-  fontName: Meslo LG S for Powerline
+  fontName: Inconsolata for Powerline
   fontSize: 13
-  font: "Meslo LG S for Powerline:pixelsize=13"
+  font: "Inconsolata for Powerline"
 plugins:
   parsers:
     - themer.parsers.SweylaColorParser

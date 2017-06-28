@@ -34,10 +34,7 @@ Xft.hintstyle: hintfull
 Xft.lcdfilter: lcddefault
 Xft.rgba: rgb
 
-*faceName: {{ fontName.title() }}
-*faceSize: {{ fontSize }}
-*font: xft:{{ fontName.title() }}:pixelsize={{ fontSize }}
-*letterSpace: 0
+#include ".Xfont"
 
 *simple_background: {% if background %}{{ background }}{% else %}{{ black }}{% endif %}
 *background: {% if transparency %}[{{ transparency }}]{% endif %}{% if background %}{{ background }}{% else %}{{ black }}{% endif %}
