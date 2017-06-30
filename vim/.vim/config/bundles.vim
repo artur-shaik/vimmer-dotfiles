@@ -33,6 +33,7 @@ function! s:enableDev()
   call s:bundle('ludovicchabant/vim-gutentags', 1)
   call s:bundle('MarcWeber/vim-addon-local-vimrc', 1)
   call s:bundle('syntastic')
+  call s:bundle('vim-scripts/ifdef-highlighting', 1)
 
   call plug#end()
 endfunction
@@ -71,6 +72,7 @@ call s:bundle('nerdtree')
 call s:bundle('tpope/vim-speeddating', 1)
 call s:bundle('skywind3000/asyncrun.vim', 1)
 call s:bundle('markdown')
+call s:bundle('clever-f')
 
 if !empty($TMUX)
   call s:bundle('tmuxline')
