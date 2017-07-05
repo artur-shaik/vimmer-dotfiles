@@ -1,4 +1,5 @@
 Plug 'Shougo/unite.vim'
+Plug 'Shougo/neoyank.vim'
 
 let g:unite_source_history_yank_enable = 1
 
@@ -11,13 +12,10 @@ let g:unite_source_grep_recursive_opt = ''
 
 nnoremap <space>/ :Unite grep:.<cr>
 nnoremap <silent> <C-p> :Unite -no-split -buffer-name=files -start-insert file_rec/async:!<cr>
-nnoremap <leader>f :Unite -no-split -buffer-name=files -start-insert file<cr>
-nnoremap <leader>m :Unite -no-split -buffer-name=mru -start-insert file_mru<cr>
-nnoremap <leader>y :Unite -no-split -buffer-name=yank history/yank<cr>
 nnoremap <silent> <C-b> :Unite -start-insert -buffer-name=buffer buffer<cr>
 nnoremap <silent> <C-t> :Unite -start-insert -buffer-name=buffer_tab buffer_tab<cr>
 
-nnoremap <leader>ev :Unite -no-split -start-insert -path=$HOME/.vim/ file_rec/async:<cr>
+nnoremap <leader>ev :Unite -no-split -start-insert -path=$HOME/.vim/config/ file_rec/async:<cr>
 
 " Interface for Git
 let g:unite_source_menu_menus = {}
