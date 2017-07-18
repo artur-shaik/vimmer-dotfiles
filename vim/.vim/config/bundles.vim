@@ -88,10 +88,6 @@ if filereadable(g:languagetool_jar)
   call s:bundle('LanguageTool')
 endif
 
-if isdirectory($HOME. '/.cheat')
-  call s:bundle('wsdjeg/vim-cheat', 1)
-endif
-
 call plug#end()
 
 if $VIM_ENV == 'dev'
