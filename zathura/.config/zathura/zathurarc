@@ -1,4 +1,4 @@
 set page-padding 5
-set recolor-darkcolor '#acb87e'
-set recolor-lightcolor '#0c0c0c'
+set recolor-darkcolor '#fff'
+set recolor-lightcolor '#000'
 set default-bg '#0c0c0c'
