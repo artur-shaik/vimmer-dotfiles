@@ -13,4 +13,5 @@ mutt/.mutt/certificates
 ncmpcpp/.ncmpcpp/error.log
 vim/.vim/bundle
 vim/.vim/sessions
+vim/.vim/view
 backups/
