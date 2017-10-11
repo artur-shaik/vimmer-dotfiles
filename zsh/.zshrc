@@ -1,5 +1,5 @@
 ZSH=$HOME/.oh-my-zsh
-#ZSH_THEME="ash"
+ZSH_THEME="minimal"
 COMPLETION_WAITING_DOTS="true"
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
@@ -87,6 +87,11 @@ fi
 # aliases
 hi() { if [ -z "$*" ]; then history; else history | egrep "$@"; fi; }
 tasknext() {task next "$@" | head -n 8}
+tin() {
+    clear
+    task '(+OVERDUE or due.before:3d or priority:H or pro:Study or +in or +mail)' minimal
+    task active
+}
 alias si='show_inbox'
 alias tn='tasknext'
 alias ta='task add'
@@ -259,9 +264,6 @@ export DE=kde
 export DISABLE_AUTO_TITLE=true
 
 source ~/.profile
-
-export _LP_ENABLE_TMUX=0
-[[ $- = *i* ]] && source ~/Soft/liquidprompt/liquidprompt
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/ash/.sdkman"
