@@ -62,4 +62,8 @@ bind index \CO sidebar-open
 bind pager \CP sidebar-prev
 bind pager \CN sidebar-next
 bind pager \CO sidebar-open
-set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
+#set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
+set sidebar_format = '%B%?N? [%N]?%* %?S?%S?'
+set sidebar_short_path = yes
+set sidebar_visible = yes
+set sidebar_on_right = yes

@@ -18,6 +18,7 @@ bind index L limit
 bind index \cw sync-mailbox
 bind index \cu half-up
 bind index \cd half-down
+bind index r group-reply
 macro index , '<change-folder>!^M'
 macro index I '<tag-pattern>~N^M<tag-prefix><toggle-new><tag-prefix><tag-entry>'
 macro index gi "<change-folder>=INBOX<enter>" "Go to inbox"
@@ -42,6 +43,7 @@ bind pager gg top
 bind pager G bottom
 bind pager \cu half-up
 bind pager \cd half-down
+bind pager r group-reply
 macro pager , '<change-folder>!^M'
 macro pager W '|elinks --force-html^M'
 
