@@ -6,11 +6,12 @@ let g:tmuxcomplete#trigger = 'omnifunc'
 Plug 'Shougo/neco-vim', {'for': 'vim'}
 
 if has('nvim')
-    function! DoRemote(arg)
-      UpdateRemotePlugins
-    endfunction
-    Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote'), 'for': 'vim' }
-    let g:deoplete#enable_at_startup = 1
+    " function! DoRemote(arg)
+    "   UpdateRemotePlugins
+    " endfunction
+    " Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote'), 'for': 'vim' }
+    " let g:deoplete#enable_at_startup = 1
+    Plug 'roxma/nvim-completion-manager'
 else
     Plug 'Shougo/neocomplete.vim', {'for': 'vim'}
     let g:acp_enableAtStartup = 0

@@ -7,8 +7,8 @@ let mapleader = "'"
 let maplocalleader = "'"
 let g:mapleader = "'"
 
-source $HOME/.vim/config/syntax.vim
 source $HOME/.vim/config/bundles.vim
+source $HOME/.vim/config/syntax.vim
 source $HOME/.vim/config/mappings.vim
 source $HOME/.vim/config/settings.vim
 source $HOME/.vim/config/abbreviation.vim
