@@ -25,7 +25,7 @@ delete-read-articles-on-quit no
 
 ## ttrss {{{1
 urls-source "ttrss"
-ttrss-url "https://ttrss.trance.kg/"
+ttrss-url "https://ttrss.shaik.link/"
 ttrss-login admin
 ttrss-passwordfile ~/private/ttrss-pwd
 ttrss-flag-star "s"
