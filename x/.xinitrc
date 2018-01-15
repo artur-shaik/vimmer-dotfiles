@@ -25,7 +25,7 @@ xsetroot -cursor_name left_ptr&
 sxhkd &
 udiskie -n -T &
 kbdd
-export DE=kde
+export DE=generic
 xautolock -locker 'xlock -mode space' &
 bash -c "export LC_TYPE=en_EN.UTF-8; export LANG=en_EN.UTF-8; conky -c ~/.conky/conkyrc_lunatico;" &
 #bash -c "conky -c ~/.conky/conkyrc_tasks;" &
