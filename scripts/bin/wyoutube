@@ -4,4 +4,4 @@
 # (youtube-dl -o - $1 | mpv - > /dev/null 2>&1) || notify 'fail'
 
 xcowsay "Opening video: $1" &
-(mpv --pause --ytdl-format="best[height=720]" $1) || notify-send "failed to play with mpv" "uri address: $1"
+(mpv --pause --ytdl-format="best[height=720]" --load-unsafe-playlists $1) || notify-send "failed to play with mpv" "uri address: $1"

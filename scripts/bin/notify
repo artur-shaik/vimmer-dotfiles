@@ -17,7 +17,7 @@ case "$appname" in
         esac
         ;;
     "mutt")
-        play -v 0.5 -q ~/Sounds/south-park-you-got-mail-bastards.mp3
+        play -v 0.5 -q ~/Sounds/inge-eng2.wav
         ;;
     *)
         play -v 0.5 -q ~/Sounds/notify_01.wav
