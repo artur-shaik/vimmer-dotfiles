@@ -4,7 +4,7 @@ variables:
   tertiary: red
   special: yellow
   transparency: 100
-  fontName: Inconsolata for Powerline
+  fontName: "Inconsolata for Powerline"
   fontSize: 13
   font: "Inconsolata for Powerline"
 plugins:
