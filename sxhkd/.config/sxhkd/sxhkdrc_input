@@ -281,3 +281,7 @@ super + ctrl + o
     unset TMUX; \
     urxvt -geometry 140x28 -e tmuxinator start servers \; \
     export TMUX="$OLDTMUX";
+
+super + shift + t
+    ttitle=$(mpc -f %title% | head -n 1); \
+    tmux send-keys "$ttitle"
