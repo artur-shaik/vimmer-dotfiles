@@ -167,8 +167,8 @@ filetype *.o nm %f | less
 
 " Image
 filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm,*.xcf
-        \ {View in Pim}
-        \ pim,
+        \ {View in Vimiv}
+        \ vimiv,
         \ {View in sxiv}
         \ sxiv,
         \ {View in gpicview}
@@ -282,10 +282,10 @@ nmap A cw<c-w>
 nmap dD :!rm -rf %f
 
 " Copy file with rsync and notify
-nmap cP :!rsync -rltzuv --info=progress2 --temp-dir=/tmp/ %f %D; notify-send --app-name=vifm-finished "rsync" "upload finished: %f"<cr>
+nmap cP :!rsync -avz -P --temp-dir=/tmp/ %f %D; notify-send --app-name=vifm-finished "rsync" "upload finished: %f"<cr>
 
 " Move file with rsync and notify
-nmap mv :!rsync -rltzuv --remove-source-files --info=progress2 --temp-dir=/tmp/ %f %D; notify-send --app-name=vifm-finished "rsync" "upload finished: %f"<cr>
+nmap mv :!rsync -avz --remove-source-files -P --temp-dir=/tmp/ %f %D; notify-send --app-name=vifm-finished "rsync" "upload finished: %f"<cr>
 
 " Toggle wrap setting on ,w key
 nmap ,w :set wrap!<cr>
