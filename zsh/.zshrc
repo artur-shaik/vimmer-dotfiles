@@ -104,7 +104,7 @@ alias vi='vim'
 alias psg="ps aux | grep"
 alias lslh='ls -hl'
 alias lslha='ls -lha'
-alias nb='newsbeuter'
+alias nb='newsboat'
 alias qb='qutebrowser'
 alias ytd='youtube-dl --write-sub --sub-lang "en,ru" -o "~/INBOX/%(title)s-%(id)s.%(ext)s"'
 alias ipinfo="dig +short my.ip @outsideip.net"
@@ -113,6 +113,7 @@ alias mux='tmuxinator'
 alias rm='trash-put'
 alias git=hub
 alias vimdev='VIM_ENV=dev vim'
+alias vimwriter='VIM_ENV=writer vim'
 alias vimwiki='VIM_ENV=wiki vim -c "VimwikiIndex"'
 
 #
@@ -260,7 +261,7 @@ zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
 export $(dbus-launch)
-export DE=kde
+export DE=generic
 export DISABLE_AUTO_TITLE=true
 
 source ~/.profile
