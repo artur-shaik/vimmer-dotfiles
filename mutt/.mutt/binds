@@ -12,6 +12,7 @@ bind index h noop
 bind index <right> display-message
 bind index <left> change-folder
 bind index H display-toggle-weed
+bind index g noop
 bind index gg first-entry
 bind index G last-entry
 bind index L limit
@@ -39,13 +40,14 @@ bind pager <up> previous-line
 bind pager <left> exit
 bind pager <right> view-attachments
 bind pager H display-toggle-weed
+bind pager g noop
 bind pager gg top
 bind pager G bottom
 bind pager \cu half-up
 bind pager \cd half-down
 bind pager r group-reply
 macro pager , '<change-folder>!^M'
-macro pager W '|elinks --force-html^M'
+macro pager W '|elinks -force-html^M'
 
 ## attach {{{1
 bind attach l view-attach
@@ -54,7 +56,8 @@ bind attach <right> view-attach
 bind attach h exit
 bind attach <left> exit
 bind attach H display-toggle-weed
-macro attach W '|elinks --force-html^M'
+macro attach W '| tee > /tmp/mutt_attach.html && elinks -force-html /tmp/mutt_attach.html && rm /tmp/mutt_attach.html^M'
+set rfc2047_parameters = yes
 
 ## compose {{{1
 bind compose l view-attach

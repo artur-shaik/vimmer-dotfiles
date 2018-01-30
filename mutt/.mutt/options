@@ -42,6 +42,8 @@ set auto_tag = yes
 ## auto recognize attaches {{{1
 set mailcap_path = ~/.mutt/mailcap
 auto_view text/html application/x-tar-gz
+set attach_charset="utf-8"
+set attach_format="%u%D%I %t%4n %T%.40d%> [%.7m/%.10M, %.6e%?C?, %C?, %s]"
 
 ## contacts {{{1
 set query_command="abook --mutt-query '%s'" # Configures contacts
