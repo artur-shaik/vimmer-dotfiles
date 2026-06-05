@@ -19,7 +19,7 @@ set -g message-command-style "fg=yellow,bg=default,bold"
 setw -g window-status-separator ""
 # setw -g window-status-bg default
 set -g status-left "#[fg=brightwhite,bg=black]  #(p)#[fg=black,bg=default]"
-set -g status-right "#[fg=black,bg=default]#[fg=brightwhite,bg=black]%a %d %h "
+set -g status-right ""
 setw -g window-status-format "#[fg=colour2] #I:#W "
 setw -g window-status-current-format "#[fg=white,bright] #W "
 #set -g window-style 'fg=black,bg=default'
