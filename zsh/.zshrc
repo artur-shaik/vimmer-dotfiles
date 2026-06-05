@@ -7,7 +7,6 @@ fi
 
 (\cat ~/.cache/wal/sequences &)
 
-eval "$(mcfly init zsh)"
 
 ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
@@ -377,3 +376,13 @@ nvm() {
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
     nvm "$@"
 }
+
+# mcfly (fuzzy-поиск по истории, ^R) — В КОНЦЕ: omz и кастом-биндинги
+# затирали его ^R, когда init стоял в начале файла
+export MCFLY_FUZZY=2
+export MCFLY_RESULTS=30
+export MCFLY_KEY_SCHEME=vim
+# zsh-vi-mode инициализируется на первом промпте и перетирает биндинги —
+# mcfly подключаем через его хук (+ сразу, если ZVM вдруг отключат)
+zvm_after_init_commands+=('eval "$(mcfly init zsh)"')
+eval "$(mcfly init zsh)"
