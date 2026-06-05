@@ -381,7 +381,7 @@ nvm() {
 # затирали его ^R, когда init стоял в начале файла
 export MCFLY_FUZZY=2
 export MCFLY_RESULTS=30
-export MCFLY_KEY_SCHEME=vim
+# export MCFLY_KEY_SCHEME=vim  # выключен: внутри TUI удобнее emacs-комбо
 # zsh-vi-mode инициализируется на первом промпте и перетирает биндинги —
 # mcfly подключаем через его хук (+ сразу, если ZVM вдруг отключат)
 zvm_after_init_commands+=('eval "$(mcfly init zsh)"')
