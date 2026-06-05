@@ -1,5 +1,16 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+(\cat ~/.cache/wal/sequences &)
+
+eval "$(mcfly init zsh)"
+
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="minimal"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 COMPLETION_WAITING_DOTS="true"
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
@@ -12,7 +23,7 @@ function bgnotify_formatted {
     fi
 }
 
-plugins=(vi-mode mvn git taskwarrior lol pip python suse web-search wd zsh-syntax-highlighting bgnotify)
+plugins=(fzf-tab zsh-vi-mode git taskwarrior timewarrior pip python suse web-search wd zsh-syntax-highlighting bgnotify)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -28,8 +39,11 @@ ZSH_HIGHLIGHT_STYLES[path]=none
 ZSH_HIGHLIGHT_STYLES[path_prefix]=none
 ZSH_HIGHLIGHT_STYLES[path_approx]=none
 
+ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
+ZVM_CURSOR_STYLE_ENABLED=false
+
 # Customize to your needs...
-export PATH=/usr/lib/mpi/gcc/openmpi/bin:/home/ash/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/X11R6/bin:/usr/games:/usr/lib/mit/bin:/usr/lib/mit/sbin
+export PATH=/usr/lib/mpi/gcc/openmpi/bin:/home/ash/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/X11R6/bin:/usr/games:/usr/lib/mit/bin:/usr/lib/mit/sbin:$HOME/.cargo/bin:$HOME/.local/bin:$PATH
 fpath=($HOME/.zsh_completions $fpath)
 
 autoload -U compinit
@@ -38,6 +52,7 @@ compinit
 # vi mode bindings
 bindkey -v
 bindkey -a u undo
+bindkey -M viins '^H' backward-delete-char
 bindkey -M viins 'jk' vi-cmd-mode
 bindkey -M viins 'лл' vi-cmd-mode
 bindkey -a '^R' redo
@@ -64,33 +79,32 @@ bindkey '^[[8~' end-of-line
 bindkey -M viins '^s' history-incremental-search-backward
 bindkey -M vicmd '^s' history-incremental-search-backward
 
-# right side prompt shows current mode. on every switch, change kbrd layout to us
-function zle-line-init zle-keymap-select {
-    VIM_PROMPT_NORMAL="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
-    VIM_PROMPT_INSERT="%{$fg_bold[white]%} -- INSERT --  %{$reset_color%}"
-    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT_NORMAL}/(main|viins)/$VIM_PROMPT_INSERT} $EPS1"
-    zle reset-prompt
-    if whence xkb-switch > /dev/null; then
-        xkb-switch -s us
+precmd () {
+    jobscount=$(($(jobs --rp | wc -l) + $(jobs --sp | wc -l)))
+    if [[ $jobscount -eq 0 ]]; then 
+        jobscount=; 
+    else
+        jobscount="$jobscount » "
     fi
 }
-zle -N zle-line-init
-zle -N zle-keymap-select
+setopt prompt_subst
+PS1+='${jobscount}'
 
 export KEYTIMEOUT=100
 
 # show urgent (due) taskwarrior's tasks on init
-if whence show_inbox > /dev/null; then
-    show_inbox
-fi
+#if whence show_inbox > /dev/null; then
+#    show_inbox
+#fi
 
 # aliases
 hi() { if [ -z "$*" ]; then history; else history | egrep "$@"; fi; }
 tasknext() {task next "$@" | head -n 8}
 tin() {
     clear
-    task '(+OVERDUE or due.before:3d or priority:H or pro:Study or +in or +mail)' minimal
-    task active
+    task "$(taskinfilter.sh)" minimal "$@"
+    task active "$@"
+    # todo list -s NEEDS-ACTION personal family-cases
 }
 alias si='show_inbox'
 alias tn='tasknext'
@@ -100,26 +114,75 @@ alias c='clear'
 alias vf='vifm'
 alias tmux='tmux -2'
 alias gs='git status'
-alias vi='vim'
+alias vi='nvim'
+alias vim='nvim'
 alias psg="ps aux | grep"
-alias lslh='ls -hl'
-alias lslha='ls -lha'
-alias nb='newsboat'
+alias ls='lsd --color=never'
+alias l='ls -la'
+alias lsl='ls -l'
+alias lsla='ls -la'
+alias news='newsboat -C ~/.newsboat/ttrss-admin'
+alias newssocial='newsboat -C ~/.newsboat/ttrss-social'
 alias qb='qutebrowser'
-alias ytd='youtube-dl --write-sub --sub-lang "en,ru" -o "~/INBOX/%(title)s-%(id)s.%(ext)s"'
-alias ipinfo="dig +short my.ip @outsideip.net"
+alias ytdbest='yt-dlp --write-sub --sub-lang "en,ru" -o "~/INBOX/%(title)s-%(id)s.%(ext)s"'
+alias myip="curl ipinfo.io/ip"
+alias ipinfo="curl ipinfo.io/$1"
 alias killl='kill -9 %1'
 alias mux='tmuxinator'
 alias rm='trash-put'
 alias git=hub
-alias vimdev='VIM_ENV=dev vim'
-alias vimwriter='VIM_ENV=writer vim'
-alias vimwiki='VIM_ENV=wiki vim -c "VimwikiIndex"'
+alias vimdev='VIM_ENV=dev nvim'
+alias vimwriter='VIM_ENV=writer nvim'
+alias vimwiki='VIM_ENV=wiki nvim -c "VimwikiIndex"'
+alias mpc='mpc -h $(cat $HOME/.mpd_host) -p $(cat $HOME/.mpd_port)'
+alias timer='termdown -f big'
+alias upload='rsync --chmod=F664 -zvhP --stats'
+alias down='aria2c -d ~/INBOX/'
+alias mutt='neomutt'
+alias cat='bat --theme GitHub'
+alias pythonref='xdg-open "/home/ash/Nextcloud/books/разработка программирование технологии/python/The Python Quick Syntax Reference [PDF] [StormRG]/Python Quick Syntax Reference, The - Walters, Gregory.pdf"'
+alias weather-bishkek='curl "wttr.in/bishkek?F"'
+alias qr="curl qrenco.de/$1"
+alias nsxiv="nsxiv -a"
+alias sgptcl="xclip -o -sel clipboard | sgpt $@"
+
+vimsession () {
+    VIM_ENV=dev nvim -c ":OpenSession! $1"
+}
+
+fzfc() {
+    curl -ks cht\.sh/$(
+        curl -ks cht\.sh/:list | \
+        IFS=+ fzf --preview 'curl -ks http://cht.sh{}' -q "$*");
+}
+
+listen-to-yt() { 
+    if [[ -z "$1" ]]; then 
+        echo "Enter a search string!"; 
+    else 
+        mpv "$(yt-dlp --default-search 'ytsearch1:' \"$1\" --get-url | tail -1)"; 
+    fi
+}
+
+tov() {
+    fzfytdh.sh --open "$(t $1 export | jq '.[] | .annotations | .[] | .description' | sed 's/\\//g' | sed -E 's/"(.*)"/\1/g')"
+}
 
 #
 # GTD task {{{1
 
 alias in='task add +in'
+
+today () {
+    if [[ $# -eq 0 ]]; then
+        task +today minimal
+    elif [[ $1 == "next" ]]; then
+        task +today next
+    else
+        id=$1
+        task $id mod +today
+    fi
+}
 
 tickle () {
     deadline=$1
@@ -136,9 +199,15 @@ alias tick=tickle
 alias tickt=ticklet
 alias think='tickle 1d'
 
-thinkt () {
+# done for today
+dft () {
     id=$1
-    ticklet $id 1d
+    task $id mod -today
+    ticklet $id tomorrow
+}
+
+week() {
+    task $1 mod wait:1w
 }
 
 webpage_title (){
@@ -150,18 +219,25 @@ read_and_review (){
     title=$(webpage_title $link)
     echo $title
     descr="\"Read and review: $title\""
-    id=$(task add +rnr +in "$descr" | sed -n 's/Created task \(.*\)./\1/p')
+    id=$(task add +rnr +in "$descr" "($@)" | sed -n 's/Created task \(.*\)./\1/p')
     task "$id" annotate "$link"
 }
 alias rnr=read_and_review
 
 ta_link () {
-    link="$1"
-    shift
-    title=$(webpage_title $link)
-    echo $title
-    id=$(task add "[$title]" "($@)" +link | sed -n 's/Created task \(.*\)./\1/p')
-    task "$id" annotate "$link"
+
+    if [ "$#" -lt 2 ]; then
+      echo "Usage: $0 link tw_parameters"
+    else
+        link="$1"
+        shift
+        title=$(webpage_title $link)
+        echo $title
+        id=$(task add "[$title]" "$@" +link | sed -n 's/Created task \(.*\)./\1/p')
+        echo "Created task $id"
+        task "$id" annotate "$link"
+    fi
+
 }
 
 # /GTD
@@ -187,64 +263,42 @@ bms() { buku --deep -s $@ }
 bmo() { buku -o $@ }
 # /buku
 
-# themer wrappers
-themergen() {
-    themename=$1
-    themelink=$2
-    echo "generating dark theme"
-    themer -t bspwm generate "$themename" "$themelink"
-    echo "generating bright theme"
-    themer -b -t bspwm generate "$themename"_l "$themelink"
-}
-themerlist() { 
-    current=$(themer -t bspwm current)
-    for theme in $(themer -t bspwm list); do
-        if [[ $theme == $current ]]; then
-            echo "* $theme"
-        else
-            if echo $theme | grep "_l$" > /dev/null; then
-                continue
-            fi
-            echo $theme
-        fi
-    done
-}
-themerdel() {
-    themename=$1
-    themer -t bspwm delete "$themename"
-    themer -t bspwm delete "$themename"_l
-}
-dark() { 
-    if [ $# -eq 1 ]; then
-        themename=$1
-    else
-        themename=$(themer -t bspwm current)
-    fi
-    if echo $themename | grep '_l$' > /dev/null; then
-        len=${#themename}
-        themename=${themename[0, len-2]}
-    fi
-    themer -t bspwm activate "$themename" 
-}
-bright() { 
-    if [ $# -eq 1 ]; then
-        themename=$1
-    else
-        themename=$(themer -t bspwm current)
-    fi
-    if ! echo $themename | grep '_l$' > /dev/null; then
-        themename="$themename"_l
-    fi
-    themer -t bspwm activate "$themename"
-}
-
-# /themer
-
 transfer() { if [ $# -eq 0 ]; then echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"; return 1; fi 
 tmpfile=$( mktemp -t transferXXX ); if tty -s; then basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g'); curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile; else curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ; fi; cat $tmpfile; rm -f $tmpfile; } 
 
-tws() {
-    echo "TW Done:$(task count end.after:today) Due:$(task count +DUE) Overdue:$(task count +OVERDUE) Next:$(task count +next)"
+#tws() {
+#    echo "TW Done:$(task count end.after:today) Due:$(task count +DUE) Overdue:$(task count +OVERDUE) Next:$(task count +next)"
+#}
+
+function blog-new {
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: $0 [post-slug]"
+    else
+        cd ~/projects/shaik.link/
+        hugo server -D &> blog.log &
+        sleep 3s
+
+        hugo new posts/$1/
+
+        xdg-open http://localhost:1313/posts/$1/
+
+        vimwriter -c ':tabnew' -c ':call termopen("tail -f blog.log")' -c ':tabnext' -O content/posts/$1/index.md content/posts/$1/index.ru.md
+
+        pkill hugo
+        rm blog.log
+    fi
+}
+
+function blog-new-redirect {
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: $0 [post-slug]"
+    else
+        cd ~/projects/shaik.link/
+
+        hugo new redirect/$1.md
+
+        vimwriter content/redirect/$1.md
+    fi
 }
 
 # foreground process with ctrl-z
@@ -260,12 +314,66 @@ fancy-ctrl-z () {
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
-export $(dbus-launch)
+#export $(dbus-launch)
 export DE=generic
 export DISABLE_AUTO_TITLE=true
 
 source ~/.profile
+source /home/ash/Soft/git-flow-completion/git-flow-completion.zsh
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export PATH="$HOME/.rbenv/bin:$PATH"
+
+[[ -s /home/ash/.autojump/etc/profile.d/autojump.sh ]] && source /home/ash/.autojump/etc/profile.d/autojump.sh
+
+autoload -U compinit && compinit -u
+
+
+if [[ $1 == eval ]]
+then
+    "$@" >> /dev/null
+set --
+fi
+
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# sdkman: ленивая загрузка (init ~0.5с). PATH к current-кандидатам — статично,
+# так что java/mvn работают сразу; сам sdkman-init грузится при первом вызове sdk.
 export SDKMAN_DIR="/home/ash/.sdkman"
-[[ -s "/home/ash/.sdkman/bin/sdkman-init.sh" ]] && source "/home/ash/.sdkman/bin/sdkman-init.sh"
+for _c in "$SDKMAN_DIR"/candidates/*/current/bin(N); do
+    PATH="$_c:$PATH"
+done
+unset _c
+sdk() {
+    unfunction sdk
+    [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+    sdk "$@"
+}
+
+# opam configuration
+[[ ! -r /home/ash/.opam/opam-init/init.zsh ]] || source /home/ash/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+export PATH=$PATH:$HOME/.local/bin
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/ash/.lmstudio/bin"
+# End of LM Studio CLI section
+
+# nvm: ленивая загрузка (~0.7с). PATH к default-ноде — статично (node/npm/npx/claude
+# работают сразу); сам nvm.sh грузится при первом вызове nvm.
+export NVM_DIR="$HOME/.config/nvm"
+if [[ -r "$NVM_DIR/alias/default" ]]; then
+    _nvm_default=$(<"$NVM_DIR/alias/default")
+    _nvm_bin=$(echo "$NVM_DIR/versions/node/v${_nvm_default#v}"*/bin(N[1]))
+    [[ -d "$_nvm_bin" ]] && PATH="$_nvm_bin:$PATH"
+    unset _nvm_default _nvm_bin
+fi
+nvm() {
+    unfunction nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    nvm "$@"
+}
