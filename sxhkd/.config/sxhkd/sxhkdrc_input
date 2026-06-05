@@ -30,6 +30,9 @@ super + b
 super + s
     bspc node -t $(bspc query -N -n -n .tiled >/dev/null && echo floating || echo tiled)
 
+super + shift + s
+    bspc node -t $(bspc query -N -n -n .tiled >/dev/null && echo pseudo_tiled || echo tiled)
+
 super + f
     bspc node -t '~fullscreen'
 
@@ -43,7 +46,7 @@ super + apostrophe
 
 # switch desktop's windows
 super + {_,shift + }c
-	bspc node -f {next,prev}.local
+	bspc node -f {next,prev}.local.!hidden.window
 
 super + {_,shift,alt,ctrl} + {h,j,k,l}
     ~/.config/bspwm/scripts/{focus,move,resize,presel}.sh {west,south,north,east}
@@ -52,23 +55,33 @@ super + {_,shift,alt,ctrl} + {h,j,k,l}
 super + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} '^{1-9,10}'
 
+super + alt + 1
+	bspc desktop -f '^6'
+
+super + alt + 2
+	bspc desktop -f '^7'
+
+super + alt + 3
+	bspc desktop -f '^8'
+
+super + alt + q
+	bspc desktop -f '^9'
+
+super + alt + w
+	bspc desktop -f '^10'
+
+#super + alt + {1-9,0}
+#	bspc desktop -f '^{6-15,16}'
+
 # jump throught window selection history
 super + {o,i}
 	bspc wm --record-history off; \
 	bspc node {older,newer} -f; \
 	bspc wm --record-history on
 
-# transplant selected window to the given window
-super + y
-	bspc query -N -n focused.automatic && bspc node -n last.!automatic || bspc node last.leaf -n focused
-
-# make window biggest
-super + ctrl + m
-	bspc node -s biggest
-
 # move node to next free desktop
 super + ctrl + f
-    bspc node -d 'next.!occupied'
+    bspc node -d 'next.!occupied' --follow
 
 # preselect split ratio side
 super + ctrl + {h,j,k,l,0}
@@ -89,6 +102,14 @@ super + alt + {8,9}
 # make window sticky
 super + e
     bspc node -g sticky
+
+# make window hidden
+super + u
+    bspc node -g hidden
+
+# unhide all on focused desktop
+super + shift + u
+	bspc node any.hidden.local -g hidden=off
 
 # preventing closing 
 super + r
@@ -130,10 +151,6 @@ super + alt + c
     IFS=' ' read sw sh < <(xdotool getdisplaygeometry); \
     eval `xdotool getactivewindow getwindowgeometry --shell`; \
     xdotool getactivewindow windowmove $(($sw/2-$WIDTH/2)) $(($sh/2-$HEIGHT/2));
-    
-# mouse {{{2
-#
-
 
 super + n
 	bspc monitor -f next
@@ -142,9 +159,9 @@ super + n
 super + shift + n
 	bspc node -m next
 
-# move current window to monitor
-super + alt + {1-9}
-    bspc node -m {1-9}
+## move current window to monitor
+#super + alt + {1-9}
+#    bspc node -m {1-9}
 
 # move current desktop to monitor
 super + shift + alt + {1-9}
@@ -153,19 +170,32 @@ super + shift + alt + {1-9}
 # mpd {{{1
 
 ctrl + alt + s
-    mpc stop
+    mpc -h $(cat $HOME/.mpd_host) -p $(cat $HOME/.mpd_port) stop
 
 ctrl + alt + c
-    mpc toggle
+    mpc -h $(cat $HOME/.mpd_host) -p $(cat $HOME/.mpd_port) toggle
 
 
 ctrl + alt + z
-    mpc prev
+    mpc -h $(cat $HOME/.mpd_host) -p $(cat $HOME/.mpd_port) prev
 
 
 ctrl + alt + n
-    mpc next
+    mpc -h $(cat $HOME/.mpd_host) -p $(cat $HOME/.mpd_port) next
 
+ctrl + alt + {equal,minus}
+    mpc -h localhost seek {+,-}5%
+
+super + ctrl + Insert
+	~/.Music/trancekgnew/bin/cptrack_for_set.sh
+
+super + ctrl + Return
+	~/.Music/trancekgnew/bin/cptrack.sh
+	#~/.Music/trancekgnew/bin/accepttrack.sh
+
+super + ctrl + period
+	~/.Music/trancekgnew/bin/regrettrack.sh
+	#~/.Music/trancekgnew/bin/filtertrack.sh
 
 # aijmixer {{{1
 
@@ -175,44 +205,44 @@ XF86Audio{Raise,Lower}Volume
 # xbacklight {{{1
 
 XF86MonBrightness{Up,Down}
-    xbacklight -{inc,dec} 10
+    brightnessctl s 10%{+,-}
 
 # xdotool {{{1
 
-# move mouse cursor with extra jump size
-super + ctrl + {_,shift} + {h,j,k,l}
-    bspc window -{f,s} {left,down,up,right}
+# # move mouse cursor with extra jump size
+# super + ctrl + {_,shift} + {h,j,k,l}
+#     bspc window -{f,s} {left,down,up,right}
+#
+# # alternative to move mouse cursor
+# super + ctrl + alt + {h,j,k,l}
+#     xdotool mousemove_relative {-- -8 0, 0 8, -- 0 -8, 8 0}
+#
+# # emulate mouse click
+# super + alt + i
+#     xdotool click 1
+#
+# # emulate mouse click at screen center
+# super + shift + i
+#     xdotool mousemove --polar 0 0 click --clearmodifiers 1
+#
+# # emulate mouse scroll down
+# super + alt + d
+#     xdotool click --clearmodifiers 5
+#
+# # emulate mouse scroll up
+# super + alt + u
+#     xdotool click --clearmodifiers 4
+#
+# # toggle `super + {h,j,k,l}` mode. 
+# super + i
+#     inputmode.sh t I &
+#
+# super + x
+#     inputmode.sh t N &
+#
+# super + m
+#     inputmode.sh t M &
 
-# alternative to move mouse cursor
-super + ctrl + alt + {h,j,k,l}
-    xdotool mousemove_relative {-- -8 0, 0 8, -- 0 -8, 8 0}
-
-# emulate mouse click
-super + alt + i
-    xdotool click 1
-
-# emulate mouse click at screen center
-super + shift + i
-    xdotool mousemove --polar 0 0 click --clearmodifiers 1
-
-# emulate mouse scroll down
-super + alt + d
-    xdotool click --clearmodifiers 5
-
-# emulate mouse scroll up
-super + alt + u
-    xdotool click --clearmodifiers 4
-
-# toggle `super + {h,j,k,l}` mode. 
-super + i
-    inputmode.sh t I &
-
-super + x
-    inputmode.sh t N &
- 
-super + m
-    inputmode.sh t M &
- 
 # misc {{{1
  
 # copy buffer to clipboard
@@ -223,65 +253,78 @@ ctrl + shift + c
 ctrl + shift + t
     notify-send tr "`xclip -o -sel clipboard | trans -no-ansi en:ru`"
 
-# lock screen
+# whois ip address
+super + alt + shift + i
+    notify-send "$(xclip -o -sel clipboard | xargs whois | grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} -i -E "(address|country|city|state)" | sort | uniq)"
+
 ctrl + alt + l
-    xlock
+    xset s activate
+
+super + ctrl + c
+    =
+
+#alt + w
+#    ~/bin/web-search.sh
+
+# dunst (бывшая секция [shortcuts] dunstrc — в 1.7+ только через WM)
+ctrl + space
+	dunstctl close
+
+ctrl + shift + space
+	dunstctl close-all
+
+ctrl + grave
+	dunstctl history-pop
+
+ctrl + shift + period
+	dunstctl context
 
 # make sxhkd reload its configuration files:
 super + Escape
 	pkill -x sxhkd; sxhkd &;
 
-# open urxvt terminal
+# open alacritty terminal
 super + Return
-	urxvt
+	alacritty
 
-# run pass menu
+super + ctrl + b
+    theme_select.sh
+
+super + ctrl + t
+    theme_toggle_light.sh
+
+# run pass menu (rofi, единая тема ash-wal)
 super + ctrl + space
-	passmenu -l 14 -nb '#000000' -nf '#d8d8d8' -sb '#d8d8d8' -sf '#000000' -fn 'Meslo Lg S For Powerline:pixelsize=11'
+	~/bin/rofi-pass.sh
 
-# run menu
-super + space
-	dmenu_recent -l 14 -nb '#000000' -nf '#d8d8d8' -sb '#d8d8d8' -sf '#000000' -fn 'Meslo Lg S For Powerline:pixelsize=11'
+super + ctrl + Tab 
+    rofi -show window -show-icons
 
 # run custom menu
-super + shift + space
-	dmenu_custom -l 14 -nb '#000000' -nf '#d8d8d8' -sb '#d8d8d8' -sf '#000000' -fn 'Meslo Lg S For Powerline:pixelsize=11'
+super + space
+	rofi -show blezz -modi blezz -auto-select -matching normal -blezz-config /home/ash/.config/blezz.conf
 
 # start terminal with ncmpcpp
 super + shift + m
-    bspc rule -a URxvt -o state=floating; \
-    urxvt -geometry 130x40 -e ncmpcpp &;
-
-# start floating terminal
-super + shift + p
-    unset TMUX; \
-    bspc rule -a URxvt -o state=floating; \
-    urxvt -geometry 40x40 -e tmuxinator translater \;
-    sleep 0.4; \
-    xdo move -x +400
+    alacritty --option 'window.dimensions.columns=100' --option 'window.dimensions.lines=20' -e ncmpcpp --host $(cat ~/.mpd_host);
 
 # start terminal with elinks
 super + shift + b
     unset TMUX; \
-    bspc rule -a URxvt -o state=floating; \
-    urxvt -geometry 80x25 -e tmux new-session -A -s eratys 'raty `xclip -o` | elinks' \; 
+    alacritty --option 'window.dimensions.columns=80' --option 'window.dimensions.lines=25' -e tmux new-session -A -s eratys 'raty `xclip -o` | elinks' \;
 
 # start terminal with weechat
 super + shift + o
-    bspc rule -a URxvt -o state=floating; \
     OLDTMUX="$TMUX"; \
     unset TMUX; \
-    urxvt -geometry 140x28 -e tmuxinator start internet \; \
+	alacritty --option 'window.dimensions.columns=130' --option 'window.dimensions.lines=28' -e tmuxinator start internet \; \
     export TMUX="$OLDTMUX";
 
-# start terminal with ssh servers
-super + ctrl + o
-    bspc rule -a URxvt -o state=floating; \
-    OLDTMUX="$TMUX"; \
-    unset TMUX; \
-    urxvt -geometry 140x28 -e tmuxinator start servers \; \
-    export TMUX="$OLDTMUX";
+super + shift + p
+	alacritty --option 'window.dimensions.columns=100' --option 'window.dimensions.lines=20' -e bash -c 'xclip -o | vim -';
 
-super + shift + t
-    ttitle=$(mpc -f %title% | head -n 1); \
-    tmux send-keys "$ttitle"
+Print
+	spectacle -g
+
+shift + Print
+	spectacle -r
