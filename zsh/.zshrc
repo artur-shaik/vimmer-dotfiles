@@ -9,6 +9,7 @@ fi
 
 
 ZSH=$HOME/.oh-my-zsh
+zstyle ':omz:update' frequency 14
 ZSH_THEME="powerlevel10k/powerlevel10k"
 COMPLETION_WAITING_DOTS="true"
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
@@ -23,6 +24,8 @@ function bgnotify_formatted {
 }
 
 plugins=(fzf-tab zsh-vi-mode git taskwarrior timewarrior pip python suse web-search wd zsh-syntax-highlighting bgnotify)
+
+fpath=($HOME/.zsh_completions $fpath)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -43,10 +46,6 @@ ZVM_CURSOR_STYLE_ENABLED=false
 
 # Customize to your needs...
 export PATH=/usr/lib/mpi/gcc/openmpi/bin:/home/ash/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/X11R6/bin:/usr/games:/usr/lib/mit/bin:/usr/lib/mit/sbin:$HOME/.cargo/bin:$HOME/.local/bin:$PATH
-fpath=($HOME/.zsh_completions $fpath)
-
-autoload -U compinit
-compinit
 
 # vi mode bindings
 bindkey -v
@@ -324,7 +323,6 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 
 [[ -s /home/ash/.autojump/etc/profile.d/autojump.sh ]] && source /home/ash/.autojump/etc/profile.d/autojump.sh
 
-autoload -U compinit && compinit -u
 
 
 if [[ $1 == eval ]]
