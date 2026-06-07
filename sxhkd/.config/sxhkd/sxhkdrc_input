@@ -48,8 +48,8 @@ super + apostrophe
 super + {_,shift + }c
 	bspc node -f {next,prev}.local.!hidden.window
 
-super + {_,shift,alt,ctrl} + {h,j,k,l}
-    ~/.config/bspwm/scripts/{focus,move,resize,presel}.sh {west,south,north,east}
+super + {_,shift,alt} + {h,j,k,l}
+    ~/.config/bspwm/scripts/{focus,move,resize}.sh {west,south,north,east}
 
 # show desktop, send window to desktop
 super + {_,shift + }{1-9,0}
@@ -87,9 +87,9 @@ super + ctrl + f
 super + ctrl + {h,j,k,l,0}
 	bspc node -p {west,south,north,east,cancel}
 
-# change select ratio
+# presel ratio (доля площади пресел-зоны); -r менял бы готовый сплит
 super + ctrl + {1-9}
-	bspc node -r 0.{1-9}
+	bspc node -o 0.{1-9}
 
 # reducing gap on the fly 
 super + {minus,equal}
