@@ -1,5 +1,5 @@
 # ash: промпт — starship (USE_STARSHIP пусто = вернуть p10k)
-USE_STARSHIP=1
+: "${USE_STARSHIP=1}"  # =1 по умолч.; USE_STARSHIP= zsh для p10k
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -32,6 +32,16 @@ plugins=(fzf-tab zsh-vi-mode git taskwarrior timewarrior pip python suse web-sea
 fpath=($HOME/.zsh_completions $fpath)
 
 source $ZSH/oh-my-zsh.sh
+
+# ash: zsh-vi-mode на КАЖДЫЙ accept-line зовёт zvm_zle-line-finish ->
+# zvm_set_cursor -> DECSCUSR reset "\e[0 q". ZVM гейтит это только на $VIMRUNTIME,
+# а nvim :terminal ставит $NVIM (не VIMRUNTIME) -> escape течёт, в буфер "0 q".
+# Глушим единственный choke-point внутри редактор-терминала (zvm_set_cursor
+# определён при source oh-my-zsh.sh выше, переопределение держится).
+if [[ -n "$NVIM" || -n "$VIM" || -n "$VIM_TERMINAL" ]]; then
+  ZVM_CURSOR_STYLE_ENABLED=false
+  zvm_set_cursor() {}
+fi
 
 # ash: держать compiled-дамп свежим (новые completions инвалидируют dump,
 # без .zwc compinit парсит текстом каждый старт — было 3.5с vs 1.0с)
