@@ -134,6 +134,7 @@ alias tn='tasknext'
 alias ta='task add'
 alias to='taskopen'
 alias c='clear'
+alias wi='wall-import'   # импорт обоев INBOX->backgrounds (Claude именует, см. ~/.local/bin)
 alias vf='vifm'
 alias tmux='tmux -2'
 alias gs='git status'
