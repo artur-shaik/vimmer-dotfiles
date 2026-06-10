@@ -1,6 +1,10 @@
 # ash: промпт — starship (USE_STARSHIP пусто = вернуть p10k)
 : "${USE_STARSHIP=1}"  # =1 по умолч.; USE_STARSHIP= zsh для p10k
 
+# ash: pinentry в терминале/TUI (neomutt, gpg, pass) — ncurses; gpg-agent
+# форвардит эту переменную в ~/bin/pe. GUI (запуск из WM) её не имеет -> rofi.
+export PINENTRY_USER_DATA=curses
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
