@@ -288,7 +288,7 @@ super + Return
 	alacritty
 
 super + ctrl + b
-    theme_select.sh
+    wall_select.sh
 
 super + ctrl + t
     theme_toggle_light.sh
