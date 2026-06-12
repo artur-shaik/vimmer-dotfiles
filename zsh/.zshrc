@@ -37,6 +37,23 @@ fpath=($HOME/.zsh_completions $fpath)
 
 source $ZSH/oh-my-zsh.sh
 
+# ash: bgnotify tmux-aware. Дефолтный currentWindowId ловит только смену
+# X-окна (_NET_ACTIVE_WINDOW) → при переключении tmux-ПЕЙНА (то же окно
+# alacritty) фокус-identity не менялся → уведа не было. Дополняем identity
+# флагами «наш пейн сейчас видимый» (#{pane_active}#{window_active}): смена
+# пейна/окна/приложения теперь меняет строку → bgnotify нотифает. Переопределяем
+# ПОСЛЕ source omz (плагин bgnotify уже определил свою версию).
+currentWindowId () {
+  local x p
+  x=$(xprop -root 2>/dev/null | awk '/NET_ACTIVE_WINDOW/{print $5; exit}')
+  if [[ -n "$TMUX" && -n "$TMUX_PANE" ]]; then
+    p=$(command tmux display-message -p -t "$TMUX_PANE" '#{pane_active}#{window_active}#{session_attached}' 2>/dev/null)
+    echo "${x:-0}:${p:-?}"
+  else
+    echo "${x:-0}"
+  fi
+}
+
 # ash: zsh-vi-mode на КАЖДЫЙ accept-line зовёт zvm_zle-line-finish ->
 # zvm_set_cursor -> DECSCUSR reset "\e[0 q". ZVM гейтит это только на $VIMRUNTIME,
 # а nvim :terminal ставит $NVIM (не VIMRUNTIME) -> escape течёт, в буфер "0 q".
