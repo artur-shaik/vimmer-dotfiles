@@ -250,8 +250,8 @@ ctrl + shift + c
     xclip -o -sel clipboard | xclip -i
 
 # translate clipboard content
-ctrl + shift + t
-    notify-send tr "`xclip -o -sel clipboard | trans -no-ansi en:ru`"
+# ctrl + shift + t
+#     notify-send tr "`xclip -o -sel clipboard | trans -no-ansi en:ru`"
 
 # whois ip address
 super + alt + shift + i
