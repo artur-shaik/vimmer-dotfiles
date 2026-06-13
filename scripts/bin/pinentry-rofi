@@ -1,0 +1,50 @@
+#!/bin/bash
+
+desc=""
+prompt="PIN:"
+
+echo "OK Pleased to meet you"
+
+while IFS= read -r line; do
+    cmd="${line%% *}"
+    args="${line#* }"
+    [ "$args" = "$cmd" ] && args=""
+
+    case "$cmd" in
+        OPTION)
+            # ash: gpg-agent форвардит окружение клиента сюда. БЕЗ этого rofi не
+            # знал DISPLAY (agent стартовал без него) → GUI-pinentry падал, пока
+            # не прогонишь через терминал (curses, DISPLAY не нужен).
+            case "$args" in
+                display=*)     export DISPLAY="${args#display=}" ;;
+                xauthority=*)  export XAUTHORITY="${args#xauthority=}" ;;
+            esac
+            echo "OK"
+            ;;
+        SETDESC)
+            desc=$(printf '%b' "${args//%/\\x}")
+            echo "OK"
+            ;;
+        SETPROMPT)
+            prompt="$args"
+            echo "OK"
+            ;;
+        GETPIN)
+            [ -z "$DISPLAY" ] && export DISPLAY=:0   # ash: страховка если OPTION не пришёл
+            pin=$(rofi -dmenu -password -p "$prompt" -mesg "$desc" -lines 0)
+            if [ $? -eq 0 ]; then
+                echo "D $pin"
+                echo "OK"
+            else
+                echo "ERR 83886179 Operation cancelled"
+            fi
+            ;;
+        BYE)
+            echo "OK closing connection"
+            exit 0
+            ;;
+        *)
+            echo "OK"
+            ;;
+    esac
+done
