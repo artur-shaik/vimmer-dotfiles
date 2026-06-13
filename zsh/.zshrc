@@ -181,7 +181,6 @@ alias upload='rsync --chmod=F664 -zvhP --stats'
 alias down='aria2c -d ~/INBOX/'
 alias mutt='neomutt'
 alias cat='bat --theme GitHub'
-alias pythonref='xdg-open "/home/ash/Nextcloud/books/разработка программирование технологии/python/The Python Quick Syntax Reference [PDF] [StormRG]/Python Quick Syntax Reference, The - Walters, Gregory.pdf"'
 alias weather-bishkek='curl "wttr.in/bishkek?F"'
 alias qr="curl qrenco.de/$1"
 alias nsxiv="nsxiv -a"
