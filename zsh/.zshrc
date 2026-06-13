@@ -430,3 +430,12 @@ export MCFLY_RESULTS=30
 # mcfly подключаем через его хук (+ сразу, если ZVM вдруг отключат)
 zvm_after_init_commands+=('eval "$(mcfly init zsh)"')
 eval "$(mcfly init zsh)"
+
+# ── OpenAI key из pass (единый источник, не в plaintext) ──────────────────
+# Ключ лежит ТОЛЬКО в `pass Key/openai` (первая строка). Обёртки подставляют
+# его в env лишь на время вызова. crush/sgpt берут OPENAI_API_KEY из env;
+# codecompanion (nvim) тянет напрямую через cmd:pass в своём конфиге.
+# Ротация ключа = `pass edit Key/openai`, больше нигде менять не надо.
+openai-key() { pass show Key/openai 2>/dev/null | head -1; }
+sgpt()  { OPENAI_API_KEY="$(openai-key)" command sgpt  "$@"; }
+crush() { OPENAI_API_KEY="$(openai-key)" command crush "$@"; }
