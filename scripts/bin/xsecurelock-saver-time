@@ -34,11 +34,11 @@ from gi.repository import Gtk, Gdk, GdkX11, GLib, GdkPixbuf, Gio
 
 
 def compute_roles(widget, ctx, x, y, w, h):
-    """Роль монитора по геометрии: где часы (основной), где инфо (внешний если есть).
+    """Monitor role by geometry: where the clock (primary), where info (external if any).
 
-    ash: каждый saver-процесс свой монитор знает (xsecurelock плодит по одному
-    на экран). Детерминированно, без сокет-гонки: часы на primary, виджеты на
-    info-мониторе = внешний при мульти-сетапе, иначе тот же (справа).
+    ash: each saver process knows its own monitor (xsecurelock spawns one per
+    screen). Deterministic, no socket race: clock on primary, widgets on the
+    info monitor = external in a multi-setup, otherwise the same one (right side).
     """
     try:
         display = widget.get_display()
@@ -95,10 +95,10 @@ def on_win_realize(widget, ctx):
 def on_win_draw(widget, cctx, ctx):
     """Draw background image, scaled to COVER this window (per-monitor).
 
-    ash: раньше кропил subpixbuf по АБСОЛЮТНОЙ позиции монитора — обои 1920px
-    шириной, второй монитор с x=1920 уходил за край картинки → чёрный экран.
-    Теперь каждое окно saver'а заполняет обои по cover (как feh --bg-fill),
-    независимо от позиции/размера → работает на любом числе мониторов.
+    ash: it used to crop subpixbuf by the ABSOLUTE monitor position — the
+    wallpaper is 1920px wide, the second monitor at x=1920 ran past the image
+    edge -> black screen. Now each saver window covers the wallpaper (like
+    feh --bg-fill), regardless of position/size -> works on any monitor count.
     """
     wwidth, wheight = widget.get_size()
     scale = widget.get_scale_factor()
@@ -113,7 +113,7 @@ def on_win_draw(widget, cctx, ctx):
     ih = ctx.background.get_height()
     dw = wwidth * scale
     dh = wheight * scale
-    s = max(dw / iw, dh / ih)  # cover: заполнить, обрезав лишнее
+    s = max(dw / iw, dh / ih)  # cover: fill, cropping the excess
     ox = (dw - iw * s) / 2
     oy = (dh - ih * s) / 2
 
@@ -127,8 +127,8 @@ def on_win_draw(widget, cctx, ctx):
 
 
 def on_overlay_draw(widget, cctx, ctx):
-    """Draw overlay: часы+дата на основном мониторе, инфо-виджеты на info-мониторе
-    (внешний если есть, иначе тот же), справа."""
+    """Draw overlay: clock+date on the primary monitor, info widgets on the info
+    monitor (external if any, otherwise the same one), right side."""
     wwidth, wheight = widget.get_parent().get_size()
     cctx.set_operator(cairo.OPERATOR_OVER)
 
@@ -141,11 +141,11 @@ def on_overlay_draw(widget, cctx, ctx):
         cctx.move_to(x, y)
         cctx.show_text(what)
 
-    # Clock (только на основном мониторе)
+    # Clock (primary monitor only)
     if ctx.is_clock and ctx.clock:
         time, date = ctx.clock
 
-        # Time (ash: вес NORMAL — семейство уже Light/Poppins, BOLD его забивал)
+        # Time (ash: weight NORMAL — family is already Light/Poppins, BOLD overrode it)
         cctx.select_font_face(
             ctx.font_family, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL
         )
@@ -187,8 +187,8 @@ def on_overlay_draw(widget, cctx, ctx):
             cctx.set_font_size(ctx.weather_font_size)
             draw(chunk)
 
-    # ash: инфо-виджеты (батарея/музыка/задачи) — info-монитор, нижний-ПРАВЫЙ
-    # угол, стопкой. Иконка nerd-шрифтом, текст info-шрифтом (+ кириллица).
+    # ash: info widgets (battery/music/tasks) — info monitor, bottom-RIGHT
+    # corner, stacked. Icon in nerd font, text in info font (+ Cyrillic).
     info = getattr(ctx, "info", None)
     if ctx.is_info and info:
         isize = min(14, ctx.clock_font_size // 6)
@@ -197,7 +197,7 @@ def on_overlay_draw(widget, cctx, ctx):
         margin = 60
         y = wheight - 40
         for icon, text in reversed(info):
-            # ширины иконки и текста — для правого выравнивания
+            # icon and text widths — for right alignment
             cctx.select_font_face(
                 ctx.icon_font, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL
             )
@@ -209,14 +209,14 @@ def on_overlay_draw(widget, cctx, ctx):
             cctx.set_font_size(isize)
             tw = cctx.text_extents(text)[4]
             x = wwidth - margin - (iadv + gap + tw)
-            # иконка
+            # icon
             cctx.select_font_face(
                 ctx.icon_font, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL
             )
             cctx.set_font_size(isize)
             cctx.move_to(x, y)
             draw(icon)
-            # текст
+            # text
             cctx.select_font_face(
                 ctx.info_font, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL
             )
@@ -255,8 +255,8 @@ def on_clock_change(ctx):
     if not ctx.clock or new_clock != ctx.clock[0]:
         ctx.clock = (new_clock, now.strftime("%A %-d %B"))
         ctx.overlay.queue_draw()
-    # ash: тикаем на каждом мониторе (роли по геометрии, рисует только is_clock).
-    # Раньше тут была сокет-выборка leader'а — убрана.
+    # ash: tick on every monitor (roles by geometry, only is_clock draws).
+    # There used to be a leader socket election here — removed.
     GLib.timeout_add(min(60 - now.second, 3) * 1000, on_clock_change, ctx)
 
 
@@ -276,9 +276,9 @@ def on_weather_change(monitor, f1, f2, event, ctx):
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# ash: инфо-виджеты на локскрине — батарея / музыка (mpd) / задачи (taskwarrior).
-# Каждый возвращает (icon, text) или None. Иконки — глифы Nerd Font (FontAwesome).
-# Сбор в фоновом потоке (_gather), чтобы subprocess не морозил GTK-цикл.
+# ash: lockscreen info widgets — battery / music (mpd) / tasks (taskwarrior).
+# Each returns (icon, text) or None. Icons are Nerd Font glyphs (FontAwesome).
+# Collected in a background thread (_gather) so subprocess won't freeze the GTK loop.
 # ──────────────────────────────────────────────────────────────────────────
 
 
@@ -303,7 +303,7 @@ def _music(ctx):
     env = dict(os.environ)
     if ctx.mpd_host:
         env["MPD_HOST"] = ctx.mpd_host
-    # plain `mpc current` = пусто когда не играет (с -f выдаёт " — " даже на стопе)
+    # plain `mpc current` = empty when nothing plays (with -f it prints " — " even when stopped)
     out = subprocess.run(
         ["mpc", "current"],
         capture_output=True,
@@ -358,7 +358,7 @@ def _gather(ctx):
 
 
 def poll_info(ctx):
-    """Запустить сбор инфо в фоне (только на info-мониторе). Повторяется."""
+    """Kick off info collection in the background (info monitor only). Repeats."""
     if ctx.is_info:
         threading.Thread(target=_gather, args=(ctx,), daemon=True).start()
     return True
@@ -368,10 +368,11 @@ if __name__ == "__main__":
     ctx = types.SimpleNamespace()
     with open("/home/ash/.cache/wal/current_wall", "r") as f:
         _src_wall = f.read().strip()
-    # ash: блюр фона (как gh0stzk i3lock). Блюрим ОДИН раз в кэш, если обои
-    # новее кэша; saver грузит готовую блюр-версию (на каждый draw не блюрим).
-    # Fast-trick: downscale -> blur -> upscale (вдвое быстрее полного gaussian).
-    # Радиус через XSECURELOCK_SAVER_BLUR (на downscaled, дефолт 0x4). Пусто/0 = без блюра.
+    # ash: blur the background (like gh0stzk i3lock). Blur ONCE into a cache if
+    # the wallpaper is newer than the cache; saver loads the ready blurred version
+    # (we don't blur on every draw). Fast-trick: downscale -> blur -> upscale
+    # (twice as fast as a full gaussian). Radius via XSECURELOCK_SAVER_BLUR
+    # (on the downscaled image, default 0x4). Empty/0 = no blur.
     _blur_cache = os.path.expanduser("~/.cache/wal/lock_blur.jpg")
     _blur = os.getenv("XSECURELOCK_SAVER_BLUR", "0x4")
     ctx.background_image = _src_wall
@@ -398,7 +399,7 @@ if __name__ == "__main__":
             if os.path.exists(_blur_cache):
                 ctx.background_image = _blur_cache
         except Exception:
-            pass  # блюр не вышел — остаёмся на резком фоне
+            pass  # blur failed — fall back to the sharp wallpaper
     ctx.clock_font_size = int(os.getenv("XSECURELOCK_SAVER_CLOCK_FONT_SIZE", 190))
     ctx.weather_font_size = int(os.getenv("XSECURELOCK_SAVER_CLOCK_FONT_SIZE", 40))
     ctx.weather_file = os.getenv("XSECURELOCK_SAVER_WEATHER", None)
@@ -407,12 +408,12 @@ if __name__ == "__main__":
     ctx.weather = None
     ctx.clock = None
     ctx.position = (0, 0)
-    # ash: роли монитора — уточняются в on_win_realize по геометрии. Дефолт True/True
-    # = одиночный монитор (нет parent) рисует и часы, и виджеты.
+    # ash: monitor roles — refined in on_win_realize by geometry. Default True/True
+    # = single monitor (no parent) draws both the clock and the widgets.
     ctx.is_clock = True
     ctx.is_info = True
 
-    # ash: инфо-виджеты (батарея/музыка/задачи)
+    # ash: info widgets (battery/music/tasks)
     ctx.info = []
     ctx.info_font = os.getenv("XSECURELOCK_SAVER_INFO_FONT", "Cantarell")
     ctx.icon_font = os.getenv("XSECURELOCK_SAVER_ICON_FONT", "JetBrainsMono Nerd Font")
@@ -447,7 +448,7 @@ if __name__ == "__main__":
         monitor2.connect("changed", on_weather_change, ctx)
         GLib.timeout_add(1000, on_weather_change, *gio_event_args, ctx)
     GLib.timeout_add(1000, on_clock_change, ctx)
-    # ash: поллинг инфо-виджетов — первый прогон ~1.5с, далее каждые 5с
+    # ash: poll info widgets — first run ~1.5s, then every 5s
     GLib.timeout_add(1500, lambda: (poll_info(ctx), False)[1])
     GLib.timeout_add(5000, poll_info, ctx)
 

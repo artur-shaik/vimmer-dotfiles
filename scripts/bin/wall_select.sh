@@ -1,8 +1,8 @@
 #!/bin/bash
-# ash: выбор обоев ГРИДОМ С ПРЕВЬЮ (в духе RiceSelector gh0stzk) + все опции
-# theme_select.sh (random/random_light/random_dark/light/dark/backend/opacity).
-# Превью — тумбочки в ~/.cache/wall-thumbs (convert, инкрементально). Меню
-# возвращает те же строки, что rofi-wal → дальше пайплайн идентичен theme_select.
+# ash: wallpaper picker as a GRID WITH PREVIEWS (like gh0stzk RiceSelector) + all
+# theme_select.sh options (random/random_light/random_dark/light/dark/backend/opacity).
+# Previews are thumbnails in ~/.cache/wall-thumbs (convert, incremental). The menu
+# returns the same strings as rofi-wal -> the pipeline below is identical to theme_select.
 
 WALLPAPERDIR="$HOME/.backgrounds"
 THUMBS="$HOME/.cache/wall-thumbs"
@@ -19,7 +19,7 @@ load_defaults() {
     backend="$(cat ~/.cache/wal/current_backend)"
 }
 
-# ---- тумбочки обоев (16:9 кроп, только новые/изменённые, parallel) ----
+# ---- wallpaper thumbnails (square crop, only new/changed, parallel) ----
 mkdir -p "$THUMBS"
 build_thumbs() {
     for f in "$WALLPAPERDIR"/*; do
@@ -32,11 +32,11 @@ build_thumbs() {
         'convert "$1" -strip -thumbnail 600x600^ -gravity center -extent 600x600 "$2" 2>/dev/null' _
 }
 
-# ---- action-плитки: kw|подпись ----
-# ВАЖНО: генерить ДО запуска rofi, не внутри menu() в command-substitution.
-# Иначе convert пишет файл, пока rofi уже async-грузит иконки → гонка
-# (читался недописанный/старый файл, все плитки показывали одну подпись).
-# Единый цвет фона+текста — иначе на светлых плитках текст сливался.
+# ---- action tiles: kw|label ----
+# IMPORTANT: generate BEFORE launching rofi, not inside menu() command-substitution.
+# Otherwise convert writes the file while rofi already async-loads icons -> race
+# (a half-written/stale file was read, all tiles showed the same label).
+# Single bg+text color — otherwise text blended in on light tiles.
 ACT_BG='#2a303c'
 ACT_FG='#e8eef7'
 ACTIONS='random|RANDOM
@@ -55,13 +55,13 @@ build_action_tiles() {
     done
 }
 
-# первый запуск может молотить тумбочки — подсказать
+# first run may churn through thumbnails — give a hint
 [ -z "$(ls -A "$THUMBS" 2>/dev/null)" ] && \
-    notify-send -t 2000 "wall-select" "генерю превью обоев…"
+    notify-send -t 2000 "wall-select" "generating wallpaper previews…"
 build_thumbs
 build_action_tiles
 
-# ---- сборка меню: сперва action-плитки, потом обои с превью ----
+# ---- build menu: action tiles first, then wallpapers with previews ----
 menu() {
     echo "$ACTIONS" | while IFS='|' read -r kw _; do
         printf '%s\000icon\037%s\n' "$kw" "$THUMBS/_act_$kw.png"
@@ -72,11 +72,11 @@ menu() {
     done
 }
 
-wall_command=$(menu | rofi -dmenu -i -p "Обои" -theme "$RASI")
+wall_command=$(menu | rofi -dmenu -i -p "Wallpaper" -theme "$RASI")
 [ -z "$wall_command" ] && exit 0
 
 # =========================================================================
-# Ниже — логика theme_select.sh без изменений (диспетч + применение).
+# Below — theme_select.sh logic unchanged (dispatch + apply).
 # =========================================================================
 if [[ $wall_command == random || $wall_command == random_light || $wall_command == random_dark ]]; then
     load_defaults
@@ -95,19 +95,19 @@ elif [[ $wall_command == opacity ]]; then
     load_defaults
     opacity=$(rofi-wal opacity | rofi -dmenu -i -theme "$ASH_RASI")
 elif [[ $wall_command == light ]]; then
-    # ash: ТОЛЬКО смена shade на ТЕКУЩИХ обоях (wall из load_defaults), без shuf.
-    # Random-обои этого shade — отдельные плитки RND LIGHT/RND DARK.
+    # ash: ONLY change shade on the CURRENT wallpaper (wall from load_defaults),
+    # no shuf. Random wallpaper of this shade = separate RND LIGHT/RND DARK tiles.
     load_defaults
     shade=light
 elif [[ $wall_command == dark ]]; then
     load_defaults
     shade=dark
 else
-    # выбран конкретный файл: opacity/backend/shade — ТЕКУЩИЕ (без промптов).
+    # a specific file was picked: opacity/backend/shade = CURRENT (no prompts).
     load_defaults
     wall="$HOME/.backgrounds/$wall_command"
-    # shade по имени файла: ровно один shade-токен → он; два или ни одного →
-    # оставить текущий (из load_defaults). Токен в границах -_. (как у random).
+    # shade from filename: exactly one shade token -> use it; two or none ->
+    # keep current (from load_defaults). Token bounded by -_. (like random).
     grep -qiE '(^|[-_.])light([-_.]|$)' <<<"$wall_command" && has_light=1 || has_light=0
     grep -qiE '(^|[-_.])dark([-_.]|$)'  <<<"$wall_command" && has_dark=1  || has_dark=0
     if   [ $has_light -eq 1 ] && [ $has_dark -eq 0 ]; then shade=light
@@ -141,7 +141,7 @@ if [ -f $wall ]; then
 
     theme-step "wall_select brightnessctl ($is_light)"
     [[ $is_light == "-l" ]] && brightnessctl set 100%
-    # ночью (19:00–06:00) тёплый redshift, днём — сброс
+    # at night (19:00–06:00) warm redshift, daytime — reset
     theme-step "wall_select redshift"
     hour=$(date +%H)
     if (( 10#$hour >= 19 || 10#$hour < 6 )); then
@@ -159,7 +159,7 @@ if [ -f $wall ]; then
 
         theme-step "wall_select after_theme_hook"
         "$HOME/bin/after_theme_hook.sh"
-        # гарантия синхрона обои↔цвета: feh выбранные обои ПОСЛЕДНИМ
+        # ensure wallpaper<->colors sync: feh the chosen wallpaper LAST
         theme-step "wall_select feh"
         feh --bg-fill "$wall"
     fi

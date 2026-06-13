@@ -1,8 +1,8 @@
 #!/bin/bash
-# ash: диспетчер pinentry. Бэкенд по PINENTRY_USER_DATA (gpg-agent форвардит
-# его от клиента): интерактивный zsh экспортит =curses -> TUI-запросы (neomutt,
-# терминальный gpg/pass) идут в ncurses; GUI (запуск из WM, без переменной) ->
-# fallback из ~/.gnupg/.pe = pinentry-rofi.
+# ash: pinentry dispatcher. Backend chosen by PINENTRY_USER_DATA (gpg-agent
+# forwards it from the client): interactive zsh exports =curses -> TUI requests
+# (neomutt, terminal gpg/pass) go to ncurses; GUI (launched from WM, no var) ->
+# fallback from ~/.gnupg/.pe = pinentry-rofi.
 
 if [ "$PINENTRY_USER_DATA" = "tty" ]; then
     exec /usr/bin/pinentry-tty "$@"
@@ -22,10 +22,10 @@ fi
 
 PINENTRY_PRG=$(cat ~/.gnupg/.pe 2>/dev/null)
 if [ -z "$PINENTRY_PRG" ]; then
-    # ash: fallback = GUI/WM-контекст (интерактивный zsh всегда ставит =curses,
-    # сюда не доходит). Раньше был curses → в GUI без tty ломался ("опять не
-    # показывает GUI"), плюс .pe периодически пустеет до 1 байта. rofi-дефолт =
-    # GUI работает даже с пустым .pe.
+    # ash: fallback = GUI/WM context (interactive zsh always sets =curses, never
+    # reaches here). Used to be curses -> broke in GUI without a tty ("GUI not
+    # showing again"), plus .pe occasionally empties to 1 byte. rofi default =
+    # GUI works even with an empty .pe.
     prg=/home/ash/bin/pinentry-rofi
 else
     prg=$PINENTRY_PRG

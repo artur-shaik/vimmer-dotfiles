@@ -1,8 +1,8 @@
-# ash: промпт — starship (USE_STARSHIP пусто = вернуть p10k)
-: "${USE_STARSHIP=1}"  # =1 по умолч.; USE_STARSHIP= zsh для p10k
+# ash: prompt — starship (USE_STARSHIP empty = back to p10k)
+: "${USE_STARSHIP=1}"  # =1 by default; USE_STARSHIP= zsh for p10k
 
-# ash: pinentry в терминале/TUI (neomutt, gpg, pass) — ncurses; gpg-agent
-# форвардит эту переменную в ~/bin/pe. GUI (запуск из WM) её не имеет -> rofi.
+# ash: pinentry in terminal/TUI (neomutt, gpg, pass) — ncurses; gpg-agent
+# forwards this variable to ~/bin/pe. GUI (launched from WM) lacks it -> rofi.
 export PINENTRY_USER_DATA=curses
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -37,12 +37,12 @@ fpath=($HOME/.zsh_completions $fpath)
 
 source $ZSH/oh-my-zsh.sh
 
-# ash: bgnotify tmux-aware. Дефолтный currentWindowId ловит только смену
-# X-окна (_NET_ACTIVE_WINDOW) → при переключении tmux-ПЕЙНА (то же окно
-# alacritty) фокус-identity не менялся → уведа не было. Дополняем identity
-# флагами «наш пейн сейчас видимый» (#{pane_active}#{window_active}): смена
-# пейна/окна/приложения теперь меняет строку → bgnotify нотифает. Переопределяем
-# ПОСЛЕ source omz (плагин bgnotify уже определил свою версию).
+# ash: bgnotify tmux-aware. The default currentWindowId only catches X-window
+# changes (_NET_ACTIVE_WINDOW) → switching a tmux PANE (same alacritty window)
+# didn't change the focus identity → no notification. We extend the identity
+# with "our pane is currently visible" flags (#{pane_active}#{window_active}):
+# pane/window/app switch now changes the string → bgnotify fires. Override AFTER
+# sourcing omz (the bgnotify plugin already defined its own version).
 currentWindowId () {
   local x p
   x=$(xprop -root 2>/dev/null | awk '/NET_ACTIVE_WINDOW/{print $5; exit}')
@@ -54,18 +54,18 @@ currentWindowId () {
   fi
 }
 
-# ash: zsh-vi-mode на КАЖДЫЙ accept-line зовёт zvm_zle-line-finish ->
-# zvm_set_cursor -> DECSCUSR reset "\e[0 q". ZVM гейтит это только на $VIMRUNTIME,
-# а nvim :terminal ставит $NVIM (не VIMRUNTIME) -> escape течёт, в буфер "0 q".
-# Глушим единственный choke-point внутри редактор-терминала (zvm_set_cursor
-# определён при source oh-my-zsh.sh выше, переопределение держится).
+# ash: zsh-vi-mode on EVERY accept-line calls zvm_zle-line-finish ->
+# zvm_set_cursor -> DECSCUSR reset "\e[0 q". ZVM gates this on $VIMRUNTIME only,
+# but nvim :terminal sets $NVIM (not VIMRUNTIME) -> escape leaks, "0 q" in buffer.
+# Silence the single choke-point inside an editor terminal (zvm_set_cursor is
+# defined when oh-my-zsh.sh is sourced above, the override sticks).
 if [[ -n "$NVIM" || -n "$VIM" || -n "$VIM_TERMINAL" ]]; then
   ZVM_CURSOR_STYLE_ENABLED=false
   zvm_set_cursor() {}
 fi
 
-# ash: держать compiled-дамп свежим (новые completions инвалидируют dump,
-# без .zwc compinit парсит текстом каждый старт — было 3.5с vs 1.0с)
+# ash: keep the compiled dump fresh (new completions invalidate the dump,
+# without .zwc compinit parses text every start — was 3.5s vs 1.0s)
 () {
   local d=${ZSH_COMPDUMP:-$HOME/.zcompdump-$HOST-$ZSH_VERSION}
   [[ -f $d && ( ! -f $d.zwc || $d -nt $d.zwc ) ]] && zcompile -R -- $d.zwc $d 2>/dev/null
@@ -151,7 +151,7 @@ alias tn='tasknext'
 alias ta='task add'
 alias to='taskopen'
 alias c='clear'
-alias wi='wall-import'   # импорт обоев INBOX->backgrounds (Claude именует, см. ~/.local/bin)
+alias wi='wall-import'   # import wallpapers INBOX->backgrounds (Claude names them, see ~/.local/bin)
 alias vf='vifm'
 alias tmux='tmux -2'
 alias gs='git status'
@@ -384,8 +384,8 @@ else
   [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 fi
 
-# sdkman: ленивая загрузка (init ~0.5с). PATH к current-кандидатам — статично,
-# так что java/mvn работают сразу; сам sdkman-init грузится при первом вызове sdk.
+# sdkman: lazy load (init ~0.5s). PATH to current candidates is static,
+# so java/mvn work immediately; sdkman-init itself loads on first `sdk` call.
 export SDKMAN_DIR="/home/ash/.sdkman"
 for _c in "$SDKMAN_DIR"/candidates/*/current/bin(N); do
     PATH="$_c:$PATH"
@@ -405,8 +405,8 @@ export PATH=$PATH:$HOME/.local/bin
 export PATH="$PATH:/home/ash/.lmstudio/bin"
 # End of LM Studio CLI section
 
-# nvm: ленивая загрузка (~0.7с). PATH к default-ноде — статично (node/npm/npx/claude
-# работают сразу); сам nvm.sh грузится при первом вызове nvm.
+# nvm: lazy load (~0.7s). PATH to the default node is static (node/npm/npx/claude
+# work immediately); nvm.sh itself loads on first `nvm` call.
 export NVM_DIR="$HOME/.config/nvm"
 if [[ -r "$NVM_DIR/alias/default" ]]; then
     _nvm_default=$(<"$NVM_DIR/alias/default")
@@ -421,21 +421,21 @@ nvm() {
     nvm "$@"
 }
 
-# mcfly (fuzzy-поиск по истории, ^R) — В КОНЦЕ: omz и кастом-биндинги
-# затирали его ^R, когда init стоял в начале файла
+# mcfly (fuzzy history search, ^R) — AT THE END: omz and custom bindings
+# clobbered its ^R when init was at the top of the file
 export MCFLY_FUZZY=2
 export MCFLY_RESULTS=30
-# export MCFLY_KEY_SCHEME=vim  # выключен: внутри TUI удобнее emacs-комбо
-# zsh-vi-mode инициализируется на первом промпте и перетирает биндинги —
-# mcfly подключаем через его хук (+ сразу, если ZVM вдруг отключат)
+# export MCFLY_KEY_SCHEME=vim  # disabled: emacs combos are handier inside a TUI
+# zsh-vi-mode initializes on the first prompt and clobbers bindings —
+# hook mcfly through its hook (+ immediately, in case ZVM is ever disabled)
 zvm_after_init_commands+=('eval "$(mcfly init zsh)"')
 eval "$(mcfly init zsh)"
 
-# ── OpenAI key из pass (единый источник, не в plaintext) ──────────────────
-# Ключ лежит ТОЛЬКО в `pass Key/openai` (первая строка). Обёртки подставляют
-# его в env лишь на время вызова. crush/sgpt берут OPENAI_API_KEY из env;
-# codecompanion (nvim) тянет напрямую через cmd:pass в своём конфиге.
-# Ротация ключа = `pass edit Key/openai`, больше нигде менять не надо.
+# ── OpenAI key from pass (single source, not plaintext) ───────────────────
+# Key lives ONLY in `pass Key/openai` (first line). Wrappers inject it into
+# env only for the call's duration. crush/sgpt read OPENAI_API_KEY from env;
+# codecompanion (nvim) pulls it directly via cmd:pass in its own config.
+# Key rotation = `pass edit Key/openai`, nothing else to change.
 openai-key() { pass show Key/openai 2>/dev/null | head -1; }
 sgpt()  { OPENAI_API_KEY="$(openai-key)" command sgpt  "$@"; }
 crush() { OPENAI_API_KEY="$(openai-key)" command crush "$@"; }

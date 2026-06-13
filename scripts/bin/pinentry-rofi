@@ -12,9 +12,9 @@ while IFS= read -r line; do
 
     case "$cmd" in
         OPTION)
-            # ash: gpg-agent форвардит окружение клиента сюда. БЕЗ этого rofi не
-            # знал DISPLAY (agent стартовал без него) → GUI-pinentry падал, пока
-            # не прогонишь через терминал (curses, DISPLAY не нужен).
+            # ash: gpg-agent forwards the client environment here. Without it
+            # rofi had no DISPLAY (agent started without one) -> GUI pinentry
+            # failed until run through a terminal (curses, no DISPLAY needed).
             case "$args" in
                 display=*)     export DISPLAY="${args#display=}" ;;
                 xauthority=*)  export XAUTHORITY="${args#xauthority=}" ;;
@@ -30,7 +30,7 @@ while IFS= read -r line; do
             echo "OK"
             ;;
         GETPIN)
-            [ -z "$DISPLAY" ] && export DISPLAY=:0   # ash: страховка если OPTION не пришёл
+            [ -z "$DISPLAY" ] && export DISPLAY=:0   # ash: safety net if OPTION never arrived
             pin=$(rofi -dmenu -password -p "$prompt" -mesg "$desc" -lines 0)
             if [ $? -eq 0 ]; then
                 echo "D $pin"
