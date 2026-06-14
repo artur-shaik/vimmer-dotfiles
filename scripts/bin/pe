@@ -1,34 +1,21 @@
 #!/bin/bash
-# ash: pinentry dispatcher. Backend chosen by PINENTRY_USER_DATA (gpg-agent
-# forwards it from the client): interactive zsh exports =curses -> TUI requests
-# (neomutt, terminal gpg/pass) go to ncurses; GUI (launched from WM, no var) ->
-# fallback from ~/.gnupg/.pe = pinentry-rofi.
+# ash: pinentry dispatcher (gpg-agent pinentry-program).
+#
+# The hard problem: gpg-agent is a long-lived daemon that bakes in the
+# PINENTRY_USER_DATA of whoever first spawned it and forwards that to us for
+# any client that doesn't send its own. So relying on PINENTRY_USER_DATA for
+# the GUI-vs-TUI split is fragile (a shell exporting =curses, or tmux-pass
+# exporting =qt + updatestartuptty, poisons every later pinentry globally).
+#
+# Robust rule for a local X desktop: default to rofi. pinentry-rofi gets the
+# client's DISPLAY via the assuan OPTION (parsed there) + a :0 fallback, so it
+# works regardless of pe's own env. Explicit tty/qt/curses are still honored
+# for deliberate callers; a baked-in value other than those falls through to
+# rofi and can't silently break GUI prompts.
 
-if [ "$PINENTRY_USER_DATA" = "tty" ]; then
-    exec /usr/bin/pinentry-tty "$@"
-fi
-
-if [ "$PINENTRY_USER_DATA" = "curses" ]; then
-    exec /usr/bin/pinentry-curses "$@"
-fi
-
-if [ "$PINENTRY_USER_DATA" = "qt" ]; then
-    exec /usr/bin/pinentry-qt "$@"
-fi
-
-if [ "$PINENTRY_USER_DATA" = "rofi" ]; then
-    exec /home/ash/bin/pinentry-rofi "$@"
-fi
-
-PINENTRY_PRG=$(cat ~/.gnupg/.pe 2>/dev/null)
-if [ -z "$PINENTRY_PRG" ]; then
-    # ash: fallback = GUI/WM context (interactive zsh always sets =curses, never
-    # reaches here). Used to be curses -> broke in GUI without a tty ("GUI not
-    # showing again"), plus .pe occasionally empties to 1 byte. rofi default =
-    # GUI works even with an empty .pe.
-    prg=/home/ash/bin/pinentry-rofi
-else
-    prg=$PINENTRY_PRG
-fi
-
-exec $prg "$@"
+case "$PINENTRY_USER_DATA" in
+    tty)    exec /usr/bin/pinentry-tty "$@" ;;
+    qt)     exec /usr/bin/pinentry-qt "$@" ;;
+    curses) exec /usr/bin/pinentry-curses "$@" ;;
+    *)      exec /home/ash/bin/pinentry-rofi "$@" ;;
+esac

@@ -1,9 +1,11 @@
 # ash: prompt — starship (USE_STARSHIP empty = back to p10k)
 : "${USE_STARSHIP=1}"  # =1 by default; USE_STARSHIP= zsh for p10k
 
-# ash: pinentry in terminal/TUI (neomutt, gpg, pass) — ncurses; gpg-agent
-# forwards this variable to ~/bin/pe. GUI (launched from WM) lacks it -> rofi.
-export PINENTRY_USER_DATA=curses
+# ash: NO PINENTRY_USER_DATA export here. gpg-agent is a daemon that bakes in
+# the env of whoever first spawns it and forwards that to ~/bin/pe for every
+# client — exporting =curses here poisoned GUI pinentry (rofi-pass got curses ->
+# "decryption error"). pe now defaults to rofi; set PINENTRY_USER_DATA=curses
+# per-call only when you genuinely need a tty pinentry (e.g. over ssh).
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
