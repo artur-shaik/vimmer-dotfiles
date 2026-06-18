@@ -26,6 +26,10 @@ super + t
 super + b
 	bspc node @/ -B
 
+# toggle polybar module mode (full/min) on the focused monitor
+super + p
+	bar-mode-toggle.sh
+
 # toggle floating and fullscreen
 super + s
     bspc node -t $(bspc query -N -n -n .tiled >/dev/null && echo floating || echo tiled)
