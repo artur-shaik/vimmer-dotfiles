@@ -113,7 +113,7 @@ super + u
 
 # unhide all on focused desktop
 super + shift + u
-	bspc node any.hidden.local -g hidden=off
+	HideNode --restore-all
 
 # preventing closing 
 super + r
@@ -251,7 +251,7 @@ XF86MonBrightness{Up,Down}
  
 # copy buffer to clipboard
 ctrl + shift + c
-    xclip -o -sel clipboard | xclip -i
+    xsel -bo | xsel -pi
 
 # translate clipboard content
 # ctrl + shift + t
@@ -290,6 +290,19 @@ super + Escape
 # open alacritty terminal
 super + Return
 	alacritty
+
+# toggle dropdown terminal (scratchpad, 70%x35% from top)
+super + d
+	OpenApps --scratch
+
+# clipboard editor (nvim, CLIPBOARD/PRIMARY tabs, :w applies)
+super + y
+	clip-edit.sh
+
+# scratch translator (tmux: left en->ru, right ru->en)
+super + z
+	trans-scratch.sh
+
 
 super + ctrl + b
     wall_select.sh
