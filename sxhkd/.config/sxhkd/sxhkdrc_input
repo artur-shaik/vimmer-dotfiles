@@ -271,7 +271,9 @@ super + ctrl + c
 #    ~/bin/web-search.sh
 
 # dunst (бывшая секция [shortcuts] dunstrc — в 1.7+ только через WM)
-ctrl + space
+# close — ctrl+period (НЕ ctrl+space: тот грабился глобально и ломал
+# treesitter-выделение C-Space в nvim/wildfire)
+ctrl + period
 	dunstctl close
 
 ctrl + shift + space
