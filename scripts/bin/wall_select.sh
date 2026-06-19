@@ -139,18 +139,32 @@ if [ -f $wall ]; then
     wal --backend=$backend -i "$wall" -a "$opacity" $is_light 2>&1 | tee -a /tmp/wal.log
     wal_exit=${PIPESTATUS[0]}
 
-    theme-step "wall_select brightnessctl ($is_light)"
-    [[ $is_light == "-l" ]] && brightnessctl set 100%
-    # at night (19:00–06:00) warm redshift, daytime — reset
-    theme-step "wall_select redshift"
-    hour=$(date +%H)
-    if (( 10#$hour >= 19 || 10#$hour < 6 )); then
-        redshift -l 42.88:74.58 -O 2100K -P -b 0.7
-    else
-        redshift -l 42.88:74.58 -x
+    # ash: backend 'wal' (imagemagick) fails on poor palettes (pixel-art, few
+    # colors): "couldn't generate a suitable palette" -> wal_exit!=0 -> nothing
+    # got applied (while brightness/redshift below fired anyway). Retry across
+    # robust backends until one succeeds.
+    if [ "$wal_exit" -ne 0 ]; then
+        for fb in haishoku colorthief colorz schemer2 wal; do
+            [ "$fb" = "$backend" ] && continue
+            theme-step "wall_select wal RETRY backend=$fb"
+            wal --backend="$fb" -i "$wall" -a "$opacity" $is_light 2>&1 | tee -a /tmp/wal.log
+            wal_exit=${PIPESTATUS[0]}
+            [ "$wal_exit" -eq 0 ] && { backend="$fb"; break; }
+        done
     fi
 
     if [ $wal_exit -eq 0 ]; then
+        theme-step "wall_select brightnessctl ($is_light)"
+        [[ $is_light == "-l" ]] && brightnessctl set 100%
+        # at night (19:00–06:00) warm redshift, daytime — reset
+        theme-step "wall_select redshift"
+        hour=$(date +%H)
+        if (( 10#$hour >= 19 || 10#$hour < 6 )); then
+            redshift -l 42.88:74.58 -O 2100K -P -b 0.7
+        else
+            redshift -l 42.88:74.58 -x
+        fi
+
         echo "$opacity" >~/.cache/wal/current_opacity
         echo "$shade" >~/.cache/wal/current_shade
         echo "$wall" >~/.cache/wal/current_wall
@@ -162,9 +176,12 @@ if [ -f $wall ]; then
         # ensure wallpaper<->colors sync: feh the chosen wallpaper LAST
         theme-step "wall_select feh"
         feh --bg-fill "$wall"
+        msg="set <b>$shade</b> background: <b>$wall</b> with opacity: <b>$opacity</b> by <b>$backend</b> backend"
+    else
+        msg="⚠ wal failed to generate a palette for <b>$wall</b> (all backends). Theme unchanged."
     fi
     theme-step "wall_select DONE"
 
     sleep 5
-    notify-send wal "set <b>$shade</b> background: <b>$wall</b> with opacity: <b>$opacity</b> by <b>$backend</b> backend"
+    notify-send wal "$msg"
 fi
